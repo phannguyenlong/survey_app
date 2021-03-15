@@ -1,9 +1,9 @@
 DROP PROCEDURE IF EXISTS java_app.GetTotalClassesSize;
 DELIMITER  //
 CREATE PROCEDURE GetTotalClassesSize(
-						academic_year INTEGER,  semester INTEGER, 
-                        faculty INTEGER, program INTEGER, 
-                        module INTEGER, lecturer INTEGER, class INTEGER) 
+						academic_year VARCHAR(10),  semester VARCHAR(10), 
+                        faculty VARCHAR(10), program VARCHAR(10), 
+                        module VARCHAR(10), lecturer VARCHAR(10), class VARCHAR(10)) 
 BEGIN
 	SELECT COUNT(*) AS total_class
 FROM (
