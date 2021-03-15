@@ -1,3 +1,20 @@
+-- CREATE TABLE path
+-- Clean up old table
+DROP TABLE IF EXISTS f_a_p;
+DROP TABLE IF EXISTS p_a_m;
+DROP TABLE IF EXISTS question_content;
+DROP TABLE IF EXISTS questionaire;
+DROP TABLE IF EXISTS teaching;
+DROP TABLE IF EXISTS class;
+DROP TABLE IF EXISTS academic_year;
+DROP TABLE IF EXISTS faculty;
+DROP TABLE IF EXISTS lecturer;
+DROP TABLE IF EXISTS module;
+DROP TABLE IF EXISTS program;
+DROP TABLE IF EXISTS question;
+DROP TABLE IF EXISTS semester;
+
+-- Create table
 CREATE TABLE faculty (
 	code INTEGER AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(30) NOT NULL
@@ -36,21 +53,22 @@ CREATE TABLE class (
     size INTEGER NOT NULL,
     semester_code INTEGER,
     module_code INTEGER,
-    FOREIGN KEY (semester_code) REFERENCES semester(code),
-    FOREIGN KEY (module_code) REFERENCES module(code)
+    FOREIGN KEY (semester_code) REFERENCES semester(code) ON DELETE CASCADE,
+    FOREIGN KEY (module_code) REFERENCES module(code) ON DELETE CASCADE
 );
 
 CREATE TABLE question_content (
-	id INTEGER AUTO_INCREMENT PRIMARY KEY,
-    content VARCHAR(100) 
+	id INTEGER AUTO_INCREMENT,
+    content VARCHAR(100),
+    PRIMARY KEY (id, content)
 );
 
 CREATE TABLE teaching (
 	class_code INTEGER,
     lecturer_code INTEGER,
     PRIMARY KEY (class_code, lecturer_code),
-    FOREIGN KEY (class_code) REFERENCES class(code),
-    FOREIGN KEY (lecturer_code) REFERENCES lecturer(code)
+    FOREIGN KEY (class_code) REFERENCES class(code) ON DELETE CASCADE,
+    FOREIGN KEY (lecturer_code) REFERENCES lecturer(code) ON DELETE CASCADE
 );
 
 CREATE TABLE questionaire (
@@ -58,9 +76,9 @@ CREATE TABLE questionaire (
     lecturer_code INTEGER,
     question_id INTEGER,
     PRIMARY KEY (class_code, lecturer_code, question_id),
-    FOREIGN KEY (class_code) REFERENCES class(code),
-    FOREIGN KEY (lecturer_code) REFERENCES lecturer(code),
-    FOREIGN KEY (question_id) REFERENCES question(id)
+    FOREIGN KEY (class_code) REFERENCES class(code) ON DELETE CASCADE,
+    FOREIGN KEY (lecturer_code) REFERENCES lecturer(code) ON DELETE CASCADE,
+    FOREIGN KEY (question_id) REFERENCES question(id) ON DELETE CASCADE
 );
 
 CREATE TABLE F_A_P (
@@ -68,9 +86,9 @@ CREATE TABLE F_A_P (
     faculty_code INTEGER,
     program_code INTEGER,
     PRIMARY KEY (academic_code, faculty_code, program_code),
-    FOREIGN KEY (academic_code) REFERENCES academic_year(code),
-    FOREIGN KEY (faculty_code) REFERENCES faculty(code),
-    FOREIGN KEY (program_code) REFERENCES program(code)
+    FOREIGN KEY (academic_code) REFERENCES academic_year(code) ON DELETE CASCADE,
+    FOREIGN KEY (faculty_code) REFERENCES faculty(code) ON DELETE CASCADE,
+    FOREIGN KEY (program_code) REFERENCES program(code) ON DELETE CASCADE
 );
 
 CREATE TABLE P_A_M (
@@ -78,9 +96,8 @@ CREATE TABLE P_A_M (
     module_code INTEGER,
     program_code INTEGER,
     PRIMARY KEY (academic_code, module_code, program_code),
-    FOREIGN KEY (academic_code) REFERENCES academic_year(code),
-    FOREIGN KEY (module_code) REFERENCES module(code),
-    FOREIGN KEY (program_code) REFERENCES program(code)
+    FOREIGN KEY (academic_code) REFERENCES academic_year(code) ON DELETE CASCADE,
+    FOREIGN KEY (module_code) REFERENCES module(code) ON DELETE CASCADE,
+    FOREIGN KEY (program_code) REFERENCES program(code) ON DELETE CASCADE
 );
-
 
