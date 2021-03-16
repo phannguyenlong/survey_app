@@ -1,4 +1,9 @@
--- CREATE TABLE path
+-- ======================CREATE GUEST USER======================
+CREATE USER 'guest'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON * . * TO 'guest'@'localhost';
+
+-- ======================CREATE TABLE path======================
+
 -- Clean up old table
 DROP TABLE IF EXISTS f_a_p;
 DROP TABLE IF EXISTS p_a_m;
@@ -17,7 +22,7 @@ DROP TABLE IF EXISTS semester;
 -- Create table
 CREATE TABLE faculty (
 	code VARCHAR(10) PRIMARY KEY,
-    name VARCHAR(30) NOT NULL
+    name VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE program (
@@ -102,7 +107,98 @@ CREATE TABLE P_A_M (
 );
 
 
--- Insert Data
+-- ======================Insert Data======================
 
 -- Falcuty
-INSERT INTO faculty (name) VALUE ('')
+INSERT INTO faculty (code, name) VALUE ('FECO', 'Faculty of Economics');
+INSERT INTO faculty (code, name) VALUE ('FENG', 'Faculty of Engineering');
+INSERT INTO faculty (code, name) VALUE ('FIT', 'Faculty of  Information Technology');
+INSERT INTO faculty (code, name) VALUE ('FLAW', 'Faculty of Law');
+INSERT INTO faculty (code, name) VALUE ('FMUS', 'Faculty of Music');
+
+-- Program
+-- Faculty of economic
+INSERT INTO program (code, name) VALUES ('BA', 'Business Administration');
+INSERT INTO program (code, name) VALUES ('LOG', 'Logistics');
+INSERT INTO program (code, name) VALUES ('ECO', 'Economics');
+-- Faculty of Engineering
+INSERT INTO program (code, name) VALUES ('ME', 'Mechanical Engineering');
+INSERT INTO program (code, name) VALUES ('EE', 'Electrical Engineering');
+INSERT INTO program (code, name) VALUES ('CE', 'Civil Engineering');
+-- Faculty of IT
+INSERT INTO program (code, name) VALUES ('CSE', 'Computer Science');
+INSERT INTO program (code, name) VALUES ('BIS', 'Business Information System');
+INSERT INTO program (code, name) VALUES ('ITSEC', 'Information Technology Security');
+-- Faculty of Law
+INSERT INTO program (code, name) VALUES ('ELAW', 'Economic Law');
+INSERT INTO program (code, name) VALUES ('CLAW', 'Commercial Law');
+INSERT INTO program (code, name) VALUES ('CVLAW', 'Civil Law');
+-- Faculty of Music
+INSERT INTO program (code, name) VALUES ('VOCAL', 'Vocalist');
+INSERT INTO program (code, name) VALUES ('COMP', 'Music Composed');
+INSERT INTO program (code, name) VALUES ('INS', 'Instrument');
+
+-- Module
+-- general
+INSERT INTO module (code, name) VALUES ('MATH', 'Mathematic');
+
+-- BA
+INSERT INTO module (code, name) VALUES ('MAK', 'Marketing');
+INSERT INTO module (code, name) VALUES ('MAN', 'Management');
+-- Logistics
+INSERT INTO module (code, name) VALUES ('LOT', 'Logistic Theory');
+INSERT INTO module (code, name) VALUES ('IOM', 'Import and Export management');
+-- Economics
+INSERT INTO module (code, name) VALUES ('MAE', 'Macro Economic');
+INSERT INTO module (code, name) VALUES ('MIE', 'Micro Economic');
+
+-- ME
+INSERT INTO module (code, name) VALUES ('PHYS', 'Physic');
+INSERT INTO module (code, name) VALUES ('CHEM', 'Chemistry');
+-- EE
+INSERT INTO module (code, name) VALUES ('AUTO', 'Automation');
+INSERT INTO module (code, name) VALUES ('HWE', 'Hardware Engineering');
+-- Civil Engineering
+INSERT INTO module (code, name) VALUES ('UWM', 'Urban Water Management');
+INSERT INTO module (code, name) VALUES ('TRE', 'Traffic Engineering');
+
+-- CSE
+INSERT INTO module (code, name) VALUES ('PE', 'Programming Exercise');
+INSERT INTO module (code, name) VALUES ('SWE', 'Software Engineering');
+-- BIS
+INSERT INTO module (code, name) VALUES ('DBSYS', 'Database System');
+INSERT INTO module (code, name) VALUES ('SARC', 'System Architecture');
+-- ITSEC
+INSERT INTO module (code, name) VALUES ('CNET', 'Computer Network');
+INSERT INTO module (code, name) VALUES ('CRYP', 'Cryptography');
+
+-- general Law
+INSERT INTO module (code, name) VALUES ('ALAW', 'Administration Law');
+-- Economic Law
+INSERT INTO module (code, name) VALUES ('ILAW', 'International Law');
+INSERT INTO module (code, name) VALUES ('IVML', 'Investment Law');
+-- Commercial Law
+INSERT INTO module (code, name) VALUES ('DITL', 'Domestic and International Tax Law');
+INSERT INTO module (code, name) VALUES ('IPL', 'Intellectual Property Law');
+-- Civil Law
+INSERT INTO module (code, name) VALUES ('HRL', 'Human Rights Law');
+INSERT INTO module (code, name) VALUES ('CVPD', 'Civil Procedure');
+
+-- general Music
+INSERT INTO module (code, name) VALUES ('MTHEO', 'Music Theory');
+-- Vocal
+INSERT INTO module (code, name) VALUES ('PERF', 'Performance-oriented');
+INSERT INTO module (code, name) VALUES ('HAR', 'Harmony');
+-- Instru
+INSERT INTO module (code, name) VALUES ('KBS', 'Keyboard Skill');
+INSERT INTO module (code, name) VALUES ('NTT', 'Notation');
+-- Composed
+INSERT INTO module (code, name) VALUES ('HOM', 'History of Music');
+INSERT INTO module (code, name) VALUES ('CMP', 'Composition');
+
+
+
+
+
+
+
