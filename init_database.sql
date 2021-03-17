@@ -6,7 +6,6 @@
 -- Clean up old table
 DROP TABLE IF EXISTS faculty_academic_program;
 DROP TABLE IF EXISTS question_content;
-DROP TABLE IF EXISTS program_module;
 DROP TABLE IF EXISTS questionaire;
 DROP TABLE IF EXISTS teaching;
 DROP TABLE IF EXISTS class;
@@ -31,7 +30,9 @@ CREATE TABLE program (
 
 CREATE TABLE module (
 	code VARCHAR(10) PRIMARY KEY,
-    name VARCHAR(50) NOT NULL
+    name VARCHAR(50) NOT NULL,
+    program_code VARCHAR(10),
+	FOREIGN KEY (program_code) REFERENCES program(code)
 );
 
 CREATE TABLE academic_year (
@@ -96,15 +97,6 @@ CREATE TABLE faculty_academic_program (
     FOREIGN KEY (faculty_code) REFERENCES faculty(code),
     FOREIGN KEY (program_code) REFERENCES program(code)
 );
-
-CREATE TABLE program_module (
-    module_code VARCHAR(10),
-    program_code VARCHAR(10),
-    PRIMARY KEY (module_code, program_code),
-    FOREIGN KEY (module_code) REFERENCES module(code),
-    FOREIGN KEY (program_code) REFERENCES program(code)
-);
-
 
 -- ======================Insert Data======================
 

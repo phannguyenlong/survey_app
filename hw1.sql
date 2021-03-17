@@ -18,10 +18,10 @@ FROM (
     JOIN lecturer l ON (t.class_code = l.code)
     JOIN semester s ON (s.code = c.semester_code)
     JOIN module m ON (m.code = c.module_code)
-    JOIN program_module pm ON (m.code = pm.module_code)
-    JOIN program p ON (p.code = pm.program_code)
+    JOIN program p ON (p.code = m.program_code)
     JOIN faculty_academic_program fap ON (p.code = fap.program_code)
-    WHERE (fap.academic_code = academic_year OR academic_year IS NULL) AND
+    WHERE 
+		(fap.academic_code = academic_year OR academic_year IS NULL) AND
 		(s.code = semester OR semester IS NULL) AND
         (fap.faculty_code = faculty OR faculty IS NULL) AND
         (fap.program_code = program OR program IS NULL) AND
@@ -31,3 +31,5 @@ FROM (
 ) AS temp;
 END //
 DELIMITER ;
+
+CALL GetTotalClassesSize(1,2,3,4,5,6,7)
