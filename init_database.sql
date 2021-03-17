@@ -3,11 +3,10 @@
 -- GRANT ALL PRIVILEGES ON * . * TO 'guest'@'localhost';
 
 -- ======================CREATE TABLE path======================
-
 -- Clean up old table
-DROP TABLE IF EXISTS f_a_p;
-DROP TABLE IF EXISTS p_a_m;
+DROP TABLE IF EXISTS faculty_academic_program;
 DROP TABLE IF EXISTS question_content;
+DROP TABLE IF EXISTS program_module;
 DROP TABLE IF EXISTS questionaire;
 DROP TABLE IF EXISTS teaching;
 DROP TABLE IF EXISTS class;
@@ -88,7 +87,7 @@ CREATE TABLE questionaire (
     FOREIGN KEY (question_id) REFERENCES question(id)
 );
 
-CREATE TABLE F_A_P (
+CREATE TABLE faculty_academic_program (
 	academic_code VARCHAR(10),
     faculty_code VARCHAR(10),
     program_code VARCHAR(10),
@@ -98,12 +97,10 @@ CREATE TABLE F_A_P (
     FOREIGN KEY (program_code) REFERENCES program(code)
 );
 
-CREATE TABLE P_A_M (
-	academic_code VARCHAR(10),
+CREATE TABLE program_module (
     module_code VARCHAR(10),
     program_code VARCHAR(10),
-    PRIMARY KEY (academic_code, module_code, program_code),
-    FOREIGN KEY (academic_code) REFERENCES academic_year(code),
+    PRIMARY KEY (module_code, program_code),
     FOREIGN KEY (module_code) REFERENCES module(code),
     FOREIGN KEY (program_code) REFERENCES program(code)
 );
@@ -197,10 +194,5 @@ INSERT INTO module (code, name) VALUES ('NTT', 'Notation');
 -- Composed
 INSERT INTO module (code, name) VALUES ('HOM', 'History of Music');
 INSERT INTO module (code, name) VALUES ('CMP', 'Composition');
-
-
-
-
-
 
 
