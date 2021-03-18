@@ -5,15 +5,9 @@ CREATE PROCEDURE GetTotalClassesSize(
                         faculty VARCHAR(10), program VARCHAR(10), 
                         module VARCHAR(10), lecturer VARCHAR(10), class VARCHAR(10)) 
 BEGIN
-	SELECT COUNT(*) AS total_class
+	SELECT SUM(size) AS total_class
 	FROM (
-	SELECT  c.code AS class_code, 
-			l.code AS lecturer_code, 
-            s.code AS semester_code, 
-            m.code AS module_code, 
-            a.code AS academic_year_code, 
-            p.code AS program_code, 
-            f.code AS faculty_code
+	SELECT c.size AS size
     FROM class c
 	JOIN teaching t ON c.code = t.class_code
 	JOIN lecturer l ON t.lecturer_code = l.code
