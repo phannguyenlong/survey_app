@@ -34,10 +34,13 @@ public class DatabaseServlet extends HttpServlet{
         System.out.println(req.getParameter("name"));
         System.out.println(req.getParameter("age"));
 
+        String query = "SELECT * FROM module";
+        System.out.println(query);
+
         try {
             DatabaseConnect DB = new DatabaseConnect();
             DB.getConnection();
-            ResultSet res = DB.doQuery("select * from module");
+            ResultSet res = DB.doQuery(query);
             // Display data
             // while (res.next()) {
             //     resp.getOutputStream().println(res.getInt(1) + "  " + res.getString(2) + "  " + res.getString(3));
@@ -46,6 +49,7 @@ public class DatabaseServlet extends HttpServlet{
 
             resp.setContentType("application/json");
             resp.setCharacterEncoding("UTF-8");
+            resp.addHeader("Access-Control-Allow-Origin", "*"); // remove CORS policy
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.writeValue(resp.getOutputStream(), json_resp);
 
