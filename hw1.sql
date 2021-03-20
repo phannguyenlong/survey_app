@@ -7,7 +7,7 @@ CREATE PROCEDURE GetTotalClassesSize(
 BEGIN
 	SELECT SUM(size) AS total_class
 	FROM (
-	SELECT c.size AS size
+	SELECT DISTINCT c.code, c.size AS size
     FROM class c
 	JOIN teaching t ON c.code = t.class_code
 	JOIN lecturer l ON t.lecturer_code = l.code
@@ -28,7 +28,7 @@ BEGIN
 END //
 DELIMITER ;
 
-CALL GetTotalClassesSize("2020-2021",null,null,null,null,23,null);
+CALL GetTotalClassesSize(null,"SS21",null,null,null,23,null);
 
 -- Code for testing 
 select * from class c
