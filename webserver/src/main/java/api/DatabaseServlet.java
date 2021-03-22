@@ -26,8 +26,6 @@ public class DatabaseServlet extends HttpServlet{
     
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("Run database");
-
         // String requestUrl = req.getRequestURI();
         // String name = requestUrl.substring("/database/".length());
 
@@ -41,10 +39,6 @@ public class DatabaseServlet extends HttpServlet{
             DatabaseConnect DB = new DatabaseConnect();
             DB.getConnection();
             ResultSet res = DB.doQuery(query);
-            // Display data
-            // while (res.next()) {
-            //     resp.getOutputStream().println(res.getInt(1) + "  " + res.getString(2) + "  " + res.getString(3));
-            // }
             List<Map<String, Object>> json_resp = DB.ResultSetToJSON(res);
 
             resp.setContentType("application/json");
@@ -79,6 +73,7 @@ public class DatabaseServlet extends HttpServlet{
                 System.out.println(id + "\t" + name + "\t" + address);
             }
         } catch (Exception e) {
+            resp.setStatus(500);
             e.printStackTrace();
         }
     }

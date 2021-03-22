@@ -24,44 +24,33 @@ import java.sql.DriverManager;
  * @author Long Phan
  */
 public class DatabaseConnect {
-    String dbURL = "jdbc:mysql://localhost:3306;";
-    String Db_Name = "SQLCalendar";
-    String userName = "guest";
-    String password = "password";
+    String dbURL, Db_Name, userName, password;
     Connection conn;
 
-    public DatabaseConnect() {
+    public DatabaseConnect() throws Exception{
         Properties props = new Properties();
         System.out.println(getClass().getResource("../config.properties"));
         InputStream input = getClass().getResourceAsStream("../config.properties");
         
-        try {
-            props.load(input);
-            // this.default_path = props.getProperty("server");
-            this.dbURL = props.getProperty("dbURL");
-            this.Db_Name = props.getProperty("Db_name");
-            this.userName = props.getProperty("username");
-            this.password = props.getProperty("password");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        props.load(input);
+        // this.default_path = props.getProperty("server");
+        this.dbURL = props.getProperty("dbURL");
+        this.Db_Name = props.getProperty("Db_name");
+        this.userName = props.getProperty("username");
+        this.password = props.getProperty("password");
     }
 
     /**
      * Establish connection to SQL server
      * @return Connection class
      */
-    public Connection getConnection() {
+    public Connection getConnection() throws Exception{
         conn = null;
         dbURL = dbURL + "/" + Db_Name;
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            conn = DriverManager.getConnection(dbURL, userName, password);
-            System.out.println("connect successfully!");
-        } catch (Exception ex) {
-            System.out.println("connect failure!");
-            ex.printStackTrace();
-        }
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        conn = DriverManager.getConnection(dbURL, userName, password);
+        System.out.println("connect successfully!");
+        System.out.println("connect failure!");
         return conn;
     }
 
