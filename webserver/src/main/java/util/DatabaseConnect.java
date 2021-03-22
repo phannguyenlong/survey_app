@@ -4,19 +4,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
+// import java.util.Properties;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
-import java.io.InputStream;
+// import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.DriverManager;
+// import java.sql.DriverManager;
 
 /**
  * Use from make connection to database
@@ -26,18 +30,22 @@ import java.sql.DriverManager;
 public class DatabaseConnect {
     String dbURL, Db_Name, userName, password;
     Connection conn;
+    DataSource ds;
 
     public DatabaseConnect() throws Exception{
-        Properties props = new Properties();
-        System.out.println(getClass().getResource("../config.properties"));
-        InputStream input = getClass().getResourceAsStream("../config.properties");
+        // Properties props = new Properties();
+        // InputStream input = getClass().getResourceAsStream("../config.properties");
         
-        props.load(input);
+        // props.load(input);
         // this.default_path = props.getProperty("server");
-        this.dbURL = props.getProperty("dbURL");
-        this.Db_Name = props.getProperty("Db_name");
-        this.userName = props.getProperty("username");
-        this.password = props.getProperty("password");
+        // this.dbURL = props.getProperty("dbURL");
+        // this.Db_Name = props.getProperty("Db_name");
+        // this.userName = props.getProperty("username");
+        // this.password = props.getProperty("password");
+
+        Context initContext = new InitialContext();
+		Context envContext = (Context) initContext.lookup("java:comp/env"); 
+		this.ds = (DataSource) envContext.lookup("jdbc/java_app");
     }
 
     /**
@@ -45,12 +53,12 @@ public class DatabaseConnect {
      * @return Connection class
      */
     public Connection getConnection() throws Exception{
-        conn = null;
-        dbURL = dbURL + "/" + Db_Name;
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        conn = DriverManager.getConnection(dbURL, userName, password);
-        System.out.println("connect successfully!");
-        System.out.println("connect failure!");
+        // conn = null;
+        // dbURL = dbURL + "/" + Db_Name;
+        // Class.forName("com.mysql.cj.jdbc.Driver");
+        // conn = DriverManager.getConnection(dbURL, userName, password);
+        // System.out.println("connect successfully!");
+        this.conn = ds.getConnection();
         return conn;
     }
 
