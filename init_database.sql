@@ -1,3 +1,7 @@
+-- ======================CREATE SCHEMA======================
+-- CREATE SCHEMA java_app;
+-- USE java_app;
+
 -- ======================CREATE GUEST USER======================
 -- CREATE USER 'guest'@'localhost' IDENTIFIED BY 'password';
 -- GRANT ALL PRIVILEGES ON * . * TO 'guest'@'localhost';
