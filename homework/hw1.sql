@@ -13,9 +13,12 @@ BEGIN
 	JOIN lecturer l ON t.lecturer_code = l.code
 	JOIN semester s ON (s.code = c.semester_code)
 	JOIN academic_year a ON (a.code = s.academic_code)
-	JOIN module m ON (c.module_code = m.code)
-	JOIN program p ON (p.code = m.program_code)
-	JOIN faculty f ON (f.code = p.faculty_code)
+    JOIN year_fac_pro_mo yfpm ON (yfpm.id_3 = c.id_3)
+	JOIN module m ON (yfpm.module_code = m.code)
+    JOIN year_fac_pro yfp ON (yfp.id_2 = yfpm.id_2 )
+	JOIN program p ON (p.code = yfp.program_code)
+    JOIN year_faculty yf ON (yf.id_1 = yfp.id_1)
+	JOIN faculty f ON (f.code = yf.faculty_code)
     WHERE 
 		(a.code = academic_year OR academic_year IS NULL) AND
 		(s.code = semester OR semester IS NULL) AND
@@ -28,16 +31,19 @@ BEGIN
 END //
 DELIMITER ;
 
-CALL GetTotalClassesSize(null,"SS21",null,null,null,23,null);
+CALL GetTotalClassesSize("2020-2021",null,null,null,null,23,null);
 
 -- Code for testing 
 select * from class c
-JOIN teaching t ON c.code = t.class_code
-JOIN lecturer l ON t.lecturer_code = l.code
-JOIN semester s ON (s.code = c.semester_code)
-JOIN academic_year a ON (a.code = s.academic_code)
-JOIN module m ON (c.module_code = m.code)
-JOIN program p ON (p.code = m.program_code)
-JOIN faculty f ON (f.code = p.faculty_code)
+	JOIN teaching t ON c.code = t.class_code
+	JOIN lecturer l ON t.lecturer_code = l.code
+	JOIN semester s ON (s.code = c.semester_code)
+	JOIN academic_year a ON (a.code = s.academic_code)
+    JOIN year_fac_pro_mo yfpm ON (yfpm.id_3 = c.id_3)
+	JOIN module m ON (yfpm.module_code = m.code)
+    JOIN year_fac_pro yfp ON (yfp.id_2 = yfpm.id_2 )
+	JOIN program p ON (p.code = yfp.program_code)
+    JOIN year_faculty yf ON (yf.id_1 = yfp.id_1)
+	JOIN faculty f ON (f.code = yf.faculty_code)
 WHERE l.code = 23
-order by c.code
+order by c.code;
