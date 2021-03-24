@@ -56,7 +56,7 @@ CREATE TABLE question (
 );
 
 CREATE TABLE year_faculty (
-	id_1 INT AUTO_INCREMENT PRIMARY KEY,
+	id_1 VARCHAR(11) PRIMARY KEY,
     academic_code VARCHAR(10),
     faculty_code VARCHAR(10),
     FOREIGN KEY (academic_code) REFERENCES academic_year(code),
@@ -65,7 +65,7 @@ CREATE TABLE year_faculty (
 
 CREATE TABLE year_fac_pro (
 	id_2 INT AUTO_INCREMENT PRIMARY KEY,
-    id_1 INT,
+    id_1 VARCHAR(11),
     program_code VARCHAR(10),
     FOREIGN KEY (id_1) REFERENCES year_faculty(id_1),
     FOREIGN KEY (program_code) REFERENCES program(code)
