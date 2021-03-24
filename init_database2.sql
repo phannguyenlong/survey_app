@@ -8,8 +8,9 @@ DROP TABLE IF EXISTS question_content;
 DROP TABLE IF EXISTS questionaire;
 DROP TABLE IF EXISTS teaching;
 DROP TABLE IF EXISTS class;
-DROP TABLE IF EXISTS fat2;
-DROP TABLE IF EXISTS fat1;
+DROP TABLE IF EXISTS year_fac_pro_mo;
+DROP TABLE IF EXISTS year_fac_pro;
+DROP TABLE IF EXISTS year_faculty;
 DROP TABLE IF EXISTS semester;
 DROP TABLE IF EXISTS academic_year;
 DROP TABLE IF EXISTS module;
@@ -54,7 +55,7 @@ CREATE TABLE question (
     type VARCHAR(20) NOT NULL
 );
 
-CREATE TABLE fat1 (
+CREATE TABLE year_faculty (
 	id_1 INT AUTO_INCREMENT PRIMARY KEY,
     academic_code VARCHAR(10),
     faculty_code VARCHAR(10),
@@ -62,23 +63,29 @@ CREATE TABLE fat1 (
     FOREIGN KEY (faculty_code) REFERENCES faculty(code)
 );
 
-CREATE TABLE fat2 (
+CREATE TABLE year_fac_pro (
 	id_2 INT AUTO_INCREMENT PRIMARY KEY,
     id_1 INT,
     program_code VARCHAR(10),
-    FOREIGN KEY (id_1) REFERENCES fat1(id_1),
+    FOREIGN KEY (id_1) REFERENCES year_faculty(id_1),
     FOREIGN KEY (program_code) REFERENCES program(code)
+);
+
+CREATE TABLE year_fac_pro_mo (
+	id_3 INT AUTO_INCREMENT PRIMARY KEY,
+    id_2 INT,
+    module_code VARCHAR(10),
+    FOREIGN KEY (id_2) REFERENCES year_fac_pro(id_2),
+    FOREIGN KEY (module_code) REFERENCES module(code)
 );
 
 CREATE TABLE class (
 	code VARCHAR(10) PRIMARY KEY,
     size INTEGER NOT NULL,
     semester_code VARCHAR(10),
-    module_code VARCHAR(10),
-    id_2 INT,
+    id_3 INT,
     FOREIGN KEY (semester_code) REFERENCES semester(code),
-    FOREIGN KEY (module_code) REFERENCES module(code),
-    FOREIGN KEY (id_2) REFERENCES fat2(id_2)
+    FOREIGN KEY (id_3) REFERENCES year_fac_pro_mo(id_3)
 );
 
 CREATE TABLE question_content (
@@ -121,29 +128,29 @@ INSERT INTO academic_year (code) VALUES ('2018-2019');
 INSERT INTO academic_year (code) VALUES ('2019-2020');
 INSERT INTO academic_year (code) VALUES ('2020-2021');
 
--- FAT1
-INSERT INTO fat1 (academic_code, faculty_code) VALUES ("2016-2017", "FIT");
-INSERT INTO fat1 (academic_code, faculty_code) VALUES ("2016-2017", "FENG");
+-- year_faculty
+INSERT INTO year_faculty (academic_code, faculty_code) VALUES ("2016-2017", "FIT");
+INSERT INTO year_faculty (academic_code, faculty_code) VALUES ("2016-2017", "FENG");
 
-INSERT INTO fat1 (academic_code, faculty_code) VALUES ("2017-2018", "FECO");
-INSERT INTO fat1 (academic_code, faculty_code) VALUES ("2017-2018", "FENG");
-INSERT INTO fat1 (academic_code, faculty_code) VALUES ("2017-2018", "FIT");
+INSERT INTO year_faculty (academic_code, faculty_code) VALUES ("2017-2018", "FECO");
+INSERT INTO year_faculty (academic_code, faculty_code) VALUES ("2017-2018", "FENG");
+INSERT INTO year_faculty (academic_code, faculty_code) VALUES ("2017-2018", "FIT");
 
-INSERT INTO fat1 (academic_code, faculty_code) VALUES ("2018-2019", "FECO");
-INSERT INTO fat1 (academic_code, faculty_code) VALUES ("2018-2019", "FENG");
-INSERT INTO fat1 (academic_code, faculty_code) VALUES ("2018-2019", "FIT");
-INSERT INTO fat1 (academic_code, faculty_code) VALUES ("2018-2019", "FLAW");
+INSERT INTO year_faculty (academic_code, faculty_code) VALUES ("2018-2019", "FECO");
+INSERT INTO year_faculty (academic_code, faculty_code) VALUES ("2018-2019", "FENG");
+INSERT INTO year_faculty (academic_code, faculty_code) VALUES ("2018-2019", "FIT");
+INSERT INTO year_faculty (academic_code, faculty_code) VALUES ("2018-2019", "FLAW");
 
-INSERT INTO fat1 (academic_code, faculty_code) VALUES ("2019-2020", "FECO");
-INSERT INTO fat1 (academic_code, faculty_code) VALUES ("2019-2020", "FENG");
-INSERT INTO fat1 (academic_code, faculty_code) VALUES ("2019-2020", "FIT");
-INSERT INTO fat1 (academic_code, faculty_code) VALUES ("2019-2020", "FLAW");
+INSERT INTO year_faculty (academic_code, faculty_code) VALUES ("2019-2020", "FECO");
+INSERT INTO year_faculty (academic_code, faculty_code) VALUES ("2019-2020", "FENG");
+INSERT INTO year_faculty (academic_code, faculty_code) VALUES ("2019-2020", "FIT");
+INSERT INTO year_faculty (academic_code, faculty_code) VALUES ("2019-2020", "FLAW");
 
-INSERT INTO fat1 (academic_code, faculty_code) VALUES ("2020-2021", "FECO");
-INSERT INTO fat1 (academic_code, faculty_code) VALUES ("2020-2021", "FENG");
-INSERT INTO fat1 (academic_code, faculty_code) VALUES ("2020-2021", "FIT");
-INSERT INTO fat1 (academic_code, faculty_code) VALUES ("2020-2021", "FLAW");
-INSERT INTO fat1 (academic_code, faculty_code) VALUES ("2020-2021", "FMUS");
+INSERT INTO year_faculty (academic_code, faculty_code) VALUES ("2020-2021", "FECO");
+INSERT INTO year_faculty (academic_code, faculty_code) VALUES ("2020-2021", "FENG");
+INSERT INTO year_faculty (academic_code, faculty_code) VALUES ("2020-2021", "FIT");
+INSERT INTO year_faculty (academic_code, faculty_code) VALUES ("2020-2021", "FLAW");
+INSERT INTO year_faculty (academic_code, faculty_code) VALUES ("2020-2021", "FMUS");
 
 -- Program
 -- Faculty of economic
@@ -167,57 +174,57 @@ INSERT INTO program (code, name) VALUES ('VOCAL', 'Vocalist');
 INSERT INTO program (code, name) VALUES ('COMP', 'Music Composed');
 INSERT INTO program (code, name) VALUES ('INS', 'Instrument');
 
--- FAT2
-INSERT INTO fat2(id_1, program_code) VALUES(1, "BIS");
-INSERT INTO fat2(id_1, program_code) VALUES(1, "CSE");
+-- year_fac_pro
+INSERT INTO year_fac_pro(id_1, program_code) VALUES(1, "BIS");
+INSERT INTO year_fac_pro(id_1, program_code) VALUES(1, "CSE");
 
-INSERT INTO fat2(id_1, program_code) VALUES(2, "ME");
+INSERT INTO year_fac_pro(id_1, program_code) VALUES(2, "ME");
 
-INSERT INTO fat2(id_1, program_code) VALUES(3, "BA");
+INSERT INTO year_fac_pro(id_1, program_code) VALUES(3, "BA");
 
-INSERT INTO fat2(id_1, program_code) VALUES(4, "ME");
-INSERT INTO fat2(id_1, program_code) VALUES(4, "EE");
+INSERT INTO year_fac_pro(id_1, program_code) VALUES(4, "ME");
+INSERT INTO year_fac_pro(id_1, program_code) VALUES(4, "EE");
 
-INSERT INTO fat2(id_1, program_code) VALUES(5, "BIS");
-INSERT INTO fat2(id_1, program_code) VALUES(5, "ITSEC");
-INSERT INTO fat2(id_1, program_code) VALUES(5, "CSE");
+INSERT INTO year_fac_pro(id_1, program_code) VALUES(5, "BIS");
+INSERT INTO year_fac_pro(id_1, program_code) VALUES(5, "ITSEC");
+INSERT INTO year_fac_pro(id_1, program_code) VALUES(5, "CSE");
 
-INSERT INTO fat2(id_1, program_code) VALUES(6, "LOG");
+INSERT INTO year_fac_pro(id_1, program_code) VALUES(6, "LOG");
 
-INSERT INTO fat2(id_1, program_code) VALUES(7, "ME");
-INSERT INTO fat2(id_1, program_code) VALUES(7, "EE");
+INSERT INTO year_fac_pro(id_1, program_code) VALUES(7, "ME");
+INSERT INTO year_fac_pro(id_1, program_code) VALUES(7, "EE");
 
-INSERT INTO fat2(id_1, program_code) VALUES(8, "BIS");
-INSERT INTO fat2(id_1, program_code) VALUES(8, "ITSEC");
-INSERT INTO fat2(id_1, program_code) VALUES(8, "CSE");
+INSERT INTO year_fac_pro(id_1, program_code) VALUES(8, "BIS");
+INSERT INTO year_fac_pro(id_1, program_code) VALUES(8, "ITSEC");
+INSERT INTO year_fac_pro(id_1, program_code) VALUES(8, "CSE");
 
-INSERT INTO fat2(id_1, program_code) VALUES(9, "ELAW");
+INSERT INTO year_fac_pro(id_1, program_code) VALUES(9, "ELAW");
 
-INSERT INTO fat2(id_1, program_code) VALUES(10, "ECO");
+INSERT INTO year_fac_pro(id_1, program_code) VALUES(10, "ECO");
 
-INSERT INTO fat2(id_1, program_code) VALUES(11, "ME");
-INSERT INTO fat2(id_1, program_code) VALUES(11, "EE");
-INSERT INTO fat2(id_1, program_code) VALUES(11, "CE");
+INSERT INTO year_fac_pro(id_1, program_code) VALUES(11, "ME");
+INSERT INTO year_fac_pro(id_1, program_code) VALUES(11, "EE");
+INSERT INTO year_fac_pro(id_1, program_code) VALUES(11, "CE");
 
-INSERT INTO fat2(id_1, program_code) VALUES(12, "BIS");
-INSERT INTO fat2(id_1, program_code) VALUES(12, "ITSEC");
-INSERT INTO fat2(id_1, program_code) VALUES(12, "CSE");
+INSERT INTO year_fac_pro(id_1, program_code) VALUES(12, "BIS");
+INSERT INTO year_fac_pro(id_1, program_code) VALUES(12, "ITSEC");
+INSERT INTO year_fac_pro(id_1, program_code) VALUES(12, "CSE");
 
-INSERT INTO fat2(id_1, program_code) VALUES(13, "CLAW");
+INSERT INTO year_fac_pro(id_1, program_code) VALUES(13, "CLAW");
 
-INSERT INTO fat2(id_1, program_code) VALUES(14, "ECO");
+INSERT INTO year_fac_pro(id_1, program_code) VALUES(14, "ECO");
 
-INSERT INTO fat2(id_1, program_code) VALUES(15, "ME");
-INSERT INTO fat2(id_1, program_code) VALUES(15, "EE");
-INSERT INTO fat2(id_1, program_code) VALUES(15, "CE");
+INSERT INTO year_fac_pro(id_1, program_code) VALUES(15, "ME");
+INSERT INTO year_fac_pro(id_1, program_code) VALUES(15, "EE");
+INSERT INTO year_fac_pro(id_1, program_code) VALUES(15, "CE");
 
-INSERT INTO fat2(id_1, program_code) VALUES(16, "BIS");
-INSERT INTO fat2(id_1, program_code) VALUES(16, "ITSEC");
-INSERT INTO fat2(id_1, program_code) VALUES(16, "CSE");
+INSERT INTO year_fac_pro(id_1, program_code) VALUES(16, "BIS");
+INSERT INTO year_fac_pro(id_1, program_code) VALUES(16, "ITSEC");
+INSERT INTO year_fac_pro(id_1, program_code) VALUES(16, "CSE");
 
-INSERT INTO fat2(id_1, program_code) VALUES(17, "CVLAW");
+INSERT INTO year_fac_pro(id_1, program_code) VALUES(17, "CVLAW");
 
-INSERT INTO fat2(id_1, program_code) VALUES(18, "COMP");
+INSERT INTO year_fac_pro(id_1, program_code) VALUES(18, "COMP");
 
 -- Module
 -- general
@@ -328,117 +335,117 @@ INSERT INTO semester (code, academic_code) VALUES ('SS21', '2020-2021');
 
 -- Class
 -- CSE
-insert into class (code, size, semester_code, module_code) values (1, 47, 'WS16', 'MACS');
-insert into class (code, size, semester_code, module_code) values (2, 57, 'SS17', 'PE');
-insert into class (code, size, semester_code, module_code) values (3, 61, 'SS17', 'SWE');
-insert into class (code, size, semester_code, module_code) values (4, 43, 'WS17', 'MACS');
-insert into class (code, size, semester_code, module_code) values (5, 43, 'SS18', 'PE');
-insert into class (code, size, semester_code, module_code) values (6, 43, 'SS18', 'SWE');
-insert into class (code, size, semester_code, module_code) values (7, 61, 'WS18', 'MACS');
-insert into class (code, size, semester_code, module_code) values (8, 47, 'SS19', 'PE');
-insert into class (code, size, semester_code, module_code) values (9, 53, 'SS19', 'SWE');
-insert into class (code, size, semester_code, module_code) values (10, 53, 'WS19', 'MACS');
-insert into class (code, size, semester_code, module_code) values (11, 43, 'SS20', 'PE');
-insert into class (code, size, semester_code, module_code) values (12, 53, 'SS20', 'SWE');
-insert into class (code, size, semester_code, module_code) values (13, 57, 'WS20', 'MACS');
-insert into class (code, size, semester_code, module_code) values (14, 53, 'SS21', 'PE');
-insert into class (code, size, semester_code, module_code) values (15, 53, 'SS21', 'SWE');
+insert into class (code, size, semester_code) values (1, 47, 'WS16');
+insert into class (code, size, semester_code) values (2, 57, 'SS17');
+insert into class (code, size, semester_code) values (3, 61, 'SS17');
+insert into class (code, size, semester_code) values (4, 43, 'WS17');
+insert into class (code, size, semester_code) values (5, 43, 'SS18');
+insert into class (code, size, semester_code) values (6, 43, 'SS18');
+insert into class (code, size, semester_code) values (7, 61, 'WS18');
+insert into class (code, size, semester_code) values (8, 47, 'SS19');
+insert into class (code, size, semester_code) values (9, 53, 'SS19');
+insert into class (code, size, semester_code) values (10, 53, 'WS19');
+insert into class (code, size, semester_code) values (11, 43, 'SS20');
+insert into class (code, size, semester_code) values (12, 53, 'SS20');
+insert into class (code, size, semester_code) values (13, 57, 'WS20');
+insert into class (code, size, semester_code) values (14, 53, 'SS21');
+insert into class (code, size, semester_code) values (15, 53, 'SS21');
 -- BIS
-insert into class (code, size, semester_code, module_code) values (16, 47, 'WS16', 'MABI');
-insert into class (code, size, semester_code, module_code) values (17, 57, 'SS17', 'DBSYS');
-insert into class (code, size, semester_code, module_code) values (18, 61, 'SS17', 'SARC');
-insert into class (code, size, semester_code, module_code) values (19, 61, 'WS17', 'MABI');
-insert into class (code, size, semester_code, module_code) values (20, 57, 'SS18', 'DBSYS');
-insert into class (code, size, semester_code, module_code) values (21, 57, 'SS18', 'SARC');
-insert into class (code, size, semester_code, module_code) values (22, 57, 'WS18', 'MABI');
-insert into class (code, size, semester_code, module_code) values (23, 47, 'SS19', 'DBSYS');
-insert into class (code, size, semester_code, module_code) values (24, 43, 'SS19', 'SARC');
-insert into class (code, size, semester_code, module_code) values (25, 53, 'WS19', 'MABI');
-insert into class (code, size, semester_code, module_code) values (26, 57, 'SS20', 'DBSYS');
-insert into class (code, size, semester_code, module_code) values (27, 61, 'SS20', 'SARC');
-insert into class (code, size, semester_code, module_code) values (28, 53, 'WS20', 'MABI');
-insert into class (code, size, semester_code, module_code) values (29, 61, 'SS21', 'DBSYS');
-insert into class (code, size, semester_code, module_code) values (30, 53, 'SS21', 'SARC');
+insert into class (code, size, semester_code) values (16, 47, 'WS16');
+insert into class (code, size, semester_code) values (17, 57, 'SS17');
+insert into class (code, size, semester_code) values (18, 61, 'SS17');
+insert into class (code, size, semester_code) values (19, 61, 'WS17');
+insert into class (code, size, semester_code) values (20, 57, 'SS18');
+insert into class (code, size, semester_code) values (21, 57, 'SS18');
+insert into class (code, size, semester_code) values (22, 57, 'WS18');
+insert into class (code, size, semester_code) values (23, 47, 'SS19');
+insert into class (code, size, semester_code) values (24, 43, 'SS19');
+insert into class (code, size, semester_code) values (25, 53, 'WS19');
+insert into class (code, size, semester_code) values (26, 57, 'SS20');
+insert into class (code, size, semester_code) values (27, 61, 'SS20');
+insert into class (code, size, semester_code) values (28, 53, 'WS20');
+insert into class (code, size, semester_code) values (29, 61, 'SS21');
+insert into class (code, size, semester_code) values (30, 53, 'SS21');
 -- ME
-insert into class (code, size, semester_code, module_code) values (31, 42, 'WS16', 'MAME');
-insert into class (code, size, semester_code, module_code) values (32, 37, 'SS17', 'PHYS');
-insert into class (code, size, semester_code, module_code) values (33, 41, 'SS17', 'CHEM');
-insert into class (code, size, semester_code, module_code) values (34, 41, 'WS17', 'MAME');
-insert into class (code, size, semester_code, module_code) values (35, 53, 'SS18', 'PHYS');
-insert into class (code, size, semester_code, module_code) values (36, 34, 'SS18', 'CHEM');
-insert into class (code, size, semester_code, module_code) values (37, 61, 'WS18', 'MAME');
-insert into class (code, size, semester_code, module_code) values (38, 67, 'SS19', 'PHYS');
-insert into class (code, size, semester_code, module_code) values (39, 64, 'SS19', 'CHEM');
-insert into class (code, size, semester_code, module_code) values (40, 67, 'WS19', 'MAME');
-insert into class (code, size, semester_code, module_code) values (41, 37, 'SS20', 'PHYS');
-insert into class (code, size, semester_code, module_code) values (42, 33, 'SS20', 'CHEM', 3);
-insert into class (code, size, semester_code, module_code) values (43, 46, 'WS20', 'MAME');
-insert into class (code, size, semester_code, module_code) values (44, 41, 'SS21', 'PHYS');
-insert into class (code, size, semester_code, module_code) values (45, 31, 'SS21', 'CHEM');
+insert into class (code, size, semester_code) values (31, 42, 'WS16');
+insert into class (code, size, semester_code) values (32, 37, 'SS17');
+insert into class (code, size, semester_code) values (33, 41, 'SS17');
+insert into class (code, size, semester_code) values (34, 41, 'WS17');
+insert into class (code, size, semester_code) values (35, 53, 'SS18');
+insert into class (code, size, semester_code) values (36, 34, 'SS18');
+insert into class (code, size, semester_code) values (37, 61, 'WS18');
+insert into class (code, size, semester_code) values (38, 67, 'SS19');
+insert into class (code, size, semester_code) values (39, 64, 'SS19');
+insert into class (code, size, semester_code) values (40, 67, 'WS19');
+insert into class (code, size, semester_code) values (41, 37, 'SS20');
+insert into class (code, size, semester_code) values (42, 33, 'SS20');
+insert into class (code, size, semester_code) values (43, 46, 'WS20');
+insert into class (code, size, semester_code) values (44, 41, 'SS21');
+insert into class (code, size, semester_code) values (45, 31, 'SS21');
 -- ITSEC
-insert into class (code, size, semester_code, module_code) values (46, 67, 'WS17', 'MAIT');
-insert into class (code, size, semester_code, module_code) values (47, 37, 'SS18', 'CNET');
-insert into class (code, size, semester_code, module_code) values (48, 63, 'SS18', 'CRYP');
-insert into class (code, size, semester_code, module_code) values (49, 57, 'WS18', 'MAIT');
-insert into class (code, size, semester_code, module_code) values (50, 48, 'SS19', 'CNET');
-insert into class (code, size, semester_code, module_code) values (51, 38, 'SS19', 'CRYP');
-insert into class (code, size, semester_code, module_code) values (52, 62, 'WS19', 'MAIT');
-insert into class (code, size, semester_code, module_code) values (53, 47, 'SS20', 'CNET');
-insert into class (code, size, semester_code, module_code) values (54, 35, 'SS20', 'CRYP');
-insert into class (code, size, semester_code, module_code) values (55, 61, 'WS20', 'MAIT');
-insert into class (code, size, semester_code, module_code) values (56, 31, 'SS21', 'CNET');
-insert into class (code, size, semester_code, module_code) values (57, 44, 'SS21', 'CRYP');
+insert into class (code, size, semester_code) values (46, 67, 'WS17');
+insert into class (code, size, semester_code) values (47, 37, 'SS18');
+insert into class (code, size, semester_code) values (48, 63, 'SS18');
+insert into class (code, size, semester_code) values (49, 57, 'WS18');
+insert into class (code, size, semester_code) values (50, 48, 'SS19');
+insert into class (code, size, semester_code) values (51, 38, 'SS19');
+insert into class (code, size, semester_code) values (52, 62, 'WS19');
+insert into class (code, size, semester_code) values (53, 47, 'SS20');
+insert into class (code, size, semester_code) values (54, 35, 'SS20');
+insert into class (code, size, semester_code) values (55, 61, 'WS20');
+insert into class (code, size, semester_code) values (56, 31, 'SS21');
+insert into class (code, size, semester_code) values (57, 44, 'SS21');
 -- EE
-insert into class (code, size, semester_code, module_code) values (61, 67, 'WS17', 'MAEE');
-insert into class (code, size, semester_code, module_code) values (62, 64, 'SS18', 'AUTO');
-insert into class (code, size, semester_code, module_code) values (63, 42, 'SS18', 'HWE');
-insert into class (code, size, semester_code, module_code) values (64, 32, 'WS18', 'MAEE', 3);
-insert into class (code, size, semester_code, module_code) values (65, 58, 'SS19', 'AUTO');
-insert into class (code, size, semester_code, module_code) values (66, 50, 'SS19', 'HWE');
-insert into class (code, size, semester_code, module_code) values (67, 59, 'WS19', 'MAEE');
-insert into class (code, size, semester_code, module_code) values (68, 58, 'SS20', 'AUTO');
-insert into class (code, size, semester_code, module_code) values (69, 50, 'SS20', 'HWE');
-insert into class (code, size, semester_code, module_code) values (70, 46, 'WS20', 'MAEE');
-insert into class (code, size, semester_code, module_code) values (71, 65, 'SS21', 'AUTO');
-insert into class (code, size, semester_code, module_code) values (72, 39, 'SS21', 'HWE');
+insert into class (code, size, semester_code) values (61, 67, 'WS17');
+insert into class (code, size, semester_code) values (62, 64, 'SS18');
+insert into class (code, size, semester_code) values (63, 42, 'SS18');
+insert into class (code, size, semester_code) values (64, 32, 'WS18');
+insert into class (code, size, semester_code) values (65, 58, 'SS19');
+insert into class (code, size, semester_code) values (66, 50, 'SS19');
+insert into class (code, size, semester_code) values (67, 59, 'WS19');
+insert into class (code, size, semester_code) values (68, 58, 'SS20');
+insert into class (code, size, semester_code) values (69, 50, 'SS20');
+insert into class (code, size, semester_code) values (70, 46, 'WS20');
+insert into class (code, size, semester_code) values (71, 65, 'SS21');
+insert into class (code, size, semester_code) values (72, 39, 'SS21');
 -- BA
-insert into class (code, size, semester_code, module_code) values (58, 59, 'WS17', 'MABA');
-insert into class (code, size, semester_code, module_code) values (59, 57, 'SS18', 'MAK');
-insert into class (code, size, semester_code, module_code) values (60, 56, 'SS18', 'MAN');
+insert into class (code, size, semester_code) values (58, 59, 'WS17');
+insert into class (code, size, semester_code) values (59, 57, 'SS18');
+insert into class (code, size, semester_code) values (60, 56, 'SS18');
 -- LOG
-insert into class (code, size, semester_code, module_code) values (73, 62, 'WS18', 'MALO');
-insert into class (code, size, semester_code, module_code) values (74, 44, 'SS19', 'LOT');
-insert into class (code, size, semester_code, module_code) values (75, 63, 'SS19', 'IOM');
+insert into class (code, size, semester_code) values (73, 62, 'WS18');
+insert into class (code, size, semester_code) values (74, 44, 'SS19');
+insert into class (code, size, semester_code) values (75, 63, 'SS19');
 -- ELAW
-insert into class (code, size, semester_code, module_code) values (76, 55, 'WS18', 'ALEL');
-insert into class (code, size, semester_code, module_code) values (77, 54, 'SS19', 'ILAW');
-insert into class (code, size, semester_code, module_code) values (78, 32, 'SS19', 'IVML');
+insert into class (code, size, semester_code) values (76, 55, 'WS18');
+insert into class (code, size, semester_code) values (77, 54, 'SS19');
+insert into class (code, size, semester_code) values (78, 32, 'SS19');
 -- CE
-insert into class (code, size, semester_code, module_code) values (79, 55, 'WS19', 'MACE');
-insert into class (code, size, semester_code, module_code) values (80, 46, 'SS20', 'UWM');
-insert into class (code, size, semester_code, module_code) values (81, 47, 'SS20', 'TRE');
-insert into class (code, size, semester_code, module_code) values (82, 33, 'WS20', 'MACE');
-insert into class (code, size, semester_code, module_code) values (83, 48, 'SS21', 'UWM');
-insert into class (code, size, semester_code, module_code) values (84, 58, 'SS21', 'TRE');
+insert into class (code, size, semester_code) values (79, 55, 'WS19');
+insert into class (code, size, semester_code) values (80, 46, 'SS20');
+insert into class (code, size, semester_code) values (81, 47, 'SS20');
+insert into class (code, size, semester_code) values (82, 33, 'WS20');
+insert into class (code, size, semester_code) values (83, 48, 'SS21');
+insert into class (code, size, semester_code) values (84, 58, 'SS21');
 -- ECO
-insert into class (code, size, semester_code, module_code) values (85, 65, 'WS19', 'MAEC');
-insert into class (code, size, semester_code, module_code) values (86, 51, 'SS20', 'MAE');
-insert into class (code, size, semester_code, module_code) values (87, 54, 'SS20', 'MIE');
-insert into class (code, size, semester_code, module_code) values (88, 34, 'WS20', 'MAEC');
-insert into class (code, size, semester_code, module_code) values (89, 52, 'SS21', 'MAE');
-insert into class (code, size, semester_code, module_code) values (90, 32, 'SS21', 'MIE');
+insert into class (code, size, semester_code) values (85, 65, 'WS19');
+insert into class (code, size, semester_code) values (86, 51, 'SS20');
+insert into class (code, size, semester_code) values (87, 54, 'SS20');
+insert into class (code, size, semester_code) values (88, 34, 'WS20');
+insert into class (code, size, semester_code) values (89, 52, 'SS21');
+insert into class (code, size, semester_code) values (90, 32, 'SS21');
 -- CLAW
-insert into class (code, size, semester_code, module_code) values (91, 66, 'WS19', 'ALCL');
-insert into class (code, size, semester_code, module_code) values (92, 36, 'SS20', 'DITL');
-insert into class (code, size, semester_code, module_code) values (93, 60, 'SS20', 'IPL');
+insert into class (code, size, semester_code) values (91, 66, 'WS19');
+insert into class (code, size, semester_code) values (92, 36, 'SS20');
+insert into class (code, size, semester_code) values (93, 60, 'SS20');
 -- CVLAW
-insert into class (code, size, semester_code, module_code) values (94, 51, 'WS20', 'ALCV');
-insert into class (code, size, semester_code, module_code) values (95, 40, 'SS21', 'HRL');
-insert into class (code, size, semester_code, module_code) values (96, 39, 'SS21', 'CVPD');
+insert into class (code, size, semester_code) values (94, 51, 'WS20');
+insert into class (code, size, semester_code) values (95, 40, 'SS21');
+insert into class (code, size, semester_code) values (96, 39, 'SS21');
 -- COMP
-insert into class (code, size, semester_code, module_code) values (97, 50, 'WS20', 'MTCO');
-insert into class (code, size, semester_code, module_code) values (98, 40, 'SS21', 'KBS');
-insert into class (code, size, semester_code, module_code) values (99, 32, 'SS21', 'NTT');
+insert into class (code, size, semester_code) values (97, 50, 'WS20');
+insert into class (code, size, semester_code) values (98, 40, 'SS21');
+insert into class (code, size, semester_code) values (99, 32, 'SS21');
 
 -- Teaching
 -- FECO
