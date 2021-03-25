@@ -101,7 +101,7 @@ public class DatabaseConnect {
             // Represent a row in DB. Key: Column name, Value: Column value
             Map<String, Object> row = new HashMap<>();
             for (int i = 1; i <= columnCount; i++) {
-                String colName = rsmd.getColumnName(i);
+                String colName = rsmd.getColumnLabel(i); // change to fix error of alias in mysql
                 Object colVal = rs.getObject(i);
                 row.put(colName, colVal);
             }
