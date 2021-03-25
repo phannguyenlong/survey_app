@@ -9,7 +9,7 @@ $(document).ready(function() {
 function getExample() {
 	$.ajax({
 		type: 'GET',
-		url: "database",
+		url: "hw3",
 		success: function(data, textStatus, jqXHR) {
 			alert(JSON.stringify(data))
             console.log(data)
