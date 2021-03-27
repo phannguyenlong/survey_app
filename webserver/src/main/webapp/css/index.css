@@ -1,0 +1,68 @@
+/* Container holding the image and the text */
+body {
+  height: 100%;
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-family: Optima;
+}
+
+.hero-image {
+  background-image: url("https://i.redd.it/kgizj1xogzs11.png");
+  background-color: #cccccc;
+  height: 300px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+}
+
+.hero-text {
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ffefcf;
+}
+
+.hwContent {
+    text-align: center;
+    height: 100px;
+    margin: 0px 0px 50px 0px;
+    padding: 10px;
+    height: 150px;
+}
+
+.button {
+  background: #d44000;
+  border-radius: 100px;
+  padding: 10px 30px;
+  color: #ffefcf;
+  text-decoration: none;
+  transition: all 0.5s;
+}
+
+.button span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.button span:after {
+  content: '\00bb';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.button:hover span {
+  padding-right: 25px;
+}
+
+.button:hover span:after {
+  opacity: 1;
+  right: 0;
+}
