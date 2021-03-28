@@ -8,13 +8,15 @@ function getHW(){
         type: 'GET',
         success: function (data) {
             data.map(val => {
-                aca_year = $("<td></td>").text(val[i].aca_year)
-                fal = $("<td></td>").text(val[i].fa_name)
-                pro_name = $("<td></td>").text(val[i].pro_name)
-                mo_name = $("<td></td>").text(val[i].mo_name)
-                class_name = $("<td></td>").text(val[i].class_name)
-                $("homework3-table").append($("<tr><tr>").append(fal,mo_name,aca_year,pro_name,class_name));
-            }
+                $(`<tr>
+                <td>${val.acayear}</td>
+                
+                <td>${val.fa_name}</td>
+                <td>${val.pro_name}</td>
+                <td>${val.mo_name}</td>
+                <td>${val.class_name}</td>    
+                </tr>`).appendTo(".homework3-table");
+            })
         };
     })
 
