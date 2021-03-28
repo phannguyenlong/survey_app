@@ -16,7 +16,7 @@ function getExample() {
             	aca_year = $("<td></td>").text(json[i].aca_year)
             	pro_name = $("<td></td>").text(json[i].pro_name)
             	class_name = $("<td></td>").text(json[i].class_name)            	
-            	$("table").append($("<tr><tr>").append(fal,mo_name,aca_year,pro_name,class_name))
+            	$("table").append($("<tr></tr>").append(fal,mo_name,aca_year,pro_name,class_name))
             }
             
 			
