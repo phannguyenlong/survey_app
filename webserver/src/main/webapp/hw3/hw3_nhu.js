@@ -2,6 +2,7 @@ $(document).ready(function() {
     getHW();
 })
 
+/*
 function getHW(){
     $.ajax({
         url: "http://localhost:8080/webserver/hw3",
@@ -9,7 +10,7 @@ function getHW(){
         success: function (data) {
             data.map(val => {
                 $(`<tr>
-                <td>${val.acayear}</td>
+                <td>${val.aca_year}</td>
                 
                 <td>${val.fa_name}</td>
                 <td>${val.pro_name}</td>
@@ -20,4 +21,22 @@ function getHW(){
         }
     })
 
+}
+*/
+
+function getHW() {
+    $.ajax({
+        type: 'GET',
+        url: "http://localhost:8080/webserver/hw3",
+        success: function(data) {
+            data.map(val => {
+                aca_year = $("<td></td>").text(val.aca_year)
+                fal = $("<td></td>").text(val.fa_name)
+                pro_name = $("<td></td>").text(val.pro_name)
+                mo_name = $("<td></td>").text(val.mo_name)
+                class_name = $("<td></td>").text(val.class_name)
+                $(".homework3-table").append($("<tr><tr>").append(aca_year, fal, pro_name, mo_name, class_name));
+            })
+        }
+    })
 }
