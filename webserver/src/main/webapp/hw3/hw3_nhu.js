@@ -17,7 +17,7 @@ function getHW(){
                 <td>${val.class_name}</td>    
                 </tr>`).appendTo(".homework3-table");
             })
-        };
+        }
     })
 
-})
+}
