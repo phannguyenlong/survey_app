@@ -18,22 +18,15 @@ import javax.servlet.annotation.WebServlet;
 import util.DatabaseConnect;
 
 /**
- * write description here
+ * Used for getQuestion from database
  */
-@WebServlet(urlPatterns = "/class")
-public class getClassServlet extends HttpServlet {
+@WebServlet(urlPatterns = "/question")
+public class getQuestionServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    	String query = "";
-    	String classCode =  req.getParameter("class_code");
-    	if (classCode.equals("all") || classCode.equals(null)) {
-    		query = "CALL getAllClass;";
-    	}
-    	else {
-    		query = "CALL getClassByCode(" + classCode + ")";
-    	}
+    	String query = "CALL getAllQuestion;";
         
         System.out.println(query);
 

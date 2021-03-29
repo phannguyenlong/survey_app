@@ -18,23 +18,18 @@ import javax.servlet.annotation.WebServlet;
 import util.DatabaseConnect;
 
 /**
- * write description here
+ * Used for check Chart's Validation from database
  */
-@WebServlet(urlPatterns = "/class")
-public class getClassServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+@WebServlet(urlPatterns = "/chart/validate")
+public class checkChartValidate extends HttpServlet {
+	private static final long serialVersionUID = 1L;
     
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    	String query = "";
-    	String classCode =  req.getParameter("class_code");
-    	if (classCode.equals("all") || classCode.equals(null)) {
-    		query = "CALL getAllClass;";
-    	}
-    	else {
-    		query = "CALL getClassByCode(" + classCode + ")";
-    	}
-        
+
+    	String query = "CALL Validate(" + req.getParameter("aca_code") + "," + req.getParameter("sem_code") + "," + req.getParameter("fa_code") 
+		+ "," + req.getParameter("pro_code") + "," + req.getParameter("mo_code") + "," + req.getParameter("class_code") + "," 
+		+ req.getParameter("lec_code") + ");";
         System.out.println(query);
 
         try {
