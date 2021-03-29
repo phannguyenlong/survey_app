@@ -17,7 +17,7 @@ import javax.servlet.annotation.WebServlet;
 import util.DatabaseConnect;
 
 /**
- * Used for getClass from database 
+ * Used for getClass from database
  */
 @WebServlet(urlPatterns = "/class")
 public class getClassServlet extends HttpServlet {
