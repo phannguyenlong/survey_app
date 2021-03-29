@@ -28,12 +28,10 @@ public class getClassServlet extends HttpServlet {
     	String query = "";
     	String classCode = req.getParameter("class_code");
     	
-    	if (req.getParameterMap().containsKey("class_code")) {
-    		query = "CALL getClassByCode(" + classCode + ")";
-    	}
-    	else {
+    	if (classCode.equals("all"))
     		query = "CALL getAllClass()";
-    	}
+    	else 
+    		query = "CALL getClassByCode(" + classCode + ")";
         System.out.println(query);
 
         try {
