@@ -8,7 +8,7 @@
 
 -- ======================CREATE TABLE path======================
 -- Clean up old table
-DROP TABLE IF EXISTS question_content;
+DROP TABLE IF EXISTS answer;
 DROP TABLE IF EXISTS questionaire;
 DROP TABLE IF EXISTS teaching;
 DROP TABLE IF EXISTS class;
@@ -56,7 +56,7 @@ CREATE TABLE semester (
 
 CREATE TABLE question (
 	id INTEGER AUTO_INCREMENT PRIMARY KEY,
-    type VARCHAR(20) NOT NULL
+    content VARCHAR(200)
 );
 
 CREATE TABLE year_faculty (
@@ -92,12 +92,6 @@ CREATE TABLE class (
     FOREIGN KEY (id_3) REFERENCES year_fac_pro_mo(id_3)
 );
 
-CREATE TABLE question_content (
-	id INTEGER,
-    content VARCHAR(100),
-    PRIMARY KEY (id, content)
-);
-
 CREATE TABLE teaching (
 	class_code VARCHAR(10),
     lecturer_code VARCHAR(10),
@@ -107,15 +101,18 @@ CREATE TABLE teaching (
 );
 
 CREATE TABLE questionaire (
+	questionaire_id INT AUTO_INCREMENT PRIMARY KEY,
 	class_code VARCHAR(10),
     lecturer_code VARCHAR(10),
-    question_id INTEGER,
-    PRIMARY KEY (class_code, lecturer_code, question_id),
     FOREIGN KEY (class_code) REFERENCES class(class_code),
-    FOREIGN KEY (lecturer_code) REFERENCES lecturer(lec_code),
-    FOREIGN KEY (question_id) REFERENCES question(id)
+    FOREIGN KEY (lecturer_code) REFERENCES lecturer(lec_code)
 );
 
+CREATE TABLE answer (
+	questionaire_id INT PRIMARY KEY,
+    answer VARCHAR(200),
+	FOREIGN KEY (questionaire_id) REFERENCES questionaire(questionaire_id)
+);
 -- ======================Insert Data======================
 
 -- Falcuty
@@ -692,6 +689,8 @@ insert into teaching (class_code, lecturer_code) values (99, 21);
 
 
 -- ================CREATE PROCEDURE==================
+
+-- GET HW3 Procedure
 DROP PROCEDURE IF EXISTS java_app.GetHW3;
 DELIMITER //
 CREATE PROCEDURE GetHW3()
