@@ -1,4 +1,4 @@
-package api.questionaire;
+package api.chart;
 
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -22,14 +22,14 @@ import util.DatabaseConnect;
  */
 @WebServlet(urlPatterns = "/chart/validate")
 public class checkChartValidate extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-    
+    private static final long serialVersionUID = 1L;
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-    	String query = "CALL Validate(" + req.getParameter("aca_code") + "," + req.getParameter("sem_code") + "," + req.getParameter("fa_code") 
-		+ "," + req.getParameter("pro_code") + "," + req.getParameter("mo_code") + "," + req.getParameter("class_code") + "," 
-		+ req.getParameter("lec_code") + ");";
+        String query = "CALL Validate(" + req.getParameter("aca_code") + "," + req.getParameter("sem_code") + ","
+                + req.getParameter("fa_code") + "," + req.getParameter("pro_code") + "," + req.getParameter("mo_code")
+                + "," + req.getParameter("lec_code") + "," + req.getParameter("class_code") + ");";
         System.out.println(query);
 
         try {

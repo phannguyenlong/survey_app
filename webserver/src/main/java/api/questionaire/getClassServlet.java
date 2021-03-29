@@ -32,7 +32,7 @@ public class getClassServlet extends HttpServlet {
     		query = "CALL getAllClass;";
     	}
     	else {
-    		query = "CALL getClassByCode(" + classCode + ")";
+    		query = "CALL getClassByCode('" + classCode + "')";
     	}
         
         System.out.println(query);
