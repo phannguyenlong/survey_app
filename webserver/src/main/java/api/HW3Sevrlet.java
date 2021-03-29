@@ -44,6 +44,7 @@ public class HW3Sevrlet extends HttpServlet {
 
             DB.closeConnect();
         } catch (Exception ex) {
+            resp.setStatus(500);
             ex.printStackTrace();
         }
     }
