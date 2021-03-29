@@ -713,3 +713,37 @@ BEGIN
 	ORDER BY a.aca_code;
 END //
 DELIMITER ;
+
+-- getAllClass Procedure
+DROP PROCEDURE IF EXISTS getAllClass;
+DELIMITER  //
+CREATE PROCEDURE getAllClass()
+BEGIN
+	SELECT
+		c.class_code
+	FROM
+		class c
+	ORDER BY c.class_code;
+END //
+DELIMITER ;
+
+-- getAllClass Procedure
+DROP PROCEDURE IF EXISTS getClassByCode;
+DELIMITER  //
+CREATE PROCEDURE getClassByCode(class VARCHAR (20))
+BEGIN
+	SELECT a.aca_code, s.sem_code, f.fa_code, p.pro_code, m.mo_code, c.class_code, l.lec_code  
+	FROM class c
+	JOIN teaching t ON c.class_code = t.class_code
+	JOIN lecturer l ON t.lecturer_code = l.lec_code
+	JOIN semester s ON (s.sem_code = c.semester_code)
+	JOIN academic_year a ON (a.aca_code = s.academic_code)
+    JOIN year_fac_pro_mo yfpm ON (yfpm.id_3 = c.id_3)
+	JOIN module m ON (yfpm.module_code = m.mo_code)
+    JOIN year_fac_pro yfp ON (yfp.id_2 = yfpm.id_2 )
+	JOIN program p ON (p.pro_code = yfp.program_code)
+    JOIN year_faculty yf ON (yf.id_1 = yfp.id_1)
+	JOIN faculty f ON (f.fa_code = yf.faculty_code)
+	WHERE c.class_code=class;
+END //
+DELIMITER ;
