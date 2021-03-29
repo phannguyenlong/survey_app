@@ -751,7 +751,10 @@ DROP PROCEDURE IF EXISTS getClassByCode;
 DELIMITER  //
 CREATE PROCEDURE getClassByCode(class VARCHAR (20))
 BEGIN
-	SELECT a.aca_code, s.sem_code, f.fa_code, p.pro_code, m.mo_code, c.class_code, l.lec_code  
+	SELECT 
+		a.aca_code, s.sem_code, f.fa_code, f.name AS fa_name, 
+        p.pro_code, p.name AS pro_name, m.mo_code, m.name AS mo_name, 
+        c.class_code, l.lec_code, l.name AS lec_name 
 	FROM class c
 	JOIN teaching t ON c.class_code = t.class_code
 	JOIN lecturer l ON t.lecturer_code = l.lec_code
@@ -788,7 +791,10 @@ CREATE PROCEDURE Validate(
                         faculty VARCHAR(10), program VARCHAR(10), 
                         module VARCHAR(10), lecturer VARCHAR(10), class VARCHAR(10)) 
 BEGIN
-	SELECT a.aca_code, s.sem_code, f.fa_code, p.pro_code, m.mo_code, c.class_code, l.lec_code
+	SELECT
+		a.aca_code, s.sem_code, f.fa_code, f.name AS fa_name, 
+        p.pro_code, p.name AS pro_name, m.mo_code, m.name AS mo_name, 
+        c.class_code, l.lec_code, l.name AS lec_name 
     FROM class c
 	JOIN teaching t ON c.class_code = t.class_code
 	JOIN lecturer l ON t.lecturer_code = l.lec_code
