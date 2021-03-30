@@ -688,24 +688,24 @@ insert into teaching (class_code, lecturer_code) values (97, 23);
 insert into teaching (class_code, lecturer_code) values (99, 21);
 
 -- Question
-insert into question (content) values ('The module objective have been clear to me.');
-insert into question (content) values ('The learning materials (e.g. course books, handouts, etc.) have been sufficient and useful.');
-insert into question (content) values ('The content of the module has always been relevant.');
-insert into question (content) values ('The lessons have been interesting.');
-insert into question (content) values ('The module workload outside classroom such as homework, assignments, exercises, exam preparation, ect. has been');
-insert into question (content) values ('The overall module workload has been');
-insert into question (content) values ('The level of difficulty of the module has been');
-insert into question (content) values ('Module contents have been presented understandably.');
-insert into question (content) values ('Various learning activities have been used to teach the content.');
-insert into question (content) values ('The learning activities have supported the intended learning outcomes.');
-insert into question (content) values ('The assessment methods (tests, assignment, group work, etc.) are appropriate.');
-insert into question (content) values ('Students have been encouraged to apply critical thinking and logics to better understand the course material.');
-insert into question (content) values ('The lecturer has given feedback (about your answers or performance in assignments, reports, presentations, etc.) and it was helpful.');
-insert into question (content) values ('The language skills (English / German) of the lecturer were excellent.');
-insert into question (content) values ("The lecturer has listened to students' ideas and contributions.");
-insert into question (content) values ('The lecturer has encouraged discussion and questions in class.');
-insert into question (content) values ('The lecturer has offered consultation to individuals for academic support.');
-insert into question (content) values ('Additional comments about what you liked or disliked and suggestions for further improvement:');
+insert into question (content) values ('The module objective have been clear to me.-Strongly disagree=1-2-3-4-Strongly agree=5-NA');
+insert into question (content) values ('The learning materials (e.g. course books, handouts, etc.) have been sufficient and useful.-Strongly disagree=1-2-3-4-Strongly agree=5-NA');
+insert into question (content) values ('The content of the module has always been relevant.-Strongly disagree=1-2-3-4-Strongly agree=5-NA');
+insert into question (content) values ('The lessons have been interesting.-Strongly disagree=1-2-3-4-Strongly agree=5-NA');
+insert into question (content) values ('The module workload outside classroom such as homework, assignments, exercises, exam preparation, ect. has been-<1hour=1-2-3-4->5hours=5');
+insert into question (content) values ('The overall module workload has been-Too little=1-2-3-4-Too much=5');
+insert into question (content) values ('The level of difficulty of the module has been-Too low=1-2-3-4-Too high=5');
+insert into question (content) values ('Module contents have been presented understandably.-Strongly disagree=1-2-3-4-Strongly agree=5-NA');
+insert into question (content) values ('Various learning activities have been used to teach the content.-Strongly disagree=1-2-3-4-Strongly agree=5-NA');
+insert into question (content) values ('The learning activities have supported the intended learning outcomes.-Strongly disagree=1-2-3-4-Strongly agree=5-NA');
+insert into question (content) values ('The assessment methods (tests, assignment, group work, etc.) are appropriate.-Strongly disagree=1-2-3-4-Strongly agree=5-NA');
+insert into question (content) values ('Students have been encouraged to apply critical thinking and logics to better understand the course material.-Strongly disagree=1-2-3-4-Strongly agree=5-NA');
+insert into question (content) values ('The lecturer has given feedback (about your answers or performance in assignments, reports, presentations, etc.) and it was helpful.-Strongly disagree=1-2-3-4-Strongly agree=5-NA');
+insert into question (content) values ('The language skills (English / German) of the lecturer were excellent.-Strongly disagree=1-2-3-4-Strongly agree=5-NA');
+insert into question (content) values ("The lecturer has listened to students' ideas and contributions.-Strongly disagree=1-2-3-4-Strongly agree=5-NA");
+insert into question (content) values ('The lecturer has encouraged discussion and questions in class.-Strongly disagree=1-2-3-4-Strongly agree=5-NA');
+insert into question (content) values ('The lecturer has offered consultation to individuals for academic support.-Strongly disagree=1-2-3-4-Strongly agree=5-NA');
+insert into question (content) values ('Additional comments about what you liked or disliked and suggestions for further improvement:-Strongly disagree=1-2-3-4-Strongly agree=5-NA');
 
 -- ================CREATE PROCEDURE==================
 
