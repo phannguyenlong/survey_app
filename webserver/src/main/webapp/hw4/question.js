@@ -52,6 +52,7 @@ function selectOption(){
 		$("#class_code").change(function(){
 			$("#aca").children("p").remove();
 			$("#sem").children("p").remove();
+			$("#fal").children("p").remove();
 			$("#pro").children("p").remove();
 			$("#mod").children("p").remove();
 			$("#lecturer_code").children("option").remove();
@@ -63,11 +64,12 @@ function selectOption(){
 			let json = JSON.parse(JSON.stringify(data))
 			$("#aca").append(`<p>"${new String(json[0].aca_code)}"</p>`)
 			$("#sem").append(`<p>"${new String(json[0].sem_code)}"</p>`)
-			$("#pro").append(`<p>"${new String(json[0].pro_code)}"</p>`)
-			$("#mod").append(`<p>"${new String(json[0].mo_code)}"</p>`)
+			$("#fal").append(`<p>"${new String(json[0].fa_code)} - ${json[0].fa_name}"</p>`)
+			$("#pro").append(`<p>"${new String(json[0].pro_code)}" - ${json[0].pro_name}</p>`)
+			$("#mod").append(`<p>"${new String(json[0].mo_code)} - ${json[0].mo_name}"</p>`)
 			
 			for(let i=0;i<json.length;i++){
-            	code = new String(json[i].lec_code)
+            	code = new String(`${json[i].lec_code} - ${json[i].lec_name}`)
 				$("#lecturer_code").append(`<option value="${code}">${code}</option>`)
             }
 
