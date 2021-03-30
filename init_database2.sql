@@ -688,6 +688,8 @@ insert into teaching (class_code, lecturer_code) values (97, 23);
 insert into teaching (class_code, lecturer_code) values (99, 21);
 
 -- Question
+insert into question (content) values ('How often did you attend class for this module?-Never-Rarely-Sometimes-Often-Always');
+insert into question (content) values ('What is your gender?-Male-Female-Other');
 insert into question (content) values ('The module objective have been clear to me.-Strongly disagree=1-2-3-4-Strongly agree=5-NA');
 insert into question (content) values ('The learning materials (e.g. course books, handouts, etc.) have been sufficient and useful.-Strongly disagree=1-2-3-4-Strongly agree=5-NA');
 insert into question (content) values ('The content of the module has always been relevant.-Strongly disagree=1-2-3-4-Strongly agree=5-NA');
@@ -705,7 +707,7 @@ insert into question (content) values ('The language skills (English / German) o
 insert into question (content) values ("The lecturer has listened to students' ideas and contributions.-Strongly disagree=1-2-3-4-Strongly agree=5-NA");
 insert into question (content) values ('The lecturer has encouraged discussion and questions in class.-Strongly disagree=1-2-3-4-Strongly agree=5-NA');
 insert into question (content) values ('The lecturer has offered consultation to individuals for academic support.-Strongly disagree=1-2-3-4-Strongly agree=5-NA');
-insert into question (content) values ('Additional comments about what you liked or disliked and suggestions for further improvement:-Strongly disagree=1-2-3-4-Strongly agree=5-NA');
+insert into question (content) values ('Additional comments about what you liked or disliked and suggestions for further improvement:');
 
 -- ================CREATE PROCEDURE==================
 
