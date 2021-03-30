@@ -1,6 +1,15 @@
 # Survey App
  **DISCLAIMER:** This project use for Programming Exercise subject
 
+ 
+# HOW TO DEPLOY THE SERVER
+1. Config `config.properties`
+2. Go to `./SQL_server/webserver`
+3. Run `mvn clean package cargo:redeploy`
+4. Then the `.war` file will be store in `./SQL_server/webseverver/target` 
+5. Start Tomcat server from `D://stuff/tomcat.../bin/startup`
+6. Access to http://localhost:8080/webserver/
+
  # API Documentations
 
 ### I. Questionaire
