@@ -33,7 +33,7 @@
 
 `POST` **/questionaire/submit**
 - **input:** input JSON string of questionarie *(put json into request body)*
-- **procedure name:** insertIntoQuestionaire()
+- **procedure name:** insertIntoQuestionaire(class_code, lectecturer, question1, question2, question3, question4, question5, question6, question7,  question8, question9, question10, question11, question12, question13, question14, question15, question16, question17, question18)
 - **output:** return status code of request
 
 ### II. Chart
