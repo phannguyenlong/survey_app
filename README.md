@@ -31,6 +31,11 @@
 - **procedure name:** getAllQuestion()
 - **output:** return (question_id, content) of that class
 
+`POST` **/questionaire/submit**
+- **input:** input JSON string of questionarie *(put json into request body)*
+- **procedure name:** insertIntoQuestionaire()
+- **output:** return status code of request
+
 ### II. Chart
 
 `GET` **/chart/validate?aca_code=''&sem_code=''&fa_code=''&pro_code=''&mo_code=''&lec_code=''&class_code=''**
