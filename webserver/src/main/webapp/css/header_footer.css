@@ -1,0 +1,57 @@
+/*================Header=============*/
+.header {
+    height: 45px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    background-color:white;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+} 
+
+.link_container {
+    margin: 15px 10px 0 0;
+}
+
+.header_link {
+    text-decoration: none;
+    margin-left: 60px;
+    color: rgba(0, 0, 0, 0.9);
+    /* font-weight: bolder; */
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.1em;
+    font-weight: 500;
+    padding: 15px 20px 15px 20px;
+    border-radius: 20px;
+    opacity: 0.6;
+    transition: 0.3s;
+}
+
+.header_link:hover {
+    background-color: #FD800D;
+    color: white;
+    opacity: 1;
+}
+
+.fill_question_btn {
+    background-color: #FD800D;
+    opacity: 1;
+    color: white;
+    font-weight: bold;
+    margin-right: 40px;
+}
+
+.fill_question_btn:hover {
+    opacity: 0.8;
+}
+
+/*================Footer=============*/
+.footer_container {
+    width: 100%;
+    height: 50px;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.5);
+}

@@ -1,3 +1,9 @@
+$(document).ready(function () {
+	console.log("helo")
+	$("#header").load("header.html")
+	$("#footer").load("footer.html")
+})
+
 $("#test_button").click(function () {
 	console.log('Make fake request for questionaire')
 	postQuestionaire();
