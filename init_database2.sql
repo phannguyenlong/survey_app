@@ -101,7 +101,7 @@ CREATE TABLE teaching (
 );
 
 CREATE TABLE questionaire (
-	questionaire_id INT AUTO_INCREMENT PRIMARY KEY,
+	id INT AUTO_INCREMENT PRIMARY KEY,
 	class_code VARCHAR(10),
     lecturer_code VARCHAR(10),
     FOREIGN KEY (class_code) REFERENCES class(class_code),
@@ -109,9 +109,48 @@ CREATE TABLE questionaire (
 );
 
 CREATE TABLE answer (
-	questionaire_id INT PRIMARY KEY,
-    answer VARCHAR(200),
-	FOREIGN KEY (questionaire_id) REFERENCES questionaire(questionaire_id)
+	questionaire_id INT ,
+    answer_1 VARCHAR(9) NOT NULL,
+    answer_2 VARCHAR(6) NOT NULL,
+    answer_3 VARCHAR(2) NOT NULL,
+    answer_4 VARCHAR(2) NOT NULL,
+    answer_5 VARCHAR(2) NOT NULL,
+    answer_6 VARCHAR(2) NOT NULL,
+    answer_7 VARCHAR(2) NOT NULL,
+    answer_8 VARCHAR(2) NOT NULL,
+    answer_9 VARCHAR(2) NOT NULL,
+    answer_10 VARCHAR(2) NOT NULL,
+    answer_11 VARCHAR(2) NOT NULL,
+    answer_12 VARCHAR(2) NOT NULL,
+    answer_13 VARCHAR(2) NOT NULL,
+    answer_14 VARCHAR(2) NOT NULL,
+    answer_15 VARCHAR(2) NOT NULL,
+    answer_16 VARCHAR(2) NOT NULL,
+    answer_17 VARCHAR(2) NOT NULL,
+    answer_18 VARCHAR(2) NOT NULL,
+    answer_19 VARCHAR(2) NOT NULL,
+    answer_20 VARCHAR(2) NOT NULL,
+	FOREIGN KEY (questionaire_id) REFERENCES questionaire(id),
+    CHECK  ((answer_1="Never" or answer_1="Rarely" or answer_1="Sometimes" or answer_1="Often" or answer_1="Always") and
+			(answer_2="Male" or answer_2="Female" or answer_2="Other") and
+			(answer_3 BETWEEN 1 AND 5 or answer_3 = "NA") and 
+			(answer_4 BETWEEN 1 AND 5 or answer_4 = "NA") and 
+			(answer_5 BETWEEN 1 AND 5 or answer_5 = "NA") and
+            (answer_6 BETWEEN 1 AND 5 or answer_6 = "NA") and 
+			(answer_7 BETWEEN 1 AND 5 or answer_7 = "NA") and 
+			(answer_8 BETWEEN 1 AND 5 or answer_8 = "NA") and
+            (answer_9 BETWEEN 1 AND 5) and
+            (answer_10 BETWEEN 1 AND 5) and
+            (answer_11 BETWEEN 1 AND 5) and
+            (answer_12 BETWEEN 1 AND 5 or answer_12 = "NA") and 
+			(answer_13 BETWEEN 1 AND 5 or answer_13 = "NA") and 
+			(answer_14 BETWEEN 1 AND 5 or answer_14 = "NA") and
+            (answer_15 BETWEEN 1 AND 5 or answer_15 = "NA") and 
+			(answer_16 BETWEEN 1 AND 5 or answer_16 = "NA") and 
+			(answer_17 BETWEEN 1 AND 5 or answer_17 = "NA") and
+            (answer_18 BETWEEN 1 AND 5 or answer_18 = "NA") and 
+			(answer_19 BETWEEN 1 AND 5 or answer_19 = "NA") and 
+			(answer_20 BETWEEN 1 AND 5 or answer_20 = "NA"))
 );
 -- ======================Insert Data======================
 
@@ -708,3 +747,7 @@ insert into question (content) values ("The lecturer has listened to students' i
 insert into question (content) values ('The lecturer has encouraged discussion and questions in class.-Strongly disagree=1-2-3-4-Strongly agree=5-NA');
 insert into question (content) values ('The lecturer has offered consultation to individuals for academic support.-Strongly disagree=1-2-3-4-Strongly agree=5-NA');
 insert into question (content) values ('Additional comments about what you liked or disliked and suggestions for further improvement:');
+
+-- Answer
+insert into questionaire(class_code,lecturer_code) values (1,1);
+insert into answer (questionaire_id,answer_1,answer_2,answer_3,answer_4,answer_5,answer_6,answer_7,answer_8,answer_9,answer_10,answer_11,answer_12,answer_13,answer_14,answer_15,answer_16,answer_17,answer_18,answer_19,answer_20) values (1,"Always","Female","na","NA","4","1","1","1","2","3","5","1","1","1","1","1","1","1","1","1");
