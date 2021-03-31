@@ -1,9 +1,8 @@
 package api;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -20,10 +19,14 @@ import javax.servlet.annotation.WebServlet;
 // Others
 import util.DatabaseConnect;
 
+/**
+ * Class for testing purpose only
+ * @author Long Phan
+ */
 @WebServlet(urlPatterns = "/database")
-public class DatabaseServlet extends HttpServlet{
+public class DatabaseServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // String requestUrl = req.getRequestURI();
@@ -52,26 +55,31 @@ public class DatabaseServlet extends HttpServlet{
             ex.printStackTrace();
         }
     }
-    
+
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {        
-        System.out.println("Do post running on server");
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        ObjectMapper mapper = new ObjectMapper();
 
-        String data = req.getParameter("data");
+        StringBuffer data = new StringBuffer();
+        String line = null;
 
-        PrintWriter printWriter = resp.getWriter();
-        printWriter.println("Welcome " + data);
+        try {
+            BufferedReader reader = req.getReader();
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+                data.append(line);
+            }
+        } catch (Exception e) {
+        }
+        
+        System.out.println(data);
 
         // Translate from JSON to SQL server
         try {
-            DatabaseConnect DB = new DatabaseConnect();
-            ArrayList<JsonNode> list = DB.JsonToJsonNode(data);
-            for (JsonNode node : list) {
-                JsonNode id = node.path("id");
-                JsonNode name = node.path("name");
-                JsonNode address = node.path("address");
-                System.out.println(id + "\t" + name + "\t" + address);
-            }
+            // DatabaseConnect DB = new DatabaseConnect();
+            JsonNode json = mapper.readTree(data.toString());
+            System.out.println(json.get("lecturer_code"));
+            // execute query like normal
         } catch (Exception e) {
             resp.setStatus(500);
             e.printStackTrace();
