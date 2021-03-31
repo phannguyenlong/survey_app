@@ -129,7 +129,7 @@ CREATE TABLE answer (
     answer_17 VARCHAR(2) NOT NULL,
     answer_18 VARCHAR(2) NOT NULL,
     answer_19 VARCHAR(2) NOT NULL,
-    answer_20 VARCHAR(2) NOT NULL,
+    answer_20 VARCHAR(100) NOT NULL,
 	FOREIGN KEY (questionaire_id) REFERENCES questionaire(id),
     CHECK  ((answer_1="Never" or answer_1="Rarely" or answer_1="Sometimes" or answer_1="Often" or answer_1="Always") and
 			(answer_2="Male" or answer_2="Female" or answer_2="Other") and
@@ -149,8 +149,7 @@ CREATE TABLE answer (
 			(answer_16 BETWEEN 1 AND 5 or answer_16 = "NA") and 
 			(answer_17 BETWEEN 1 AND 5 or answer_17 = "NA") and
             (answer_18 BETWEEN 1 AND 5 or answer_18 = "NA") and 
-			(answer_19 BETWEEN 1 AND 5 or answer_19 = "NA") and 
-			(answer_20 BETWEEN 1 AND 5 or answer_20 = "NA"))
+			(answer_19 BETWEEN 1 AND 5 or answer_19 = "NA"))
 );
 -- ======================Insert Data======================
 
