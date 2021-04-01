@@ -11,10 +11,10 @@ $("#test_button").click(function () {
 
 function postQuestionaire() {
   	let questionnaire = {
-			"class_code": 1,
-			"lecturer_code": 99,
-			"question1": "3",
-			"question2": "4",
+			"class_code": 99,
+			"lecturer_code": 23,
+			"question1": "Never",
+			"question2": "Male",
 			"question3": "2",
 			"question4": "5",
 			"question5": "1",
@@ -23,6 +23,7 @@ function postQuestionaire() {
 			"question8": "3",
 			"question9": "2",
 			"question10": "1",
+			"question11": "4",
 			"question12": "5",
 			"question13": "4",
 			"question14": "4",
@@ -36,7 +37,7 @@ function postQuestionaire() {
 	$.ajax({
 		type: 'POST',
 		contentType: "application/json",
-		url: "webserver/questionaire/submit",
+		url: "/webserver/questionaire/submit",
 		data: JSON.stringify(questionnaire),
 		dataType: "text",
 		success: function(data, textStatus, jqXHR) {
