@@ -8,7 +8,6 @@
 
 -- ======================CREATE TABLE path======================
 -- Clean up old table
-DROP TABLE IF EXISTS answer;
 DROP TABLE IF EXISTS questionaire;
 DROP TABLE IF EXISTS teaching;
 DROP TABLE IF EXISTS class;
@@ -93,14 +92,6 @@ CREATE TABLE class (
 );
 
 CREATE TABLE teaching (
-	class_code VARCHAR(10),
-    lecturer_code VARCHAR(10),
-    PRIMARY KEY (class_code, lecturer_code),
-    FOREIGN KEY (class_code) REFERENCES class(class_code),
-    FOREIGN KEY (lecturer_code) REFERENCES lecturer(lec_code)
-);
-
-CREATE TABLE questionaire (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	class_code VARCHAR(10),
     lecturer_code VARCHAR(10),
@@ -108,8 +99,9 @@ CREATE TABLE questionaire (
     FOREIGN KEY (lecturer_code) REFERENCES lecturer(lec_code)
 );
 
-CREATE TABLE answer (
-	questionaire_id INT ,
+CREATE TABLE questionaire (
+	questionaire_id INT AUTO_INCREMENT PRIMARY KEY,
+    teaching_id INT,
     answer_1 VARCHAR(9) NOT NULL,
     answer_2 VARCHAR(6) NOT NULL,
     answer_3 VARCHAR(2) NOT NULL,
@@ -130,7 +122,7 @@ CREATE TABLE answer (
     answer_18 VARCHAR(2) NOT NULL,
     answer_19 VARCHAR(2) NOT NULL,
     answer_20 VARCHAR(100) NOT NULL,
-	FOREIGN KEY (questionaire_id) REFERENCES questionaire(id),
+    FOREIGN KEY (teaching_id) REFERENCES teaching(id),
     CHECK  ((answer_1="Never" or answer_1="Rarely" or answer_1="Sometimes" or answer_1="Often" or answer_1="Always") and
 			(answer_2="Male" or answer_2="Female" or answer_2="Other") and
 			(answer_3 BETWEEN 1 AND 5 or answer_3 = "NA") and 
@@ -746,7 +738,3 @@ insert into question (content) values ("The lecturer has listened to students' i
 insert into question (content) values ('The lecturer has encouraged discussion and questions in class.-Strongly disagree=1-2-3-4-Strongly agree=5-NA');
 insert into question (content) values ('The lecturer has offered consultation to individuals for academic support.-Strongly disagree=1-2-3-4-Strongly agree=5-NA');
 insert into question (content) values ('Additional comments about what you liked or disliked and suggestions for further improvement:');
-
--- Answer
-insert into questionaire(class_code,lecturer_code) values (1,1);
-insert into answer (questionaire_id,answer_1,answer_2,answer_3,answer_4,answer_5,answer_6,answer_7,answer_8,answer_9,answer_10,answer_11,answer_12,answer_13,answer_14,answer_15,answer_16,answer_17,answer_18,answer_19,answer_20) values (1,"Always","Female","na","NA","4","1","1","1","2","3","5","1","1","1","1","1","1","1","1","1");
