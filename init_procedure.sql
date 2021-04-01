@@ -107,3 +107,22 @@ BEGIN
         (c.class_code = class OR class IS NULL);
 END //
 DELIMITER ;
+
+-- Insert into questionaire
+DROP PROCEDURE IF EXISTS java_app.insertIntoQuestionaire;
+DELIMITER //
+CREATE PROCEDURE insertIntoQuestionaire(questionaire_id INT, teaching_id INT , answer_1 VARCHAR(9), answer_2 VARCHAR(6),
+									answer_3 VARCHAR(2), answer_4 VARCHAR(2), answer_5 VARCHAR(2), answer_6 VARCHAR(2),
+                                    answer_7 VARCHAR(2), answer_8 VARCHAR(2), answer_9 VARCHAR(2), answer_10 VARCHAR(2),
+                                    answer_11 VARCHAR(2), answer_12 VARCHAR(2), answer_13 VARCHAR(2), answer_14 VARCHAR(2),
+                                    answer_15 VARCHAR(2), answer_16 VARCHAR(2), answer_17 VARCHAR(2), answer_18 VARCHAR(2),
+                                    answer_19 VARCHAR(2), answer_20 VARCHAR(100)) 
+BEGIN
+	INSERT INTO questionaire (questionaire_id, teaching_id, answer_1, answer_2, answer_3, answer_4, answer_5,
+							answer_6, answer_7, answer_8, answer_9, answer_10, answer_11, answer_12, answer_13,
+                            answer_14, answer_15, answer_16, answer_17, answer_18, answer_19, answer_20)
+	VALUES (questionaire_id, teaching_id, answer_1, answer_2, answer_3, answer_4, answer_5,
+			answer_6, answer_7, answer_8, answer_9, answer_10, answer_11, answer_12, answer_13,
+			answer_14, answer_15, answer_16, answer_17, answer_18, answer_19, answer_20);
+END //
+DELIMITER ;
