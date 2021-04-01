@@ -121,7 +121,7 @@ CREATE TABLE questionaire (
     answer_17 VARCHAR(2) NOT NULL,
     answer_18 VARCHAR(2) NOT NULL,
     answer_19 VARCHAR(2) NOT NULL,
-    answer_20 VARCHAR(100) NOT NULL,
+    answer_20 VARCHAR(100),
     FOREIGN KEY (teaching_id) REFERENCES teaching(id),
     CHECK  ((answer_1="Never" or answer_1="Rarely" or answer_1="Sometimes" or answer_1="Often" or answer_1="Always") and
 			(answer_2="Male" or answer_2="Female" or answer_2="Other") and
