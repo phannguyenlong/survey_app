@@ -7,7 +7,7 @@
 -- GRANT ALL PRIVILEGES ON * . * TO 'guest'@'localhost';
 
 -- ======================CREATE TABLE path======================
--- Clean up old table
+-- Clean up old tablequestionquestion
 DROP TABLE IF EXISTS questionaire;
 DROP TABLE IF EXISTS teaching;
 DROP TABLE IF EXISTS class;
