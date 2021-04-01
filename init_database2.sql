@@ -101,7 +101,7 @@ CREATE TABLE teaching (
 
 CREATE TABLE questionaire (
 	questionaire_id INT AUTO_INCREMENT PRIMARY KEY,
-    teaching_id INT,
+    teaching_id INT NOT NULL,
     answer_1 VARCHAR(9) NOT NULL,
     answer_2 VARCHAR(6) NOT NULL,
     answer_3 VARCHAR(2) NOT NULL,
