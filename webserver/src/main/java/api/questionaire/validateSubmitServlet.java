@@ -2,9 +2,6 @@ package api.questionaire;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.sql.ResultSet;
-import java.util.List;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -39,6 +36,7 @@ public class validateSubmitServlet extends HttpServlet {
                 data.append(line);
             }
         } catch (Exception e) {
+            resp.setStatus(500);
         }
         
         System.out.println(data);
@@ -48,10 +46,8 @@ public class validateSubmitServlet extends HttpServlet {
             DatabaseConnect DB = new DatabaseConnect();
             DB.getConnection();
             JsonNode json = mapper.readTree(data.toString());
-            JsonNode class_code = json.get("class_code");
-            JsonNode lecturer_code = json.get("lecturer_code");
 
-            String query = "Call insertIntoQuestionaire('" + class_code + "', '" + lecturer_code + "', ";
+            String query = "Call insertIntoQuestionaire('" + json.get("class_code").toString() + "', '" + json.get("lecturer_code").toString() + "', ";
             for (int i = 1; i < 21; i++)
                 query += i == 20? json.get("question" +String.valueOf(i)) + "" : json.get("question" + String.valueOf(i)) + ", ";
             query += ");";
