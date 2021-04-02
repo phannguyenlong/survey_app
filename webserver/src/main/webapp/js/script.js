@@ -1,7 +1,7 @@
 $(document).ready(function () {
 	console.log("helo")
-	$("#header").load("header.html")
-	$("#footer").load("footer.html")
+	$("#header").load("/webserver/header.html")
+	$("#footer").load("/webserver/footer.html")
 })
 
 $("#test_button").click(function () {
