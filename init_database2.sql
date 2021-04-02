@@ -129,9 +129,9 @@ CREATE TABLE questionaire (
 			(answer_4 BETWEEN 1 AND 5 or answer_4 = "NA") and 
 			(answer_5 BETWEEN 1 AND 5 or answer_5 = "NA") and
             (answer_6 BETWEEN 1 AND 5 or answer_6 = "NA") and 
-			(answer_7 BETWEEN 1 AND 5 or answer_7 = "NA") and 
-			(answer_8 BETWEEN 1 AND 5 or answer_8 = "NA") and
-            (answer_9 BETWEEN 1 AND 5 or answer_9 = "NA") and
+			(answer_7 BETWEEN 1 AND 5) and 
+			(answer_8 BETWEEN 1 AND 5) and
+            (answer_9 BETWEEN 1 AND 5) and
             (answer_10 BETWEEN 1 AND 5 or answer_10 = "NA") and
             (answer_11 BETWEEN 1 AND 5 or answer_11 = "NA") and
             (answer_12 BETWEEN 1 AND 5 or answer_12 = "NA") and 
