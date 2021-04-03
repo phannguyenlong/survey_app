@@ -4,13 +4,13 @@ let lecturer_code;
 
 $(document).ready(function() {
 	
-
+	
 	getClass()
 	
 	selectOption()
 	getQuestion()
-	$("#header").load("../header.html")
-	$("#footer").load("../footer.html")
+	$("#header").load("/webserver/header.html")
+	$("#footer").load("/webserver/footer.html")
 	$("#submit_bnt").click(function(){
 		submitQuestion(questions)
 	})
@@ -87,11 +87,11 @@ function selectOption(){
 			url:"http://localhost:8080/webserver/class?class_code="+code,
 			success: function(data, textStatus, jqXHR) {
 			let json = JSON.parse(JSON.stringify(data))
-			$("#aca").append(`<p>"${json[0].aca_code}"</p>`)
-			$("#sem").append(`<p>"${json[0].sem_code}"</p>`)
-			$("#fal").append(`<p>"${json[0].fa_code} - ${json[0].fa_name}"</p>`)
-			$("#pro").append(`<p>"${json[0].pro_code}" - ${json[0].pro_name}</p>`)
-			$("#mod").append(`<p>"${json[0].mo_code} - ${json[0].mo_name}"</p>`)
+			$("#aca").append(`<p>${json[0].aca_code}</p>`)
+			$("#sem").append(`<p>${json[0].sem_code}</p>`)
+			$("#fal").append(`<p>${json[0].fa_code} - ${json[0].fa_name}</p>`)
+			$("#pro").append(`<p>${json[0].pro_code} - ${json[0].pro_name}</p>`)
+			$("#mod").append(`<p>${json[0].mo_code} - ${json[0].mo_name}</p>`)
 			
 			for(let i=0;i<json.length;i++){
             	name = new String(`${json[i].lec_code} - ${json[i].lec_name}`)
