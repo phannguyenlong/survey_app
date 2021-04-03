@@ -3,21 +3,23 @@ let class_code;
 let lecturer_code;
 
 $(document).ready(function() {
-	
-	
+	init()	
+});
+
+function init() {
+	// get data from server
 	getClass()
-	
 	selectOption()
 	getQuestion()
+
+	// load html component
 	$("#header").load("/webserver/header.html")
 	$("#footer").load("/webserver/footer.html")
+
 	$("#submit_bnt").click(function(){
 		submitQuestion(questions)
 	})
-	
-	
-	
-});
+}
 	
 
 function getClass() {
@@ -30,8 +32,8 @@ function getClass() {
             	code = new String(json[i].class_code)
 				$("#class_code").append(`<option value="${code}">${code}</option>`)
             }
-			
-		}
+		},
+		error: () => alertMessage('error', 'Error', 'There is something wrong with server')
 	})
 }
 
@@ -50,24 +52,15 @@ function getQuestion() {
 				for(let j=0;j<answer.length;j++){
 					text = $("<p class=\"answer\" ></p>").text(new String(answer[j]))
 					$("#form").append(text)
-					if(i<2){
+					if(i<2)
 						$("#form").append(`<input type="radio" name="${new String(json[i].id)}" value="${answer[j]}"/>`)
-
-					}
-					else{
+					else
 						$("#form").append(`<input type="radio" name="${new String(json[i].id)}" value="${j+1}"/>`)
-
-					}
-					
-				}
-				
-//				$("#class_code").append(`<option value="${code}">${code}</option>`)
+				}				
             }
-			//console.log(json[0].content)
-
-			$("#form").append(`<input type="text" id="text_input" />`)			
-		}
-		
+			$("#form").append(`<input style="width: 90%; height: 70px" type="text" id="text_input" />`)			
+		},
+		error: () => alertMessage('error', 'Error', 'There is something wrong with server')
 	})
 }
 
@@ -86,20 +79,21 @@ function selectOption(){
 			type: 'GET',
 			url:"http://localhost:8080/webserver/class?class_code="+code,
 			success: function(data, textStatus, jqXHR) {
-			let json = JSON.parse(JSON.stringify(data))
-			$("#aca").append(`<p>${json[0].aca_code}</p>`)
-			$("#sem").append(`<p>${json[0].sem_code}</p>`)
-			$("#fal").append(`<p>${json[0].fa_code} - ${json[0].fa_name}</p>`)
-			$("#pro").append(`<p>${json[0].pro_code} - ${json[0].pro_name}</p>`)
-			$("#mod").append(`<p>${json[0].mo_code} - ${json[0].mo_name}</p>`)
-			
-			for(let i=0;i<json.length;i++){
-            	name = new String(`${json[i].lec_code} - ${json[i].lec_name}`)
-				$("#lecturer_code").append(`<option value="${json[i].lec_code}">${name}</option>`)
-            }
-		}
-    })
-})
+				let json = JSON.parse(JSON.stringify(data))
+				$("#aca").append(`<p class="info_value">${json[0].aca_code}</p>`)
+				$("#sem").append(`<p class="info_value">${json[0].sem_code}</p>`)
+				$("#fal").append(`<p class="info_value">${json[0].fa_code} - ${json[0].fa_name}</p>`)
+				$("#pro").append(`<p class="info_value">${json[0].pro_code} - ${json[0].pro_name}</p>`)
+				$("#mod").append(`<p class="info_value">${json[0].mo_code} - ${json[0].mo_name}</p>`)
+				
+				for(let i=0;i<json.length;i++){
+					name = new String(`${json[i].lec_code} - ${json[i].lec_name}`)
+					$("#lecturer_code").append(`<option value="${json[i].lec_code}">${name}</option>`)
+				}
+			},
+			error: () => alertMessage('error', 'Error', 'There is something wrong with server')
+		})
+	})
 }
 
 function submitQuestion(json){
@@ -120,16 +114,14 @@ function submitQuestion(json){
 			//let element = {}
             if (rbs[j].checked) {
 				selectedValue = rbs[j].value;
-				if(parseInt(selectedValue)==6){
+				if(parseInt(selectedValue)==6)
 					selectedValue = "NA";
-				}
 				break;
             }			
         }
-		if(selectedValue===undefined){
+		if(selectedValue===undefined)
 			isPost = false;
-		}
-		else{
+		else {
 			num = i+1;
 			index = "question".concat(num)
 			answers[index] = selectedValue //ES5 from variable to key values
@@ -140,22 +132,31 @@ function submitQuestion(json){
 	selectedValue = document.getElementById("text_input").value
 	index = "question".concat(20)
 	answers[index] = selectedValue 
-		
 	
-	if(isPost ===true){
+	if(isPost ===true) {
 		$.ajax({
 			type: 'POST',
 			contentType: "application/json",
 			url:"http://localhost:8080/webserver/questionaire/submit",
 			data:JSON.stringify(answers),
 			dataType:"text",
-			success: function(data, textStatus, jqXHR) {
-				alert(data)
-			}
+			success: function (data, textStatus, jqXHR) {
+				alertMessage('success', 'Success', 'Your answer has been submmited. Thanks for filling our survey')
+				// reload the question
+				$("#form").empty();
+				getQuestion();
+			},
+			error: () => alertMessage('error', 'Error', 'There is something wrong with server. Please check that you have filled in class and teacher option')
 		})
 	}
-	else{
-		alert("Please answer all the questions :(")
-	}
-	
+	else
+		alertMessage('error', "Error", 'Please fill in all answer before submit')
+}
+
+function alertMessage(type, title, content) {
+	Swal.fire({
+		icon: type,
+		title: title,
+		text: content,
+	})
 }
