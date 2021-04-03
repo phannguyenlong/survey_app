@@ -3,10 +3,14 @@ let class_code;
 let lecturer_code;
 
 $(document).ready(function() {
+	
+
 	getClass()
 	
 	selectOption()
 	getQuestion()
+	$("#header").load("../header.html")
+	$("#footer").load("../footer.html")
 	$("#submit_bnt").click(function(){
 		submitQuestion(questions)
 	})
@@ -40,11 +44,12 @@ function getQuestion() {
 			questions = json
             for(let i=0;i<json.length;i++){
             	text = json[i].content.split("-")
-				question = $("<p></p>").text(new String(text[0]))
+				question = $("<p class=\"question\"></p>").text(new String(text[0]))
 				$("#form").append(question)
 				answer = text.slice(1,text.length)
 				for(let j=0;j<answer.length;j++){
-					$("#form").append(`<label>"${new String(answer[j])}"</label>`)
+					text = $("<p class=\"answer\" ></p>").text(new String(answer[j]))
+					$("#form").append(text)
 					if(i<2){
 						$("#form").append(`<input type="radio" name="${new String(json[i].id)}" value="${answer[j]}"/>`)
 
@@ -82,11 +87,11 @@ function selectOption(){
 			url:"http://localhost:8080/webserver/class?class_code="+code,
 			success: function(data, textStatus, jqXHR) {
 			let json = JSON.parse(JSON.stringify(data))
-			$("#aca").append(`<p>"${new String(json[0].aca_code)}"</p>`)
-			$("#sem").append(`<p>"${new String(json[0].sem_code)}"</p>`)
-			$("#fal").append(`<p>"${new String(json[0].fa_code)} - ${json[0].fa_name}"</p>`)
-			$("#pro").append(`<p>"${new String(json[0].pro_code)}" - ${json[0].pro_name}</p>`)
-			$("#mod").append(`<p>"${new String(json[0].mo_code)} - ${json[0].mo_name}"</p>`)
+			$("#aca").append(`<p>"${json[0].aca_code}"</p>`)
+			$("#sem").append(`<p>"${json[0].sem_code}"</p>`)
+			$("#fal").append(`<p>"${json[0].fa_code} - ${json[0].fa_name}"</p>`)
+			$("#pro").append(`<p>"${json[0].pro_code}" - ${json[0].pro_name}</p>`)
+			$("#mod").append(`<p>"${json[0].mo_code} - ${json[0].mo_name}"</p>`)
 			
 			for(let i=0;i<json.length;i++){
             	name = new String(`${json[i].lec_code} - ${json[i].lec_name}`)
@@ -132,15 +137,9 @@ function submitQuestion(json){
     };
 	console.log(answers);
 	
-	if($("#text_input").val !== ""){
-			selectedValue = document.getElementById("text_input").value
-			index = "question".concat(20)
-			answers[index] = selectedValue 
-	}
-	else{
-		isPost= false;
-	}
-
+	selectedValue = document.getElementById("text_input").value
+	index = "question".concat(20)
+	answers[index] = selectedValue 
 		
 	
 	if(isPost ===true){
