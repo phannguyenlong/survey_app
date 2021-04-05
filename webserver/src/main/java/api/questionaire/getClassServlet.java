@@ -1,6 +1,8 @@
 package api.questionaire;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
 import java.util.Map;
@@ -26,21 +28,20 @@ public class getClassServlet extends HttpServlet {
     
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    	String query = "";
-    	String classCode =  req.getParameter("class_code");
-    	if (classCode.equals("all") || classCode.equals(null)) {
-    		query = "CALL getAllClass;";
-    	}
-    	else {
-    		query = "CALL getClassByCode('" + classCode + "')";
-    	}
+        String classCode = req.getParameter("class_code");
         
-        System.out.println(query);
-
+        String query = classCode.equals("all") || classCode.equals(null) ? "CALL getAllClass;" : "CALL getClassByCode(?)";
         try {
             DatabaseConnect DB = new DatabaseConnect();
-            DB.getConnection();
-            ResultSet res = DB.doQuery(query);
+            Connection conn = DB.getConnection();
+            PreparedStatement st = conn.prepareStatement(query);
+            
+            if (!classCode.equals("all"))
+                st.setString(1, classCode);
+            
+            System.out.println(st);
+
+            ResultSet res = st.executeQuery();
             List<Map<String, Object>> json_resp = DB.ResultSetToJSON(res);
 
             resp.setContentType("application/json");
