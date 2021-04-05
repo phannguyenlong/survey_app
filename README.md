@@ -46,7 +46,7 @@
 - **output:** return (Academic Year, Semester, Faculty, Faculty_name, Program, Program_name, Module, Module_name, Class_code, Lecturer, Lecturer_name)
 - **EX:** /chart/validate?aca_code=null&sem_code='WS20'&fa_code=null&pro_code=null&mo_code=null&class_code=null&lec_code='23'
 
-`GET` **/chart/numberOfAnswer?class_code=''&lecturer_code=''
+`GET` **/chart/numberOfAnswer?class_code=''&lecturer_code=''**
 - **input:** class_code, lecturer_code
 - **procedure name:** getNumberOfAnswer(*class_code, lecturer_code*)
     - Find `teaching_id` using `class_code`, `lecturer_code`
@@ -61,7 +61,7 @@
 | ...                          | ...         | ...         | ...         | ...         | ...         |
 | A19 (dont count question 20) | ...         | ...         | ...         | ...         | ...         |
 
-`GET` **/chart/propertiesOfAnswer?class_code=''&lecturer_code=''
+`GET` **/chart/propertiesOfAnswer?class_code=''&lecturer_code=''**
 - **input:** class_code, lecturer_code
 - **procedure name:** getPropertiesOfAnswer(*class_code, lecturer_code*)
     - Find `teaching_id` using `class_code`, `lecturer_code`
@@ -79,7 +79,7 @@
 
 
 ### III. Database
-`GET` **/database/dumpingTable?table_name=''
+`GET` **/database/dumpingTable?table_name=''**
 - **input:** table_name with option `{aca_year, faculty, program, module, semster, class, lecturer, teaching}`
 - **procedure name:** dumpTable(*table_name*)
 - **output:** fix for each option.
