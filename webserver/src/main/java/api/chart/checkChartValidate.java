@@ -36,13 +36,10 @@ public class checkChartValidate extends HttpServlet {
             Connection conn = DB.getConnection();
             PreparedStatement st = conn.prepareStatement(query);
 
-            st.setString(1, req.getParameter("aca_code").equals("null") ? null : req.getParameter("aca_code"));
-            st.setString(2, req.getParameter("sem_code").equals("null") ? null : req.getParameter("sem_code"));
-            st.setString(3, req.getParameter("fa_code").equals("null") ? null : req.getParameter("fa_code"));
-            st.setString(4, req.getParameter("pro_code").equals("null") ? null : req.getParameter("pro_code"));
-            st.setString(5, req.getParameter("mo_code").equals("null") ? null : req.getParameter("mo_code"));
-            st.setString(6, req.getParameter("lec_code").equals("null") ? null : req.getParameter("lec_code"));
-            st.setString(7, req.getParameter("class_code").equals("null") ? null : req.getParameter("class_code"));
+            String[] params = { "aca_code", "sem_code", "fa_code", "pro_code", "mo_code", "lec_code", "class_code" };
+            for (int i = 1; i < 8; i++)
+                st.setString(i, req.getParameter(params[i-1]).equals("null") ? null : req.getParameter(params[i-1]));
+
             System.out.println(st);
 
             ResultSet res = st.executeQuery();
