@@ -23,7 +23,7 @@ import util.DatabaseConnect;
  * Get Answer Properties
  */
 @WebServlet(urlPatterns = "/chart/propertiesOfAnswer")
-public class getAnswerPropertiesServlet extends HttpServlet {
+public class getPropertiesOfAnswerServlet extends HttpServlet {
 private static final long serialVersionUID = 1L;
     
     @Override
