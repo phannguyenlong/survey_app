@@ -127,3 +127,126 @@ BEGIN
 	answer_14, answer_15, answer_16, answer_17, answer_18, answer_19, answer_20);
 END //
 DELIMITER ;
+
+-- View 19 answers's properties
+DROP PROCEDURE IF EXISTS java_app.getPropertiesOfAnswer;
+DELIMITER //
+CREATE PROCEDURE getPropertiesOfAnswer(class VARCHAR(10), lecturer VARCHAR(10))
+BEGIN
+	SET @class_size = (SELECT size FROM class WHERE class_code = class);
+	SELECT 'A1', count(*) AS 'n', (count(*)/@class_size) AS 'Resp.Rate', 
+		FORMAT(AVG(q.answer_1),2) AS 'Mean', FORMAT(stddev_samp(q.answer_1),2) AS 'SD'
+	FROM questionaire q
+	JOIN teaching t ON (t.id = q.teaching_id)
+	WHERE t.class_code = class AND t.lecturer_code = lecturer AND NOT q.answer_1 IS NULL
+    UNION ALL
+	SELECT 'A2', count(*) AS 'n', (count(*)/@class_size) AS 'Resp.Rate', 
+		FORMAT(AVG(q.answer_2),2) AS 'Mean', FORMAT(stddev_samp(q.answer_2),2) AS 'SD'
+	FROM questionaire q
+	JOIN teaching t ON (t.id = q.teaching_id)
+	WHERE t.class_code = class AND t.lecturer_code = lecturer AND NOT q.answer_2 IS NULL
+    UNION ALL
+	SELECT 'A3', count(*) AS 'n', (count(*)/@class_size) AS 'Resp.Rate', 
+		FORMAT(AVG(q.answer_3),2) AS 'Mean', FORMAT(stddev_samp(q.answer_3),2) AS 'SD'
+	FROM questionaire q
+	JOIN teaching t ON (t.id = q.teaching_id)
+	WHERE t.class_code = class AND t.lecturer_code = lecturer AND NOT q.answer_3 = 'NA'
+    UNION ALL
+	SELECT 'A4', count(*) AS 'n', (count(*)/@class_size) AS 'Resp.Rate', 
+		FORMAT(AVG(q.answer_4),2) AS 'Mean', FORMAT(stddev_samp(q.answer_4),2) AS 'SD'
+	FROM questionaire q
+	JOIN teaching t ON (t.id = q.teaching_id)
+	WHERE t.class_code = class AND t.lecturer_code = lecturer AND NOT q.answer_4 = 'NA'
+    UNION ALL
+	SELECT 'A5', count(*) AS 'n', (count(*)/@class_size) AS 'Resp.Rate', 
+		FORMAT(AVG(q.answer_5),2) AS 'Mean', FORMAT(stddev_samp(q.answer_5),2) AS 'SD'
+	FROM questionaire q
+	JOIN teaching t ON (t.id = q.teaching_id)
+	WHERE t.class_code = class AND t.lecturer_code = lecturer AND NOT q.answer_5 = 'NA'
+    UNION ALL
+	SELECT 'A6', count(*) AS 'n', (count(*)/@class_size) AS 'Resp.Rate', 
+		FORMAT(AVG(q.answer_6),2) AS 'Mean', FORMAT(stddev_samp(q.answer_6),2) AS 'SD'
+	FROM questionaire q
+	JOIN teaching t ON (t.id = q.teaching_id)
+	WHERE t.class_code = class AND t.lecturer_code = lecturer AND NOT q.answer_6 = 'NA'
+    UNION ALL
+	SELECT 'A7', count(*) AS 'n', (count(*)/@class_size) AS 'Resp.Rate', 
+		FORMAT(AVG(q.answer_7),2) AS 'Mean', FORMAT(stddev_samp(q.answer_7),2) AS 'SD'
+	FROM questionaire q
+	JOIN teaching t ON (t.id = q.teaching_id)
+	WHERE t.class_code = class AND t.lecturer_code = lecturer AND NOT q.answer_7 = 'NA'
+    UNION ALL
+	SELECT 'A8', count(*) AS 'n', (count(*)/@class_size) AS 'Resp.Rate', 
+		FORMAT(AVG(q.answer_8),2) AS 'Mean', FORMAT(stddev_samp(q.answer_8),2) AS 'SD'
+	FROM questionaire q
+	JOIN teaching t ON (t.id = q.teaching_id)
+	WHERE t.class_code = class AND t.lecturer_code = lecturer AND NOT q.answer_8 = 'NA'
+    UNION ALL
+	SELECT 'A9', count(*) AS 'n', (count(*)/@class_size) AS 'Resp.Rate', 
+		FORMAT(AVG(q.answer_9),2) AS 'Mean', FORMAT(stddev_samp(q.answer_9),2) AS 'SD'
+	FROM questionaire q
+	JOIN teaching t ON (t.id = q.teaching_id)
+	WHERE t.class_code = class AND t.lecturer_code = lecturer AND NOT q.answer_9 = 'NA'
+    UNION ALL
+	SELECT 'A10', count(*) AS 'n', (count(*)/@class_size) AS 'Resp.Rate', 
+		FORMAT(AVG(q.answer_10),2) AS 'Mean', FORMAT(stddev_samp(q.answer_10),2) AS 'SD'
+	FROM questionaire q
+	JOIN teaching t ON (t.id = q.teaching_id)
+	WHERE t.class_code = class AND t.lecturer_code = lecturer AND NOT q.answer_10 = 'NA'
+    UNION ALL
+	SELECT 'A11', count(*) AS 'n', (count(*)/@class_size) AS 'Resp.Rate', 
+		FORMAT(AVG(q.answer_11),2) AS 'Mean', FORMAT(stddev_samp(q.answer_11),2) AS 'SD'
+	FROM questionaire q
+	JOIN teaching t ON (t.id = q.teaching_id)
+	WHERE t.class_code = class AND t.lecturer_code = lecturer AND NOT q.answer_11 = 'NA'
+    UNION ALL
+	SELECT 'A12', count(*) AS 'n', (count(*)/@class_size) AS 'Resp.Rate', 
+		FORMAT(AVG(q.answer_12),2) AS 'Mean', FORMAT(stddev_samp(q.answer_12),2) AS 'SD'
+	FROM questionaire q
+	JOIN teaching t ON (t.id = q.teaching_id)
+	WHERE t.class_code = class AND t.lecturer_code = lecturer AND NOT q.answer_12 = 'NA'
+    UNION ALL
+	SELECT 'A13', count(*) AS 'n', (count(*)/@class_size) AS 'Resp.Rate', 
+		FORMAT(AVG(q.answer_13),2) AS 'Mean', FORMAT(stddev_samp(q.answer_13),2) AS 'SD'
+	FROM questionaire q
+	JOIN teaching t ON (t.id = q.teaching_id)
+	WHERE t.class_code = class AND t.lecturer_code = lecturer AND NOT q.answer_13 = 'NA'
+    UNION ALL
+	SELECT 'A14', count(*) AS 'n', (count(*)/@class_size) AS 'Resp.Rate', 
+		FORMAT(AVG(q.answer_14),2) AS 'Mean', FORMAT(stddev_samp(q.answer_14),2) AS 'SD'
+	FROM questionaire q
+	JOIN teaching t ON (t.id = q.teaching_id)
+	WHERE t.class_code = class AND t.lecturer_code = lecturer AND NOT q.answer_14 = 'NA'
+    UNION ALL
+	SELECT 'A15', count(*) AS 'n', (count(*)/@class_size) AS 'Resp.Rate', 
+		FORMAT(AVG(q.answer_15),2) AS 'Mean', FORMAT(stddev_samp(q.answer_15),2) AS 'SD'
+	FROM questionaire q
+	JOIN teaching t ON (t.id = q.teaching_id)
+	WHERE t.class_code = class AND t.lecturer_code = lecturer AND NOT q.answer_15 = 'NA'
+    UNION ALL
+	SELECT 'A16', count(*) AS 'n', (count(*)/@class_size) AS 'Resp.Rate', 
+		FORMAT(AVG(q.answer_16),2) AS 'Mean', FORMAT(stddev_samp(q.answer_16),2) AS 'SD'
+	FROM questionaire q
+	JOIN teaching t ON (t.id = q.teaching_id)
+	WHERE t.class_code = class AND t.lecturer_code = lecturer AND NOT q.answer_16 = 'NA'
+    UNION ALL
+	SELECT 'A17', count(*) AS 'n', (count(*)/@class_size) AS 'Resp.Rate', 
+		FORMAT(AVG(q.answer_17),2) AS 'Mean', FORMAT(stddev_samp(q.answer_17),2) AS 'SD'
+	FROM questionaire q
+	JOIN teaching t ON (t.id = q.teaching_id)
+	WHERE t.class_code = class AND t.lecturer_code = lecturer AND NOT q.answer_17 = 'NA'
+    UNION ALL
+	SELECT 'A18', count(*) AS 'n', (count(*)/@class_size) AS 'Resp.Rate', 
+		FORMAT(AVG(q.answer_18),2) AS 'Mean', FORMAT(stddev_samp(q.answer_18),2) AS 'SD'
+	FROM questionaire q
+	JOIN teaching t ON (t.id = q.teaching_id)
+	WHERE t.class_code = class AND t.lecturer_code = lecturer AND NOT q.answer_18 = 'NA'
+    UNION ALL
+	SELECT 'A19', count(*) AS 'n', (count(*)/@class_size) AS 'Resp.Rate', 
+		FORMAT(AVG(q.answer_19),2) AS 'Mean', FORMAT(stddev_samp(q.answer_19),2) AS 'SD'
+	FROM questionaire q
+	JOIN teaching t ON (t.id = q.teaching_id)
+	WHERE t.class_code = class AND t.lecturer_code = lecturer AND NOT q.answer_19 = 'NA'
+	;
+END //
+
