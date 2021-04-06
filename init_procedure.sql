@@ -301,3 +301,257 @@ BEGIN
 END//
 DELIMITER ;
 
+-- getNumberOfAnswer
+DROP PROCEDURE IF EXISTS java_app.getNumberOfAnswer;
+DELIMITER  //
+CREATE PROCEDURE getNumberOfAnswer(class VARCHAR(10), lecturer VARCHAR(10))
+BEGIN
+	SELECT
+		"answer_1" as answer,
+		sum(answer_1 = 'Never' ) as op1,
+		sum(answer_1 = 'Rarely' ) as op2,
+		sum(answer_1 = 'Sometimes' ) as op3,
+		sum(answer_1 = 'Often' ) as op4,
+		sum(answer_1 = 'Always' ) as op5
+	FROM
+		teaching t JOIN questionaire q ON t.id = q.teaching_id
+	WHERE
+		(t.class_code = class) AND
+		(t.lecturer_code = lecturer)
+	UNION ALL
+	SELECT
+		"answer_2" as answer,
+		sum(answer_2 = 'Male' ) as op1,
+		sum(answer_2 = 'Female' ) as op2,
+		sum(answer_2 = 'Other' ) as op3,
+		0 as op4,
+		0 as op5
+	FROM
+		teaching t JOIN questionaire q ON t.id = q.teaching_id
+	WHERE
+		(t.class_code = class) AND
+		(t.lecturer_code = lecturer)
+	UNION ALL
+	SELECT
+		"answer_3" as answer,
+		sum(answer_3 = '1' ) as op1,
+		sum(answer_3 = '2' ) as op2,
+		sum(answer_3 = '3' ) as op3,
+		sum(answer_3 = '4' ) as op4,
+		sum(answer_3 = '5' ) as op5
+	FROM
+		teaching t JOIN questionaire q ON t.id = q.teaching_id
+	WHERE
+		(t.class_code = class) AND
+		(t.lecturer_code = lecturer)
+	UNION ALL
+	SELECT
+		"answer_4" as answer,
+		sum(answer_4 = '1' ) as op1,
+		sum(answer_4 = '2' ) as op2,
+		sum(answer_4 = '3' ) as op3,
+		sum(answer_4 = '4' ) as op4,
+		sum(answer_4 = '5' ) as op5
+	FROM
+		teaching t JOIN questionaire q ON t.id = q.teaching_id
+	WHERE
+		(t.class_code = class) AND
+		(t.lecturer_code = lecturer)
+	UNION ALL
+	SELECT
+		"answer_5" as answer,
+		sum(answer_5 = '1' ) as op1,
+		sum(answer_5 = '2' ) as op2,
+		sum(answer_5 = '3' ) as op3,
+		sum(answer_5 = '4' ) as op4,
+		sum(answer_5 = '5' ) as op5
+	FROM
+		teaching t JOIN questionaire q ON t.id = q.teaching_id
+	WHERE
+		(t.class_code = class) AND
+		(t.lecturer_code = lecturer)
+	UNION ALL
+	SELECT
+		"answer_6" as answer,
+		sum(answer_6 = '1' ) as op1,
+		sum(answer_6 = '2' ) as op2,
+		sum(answer_6 = '3' ) as op3,
+		sum(answer_6 = '4' ) as op4,
+		sum(answer_6 = '5' ) as op5
+	FROM
+		teaching t JOIN questionaire q ON t.id = q.teaching_id
+	WHERE
+		(t.class_code = class) AND
+		(t.lecturer_code = lecturer)
+	UNION ALL
+	SELECT
+		"answer_7" as answer,
+		sum(answer_7 = '1' ) as op1,
+		sum(answer_7 = '2' ) as op2,
+		sum(answer_7 = '3' ) as op3,
+		sum(answer_7 = '4' ) as op4,
+		sum(answer_7 = '5' ) as op5
+	FROM
+		teaching t JOIN questionaire q ON t.id = q.teaching_id
+	WHERE
+		(t.class_code = class) AND
+		(t.lecturer_code = lecturer)
+	UNION ALL
+	SELECT
+		"answer_8" as answer,
+		sum(answer_8 = '1' ) as op1,
+		sum(answer_8 = '2' ) as op2,
+		sum(answer_8 = '3' ) as op3,
+		sum(answer_8 = '4' ) as op4,
+		sum(answer_8 = '5' ) as op5
+	FROM
+		teaching t JOIN questionaire q ON t.id = q.teaching_id
+	WHERE
+		(t.class_code = class) AND
+		(t.lecturer_code = lecturer)
+	UNION ALL
+	SELECT
+		"answer_9" as answer,
+		sum(answer_9 = '1' ) as op1,
+		sum(answer_9 = '2' ) as op2,
+		sum(answer_9 = '3' ) as op3,
+		sum(answer_9 = '4' ) as op4,
+		sum(answer_9 = '5' ) as op5
+	FROM
+		teaching t JOIN questionaire q ON t.id = q.teaching_id
+	WHERE
+		(t.class_code = class) AND
+		(t.lecturer_code = lecturer)
+	UNION ALL
+	SELECT
+		"answer_10" as answer,
+		sum(answer_10 = '1' ) as op1,
+		sum(answer_10 = '2' ) as op2,
+		sum(answer_10 = '3' ) as op3,
+		sum(answer_10 = '4' ) as op4,
+		sum(answer_10 = '5' ) as op5
+	FROM
+		teaching t JOIN questionaire q ON t.id = q.teaching_id
+	WHERE
+		(t.class_code = class) AND
+		(t.lecturer_code = lecturer)
+	UNION ALL
+	SELECT
+		"answer_11" as answer,
+		sum(answer_11 = '1' ) as op1,
+		sum(answer_11 = '2' ) as op2,
+		sum(answer_11 = '3' ) as op3,
+		sum(answer_11 = '4' ) as op4,
+		sum(answer_11 = '5' ) as op5
+	FROM
+		teaching t JOIN questionaire q ON t.id = q.teaching_id
+	WHERE
+		(t.class_code = class) AND
+		(t.lecturer_code = lecturer)
+	UNION ALL
+	SELECT
+		"answer_12" as answer,
+		sum(answer_12 = '1' ) as op1,
+		sum(answer_12 = '2' ) as op2,
+		sum(answer_12 = '3' ) as op3,
+		sum(answer_12 = '4' ) as op4,
+		sum(answer_12 = '5' ) as op5
+	FROM
+		teaching t JOIN questionaire q ON t.id = q.teaching_id
+	WHERE
+		(t.class_code = class) AND
+		(t.lecturer_code = lecturer)
+	UNION ALL
+	SELECT
+		"answer_13" as answer,
+		sum(answer_13 = '1' ) as op1,
+		sum(answer_13 = '2' ) as op2,
+		sum(answer_13 = '3' ) as op3,
+		sum(answer_13 = '4' ) as op4,
+		sum(answer_13 = '5' ) as op5
+	FROM
+		teaching t JOIN questionaire q ON t.id = q.teaching_id
+	WHERE
+		(t.class_code = class) AND
+		(t.lecturer_code = lecturer)
+	UNION ALL
+	SELECT
+		"answer_14" as answer,
+		sum(answer_14 = '1' ) as op1,
+		sum(answer_14 = '2' ) as op2,
+		sum(answer_14 = '3' ) as op3,
+		sum(answer_14 = '4' ) as op4,
+		sum(answer_14 = '5' ) as op5
+	FROM
+		teaching t JOIN questionaire q ON t.id = q.teaching_id
+	WHERE
+		(t.class_code = class) AND
+		(t.lecturer_code = lecturer)
+	UNION ALL
+	SELECT
+		"answer_15" as answer,
+		sum(answer_15 = '1' ) as op1,
+		sum(answer_15 = '2' ) as op2,
+		sum(answer_15 = '3' ) as op3,
+		sum(answer_15 = '4' ) as op4,
+		sum(answer_15 = '5' ) as op5
+	FROM
+		teaching t JOIN questionaire q ON t.id = q.teaching_id
+	WHERE
+		(t.class_code = class) AND
+		(t.lecturer_code = lecturer)
+	UNION ALL
+	SELECT
+		"answer_16" as answer,
+		sum(answer_16 = '1' ) as op1,
+		sum(answer_16 = '2' ) as op2,
+		sum(answer_16 = '3' ) as op3,
+		sum(answer_16 = '4' ) as op4,
+		sum(answer_16 = '5' ) as op5
+	FROM
+		teaching t JOIN questionaire q ON t.id = q.teaching_id
+	WHERE
+		(t.class_code = class) AND
+		(t.lecturer_code = lecturer)
+	UNION ALL
+	SELECT
+		"answer_17" as answer,
+		sum(answer_17 = '1' ) as op1,
+		sum(answer_17 = '2' ) as op2,
+		sum(answer_17 = '3' ) as op3,
+		sum(answer_17 = '4' ) as op4,
+		sum(answer_17 = '5' ) as op5
+	FROM
+		teaching t JOIN questionaire q ON t.id = q.teaching_id
+	WHERE
+		(t.class_code = class) AND
+		(t.lecturer_code = lecturer)
+	UNION ALL
+	SELECT
+		"answer_18" as answer,
+		sum(answer_18 = '1' ) as op1,
+		sum(answer_18 = '2' ) as op2,
+		sum(answer_18 = '3' ) as op3,
+		sum(answer_18 = '4' ) as op4,
+		sum(answer_18 = '5' ) as op5
+	FROM
+		teaching t JOIN questionaire q ON t.id = q.teaching_id
+	WHERE
+		(t.class_code = class) AND
+		(t.lecturer_code = lecturer)
+	UNION ALL
+	SELECT
+		"answer_19" as answer,
+		sum(answer_19 = '1' ) as op1,
+		sum(answer_19 = '2' ) as op2,
+		sum(answer_19 = '3' ) as op3,
+		sum(answer_19 = '4' ) as op4,
+		sum(answer_19 = '5' ) as op5
+	FROM
+		teaching t JOIN questionaire q ON t.id = q.teaching_id
+	WHERE
+		(t.class_code = class) AND
+		(t.lecturer_code = lecturer);
+
+END //
+DELIMITER ;
