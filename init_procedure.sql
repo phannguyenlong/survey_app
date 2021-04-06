@@ -301,7 +301,7 @@ BEGIN
 END//
 DELIMITER ;
 
--- getNumberOfAnswer
+-- getNumberOfAnswer Procedure
 DROP PROCEDURE IF EXISTS java_app.getNumberOfAnswer;
 DELIMITER  //
 CREATE PROCEDURE getNumberOfAnswer(class VARCHAR(10), lecturer VARCHAR(10))
