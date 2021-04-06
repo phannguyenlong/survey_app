@@ -16,11 +16,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.annotation.WebServlet;
 
-// Others
 import util.DatabaseConnect;
 
 /**
- * write description here
+ * get all Class
+ * @author Hai Yen Le
  */
 @WebServlet(urlPatterns = "/class")
 public class getClassServlet extends HttpServlet {
