@@ -28,9 +28,7 @@ public class checkChartValidate extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         String query = "CALL Validate(?, ?, ?, ?, ?, ?, ?);";
-
         try {
             DatabaseConnect DB = new DatabaseConnect();
             Connection conn = DB.getConnection();
