@@ -1,4 +1,4 @@
-package api.chart;
+package api.database;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -16,32 +16,30 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.annotation.WebServlet;
 
-// Others
 import util.DatabaseConnect;
 
 /**
- * Used for check Chart's Validation from database
+ * Dump Table
+ * @author Hai Yen Le
  */
-@WebServlet(urlPatterns = "/chart/validate")
-public class checkChartValidate extends HttpServlet {
+@WebServlet("/database/dumpingTable")
+public class dumpTableServlet extends HttpServlet{
     private static final long serialVersionUID = 1L;
-
+    
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        String query = "CALL Validate(?, ?, ?, ?, ?, ?, ?);";
-
+    	
+        String query = "CALL dumpTable(?);";
+        
         try {
             DatabaseConnect DB = new DatabaseConnect();
             Connection conn = DB.getConnection();
             PreparedStatement st = conn.prepareStatement(query);
-
-            String[] params = { "aca_code", "sem_code", "fa_code", "pro_code", "mo_code", "lec_code", "class_code" };
-            for (int i = 1; i < 8; i++)
-                st.setString(i, req.getParameter(params[i-1]).equals("null") ? null : req.getParameter(params[i-1]));
-
+            
+            st.setString(1, req.getParameter("table_name"));
+            
             System.out.println(st);
-
+            
             ResultSet res = st.executeQuery();
             List<Map<String, Object>> json_resp = DB.ResultSetToJSON(res);
 

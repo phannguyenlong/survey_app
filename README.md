@@ -45,3 +45,46 @@
 - **procedure name:** Validate(*academic_year, semester, faculty, program, module, lecturer, class*)
 - **output:** return (Academic Year, Semester, Faculty, Faculty_name, Program, Program_name, Module, Module_name, Class_code, Lecturer, Lecturer_name)
 - **EX:** /chart/validate?aca_code=null&sem_code='WS20'&fa_code=null&pro_code=null&mo_code=null&class_code=null&lec_code='23'
+
+`GET` **/chart/numberOfAnswer?class_code=''&lecturer_code=''**
+- **input:** class_code, lecturer_code
+- **procedure name:** getNumberOfAnswer(*class_code, lecturer_code*)
+    - Find `teaching_id` using `class_code`, `lecturer_code`
+    - Filter questionaire table using `teaching_id` 
+    - Return table sum of each option for each answer
+- **output:**
+
+| **Table**                    | **Option1** | **Option2** | **Option3** | **Option4** | **Option5** |
+|------------------------------|-------------|-------------|-------------|-------------|-------------|
+| A1                           | 20          | 30          | 40          | 20          | 10          |
+| A2                           | 30          | 20          | 25          | 15          | 66          |
+| ...                          | ...         | ...         | ...         | ...         | ...         |
+| A19 (dont count question 20) | ...         | ...         | ...         | ...         | ...         |
+
+`GET` **/chart/propertiesOfAnswer?class_code=''&lecturer_code=''**
+- **input:** class_code, lecturer_code
+- **procedure name:** getPropertiesOfAnswer(*class_code, lecturer_code*)
+    - Find `teaching_id` using `class_code`, `lecturer_code`
+    - Filter questionaire table using `teaching_id`
+    - sum:= `SELECT COUNT(*) FROM qfilterd_table`
+    - Return table sum of each option for each answer
+- **output:**
+
+| **Table**                    | **n**     | **Mean (AVG)** | **sd (STD)** | **reponse_rate** | **sum** |
+|------------------------------|------------|----------------|--------------|------------------|---------|
+| A1                           | (sum - NA) | ...            | ...          | n/sum * 100      | 200     |
+| A2                           | (sum - NA) | ...            | ...          | n/sum * 100      | 200     |
+| ...                          | (sum - NA) | ...            | ...          | n/sum * 100      | 200     |
+| A19 (dont count question 20) | (sum - NA) | ...            | ...          | n/sum * 100      | 200     |
+
+
+### III. Database
+`GET` **/database/dumpingTable?table_name=''**
+- **input:** table_name with option `{aca_year, faculty, program, module, semster, class, lecturer, teaching}`
+- **procedure name:** dumpTable(*table_name*)
+- **output:** fix for each option.
+  - Faculty ==> aca_year | faculty
+  - program ==> aca_year | faculty| program
+  - class ==> aca | faculty | program | module | semester | class
+  - ...
+

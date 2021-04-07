@@ -60,43 +60,47 @@ CREATE TABLE question (
 
 CREATE TABLE year_faculty (
 	id_1 VARCHAR(20) PRIMARY KEY,
-    academic_code VARCHAR(10),
-    faculty_code VARCHAR(10),
+    academic_code VARCHAR(10) NOT NULL,
+    faculty_code VARCHAR(10) NOT NULL,
     FOREIGN KEY (academic_code) REFERENCES academic_year(aca_code),
-    FOREIGN KEY (faculty_code) REFERENCES faculty(fa_code)
+    FOREIGN KEY (faculty_code) REFERENCES faculty(fa_code),
+    UNIQUE KEY (academic_code, faculty_code)
 );
 
 CREATE TABLE year_fac_pro (
 	id_2 INT AUTO_INCREMENT PRIMARY KEY,
-    id_1 VARCHAR(20),
-    program_code VARCHAR(10),
+    id_1 VARCHAR(20) NOT NULL,
+    program_code VARCHAR(10) NOT NULL,
     FOREIGN KEY (id_1) REFERENCES year_faculty(id_1),
-    FOREIGN KEY (program_code) REFERENCES program(pro_code)
+    FOREIGN KEY (program_code) REFERENCES program(pro_code),
+	UNIQUE KEY (id_1, program_code)
 );
 
 CREATE TABLE year_fac_pro_mo (
 	id_3 INT AUTO_INCREMENT PRIMARY KEY,
-    id_2 INT,
-    module_code VARCHAR(10),
+    id_2 INT NOT NULL,
+    module_code VARCHAR(10) NOT NULL,
     FOREIGN KEY (id_2) REFERENCES year_fac_pro(id_2),
-    FOREIGN KEY (module_code) REFERENCES module(mo_code)
+    FOREIGN KEY (module_code) REFERENCES module(mo_code),
+	UNIQUE KEY (id_2, module_code)
 );
 
 CREATE TABLE class (
 	class_code VARCHAR(10) PRIMARY KEY,
     size INTEGER NOT NULL,
-    semester_code VARCHAR(10),
-    id_3 INT,
+    semester_code VARCHAR(10) NOT NULL,
+    id_3 INT NOT NULL,
     FOREIGN KEY (semester_code) REFERENCES semester(sem_code),
     FOREIGN KEY (id_3) REFERENCES year_fac_pro_mo(id_3)
 );
 
 CREATE TABLE teaching (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	class_code VARCHAR(10),
-    lecturer_code VARCHAR(10),
+	class_code VARCHAR(10) NOT NULL,
+    lecturer_code VARCHAR(10) NOT NULL,
     FOREIGN KEY (class_code) REFERENCES class(class_code),
-    FOREIGN KEY (lecturer_code) REFERENCES lecturer(lec_code)
+    FOREIGN KEY (lecturer_code) REFERENCES lecturer(lec_code),
+	UNIQUE KEY (class_code, lecturer_code)
 );
 
 CREATE TABLE questionaire (

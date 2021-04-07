@@ -2,6 +2,8 @@ package api.questionaire;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -40,21 +42,24 @@ public class validateSubmitServlet extends HttpServlet {
         }
         
         System.out.println(data);
+        String query = "{Call insertIntoQuestionaire(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
 
-        // Translate from JSON to SQL server
         try {
             DatabaseConnect DB = new DatabaseConnect();
-            DB.getConnection();
+            Connection conn = DB.getConnection();
+            PreparedStatement st = conn.prepareStatement(query);
             JsonNode json = mapper.readTree(data.toString());
 
-            String query = "Call insertIntoQuestionaire('" + json.get("class_code").toString() + "', '" + json.get("lecturer_code").toString() + "', ";
-            for (int i = 1; i < 21; i++)
-                query += i == 20? json.get("question" +String.valueOf(i)) + "" : json.get("question" + String.valueOf(i)) + ", ";
-            query += ");";
+            st.setString(1, json.get("class_code").toString());
+            st.setString(2, json.get("lecturer_code").toString());
 
-            System.out.println(query);
+            for (int i = 1; i < 21; i++)
+                st.setString(i + 2, (json.get("question" + String.valueOf(i)).toString()).toString().replace("\"", ""));
+
+            System.out.println(st);
             
-            DB.doQuery(query);
+            st.executeUpdate();
+            // DB.doQuery(query);
             DB.closeConnect();
         } catch (Exception e) {
             resp.setStatus(500);

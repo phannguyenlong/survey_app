@@ -1,0 +1,9 @@
+body {
+	margin: 0;
+}
+#main{
+	margin: 100px 10px 0 10px;
+}
+.content_tr{
+	font-weight:normal
+}
