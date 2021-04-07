@@ -1,6 +1,10 @@
 $(document).ready(function() {
     $("#header").load("/webserver/header.html");
     $("#footer").load("/webserver/footer.html");
+    filterChart();
+})
+
+function filterChart() {
     getAcademicYear();
     $("#sem").click(function() {
         getSemester();
@@ -20,8 +24,7 @@ $(document).ready(function() {
     $("#lect").click(function() {
         getLecturer();
     })
-})
-
+}
 function getAcademicYear() {
     let codes = [];
     $.ajax({
