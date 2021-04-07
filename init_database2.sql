@@ -43,14 +43,14 @@ CREATE TABLE academic_year (
 );
 
 CREATE TABLE lecturer (
-	lec_code VARCHAR(10) PRIMARY KEY,
+	lec_code INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(30) NOT NULL
 );
 
 CREATE TABLE semester (
 	sem_code VARCHAR(10) PRIMARY KEY,
     academic_code VARCHAR(10),
-    FOREIGN KEY (academic_code) REFERENCES academic_year(aca_code)
+    FOREIGN KEY (academic_code) REFERENCES academic_year(aca_code) ON UPDATE CASCADE
 );
 
 CREATE TABLE question (
@@ -62,8 +62,8 @@ CREATE TABLE year_faculty (
 	id_1 VARCHAR(20) PRIMARY KEY,
     academic_code VARCHAR(10) NOT NULL,
     faculty_code VARCHAR(10) NOT NULL,
-    FOREIGN KEY (academic_code) REFERENCES academic_year(aca_code),
-    FOREIGN KEY (faculty_code) REFERENCES faculty(fa_code),
+    FOREIGN KEY (academic_code) REFERENCES academic_year(aca_code) ON UPDATE CASCADE,
+    FOREIGN KEY (faculty_code) REFERENCES faculty(fa_code) ON UPDATE CASCADE,
     UNIQUE KEY (academic_code, faculty_code)
 );
 
@@ -71,8 +71,8 @@ CREATE TABLE year_fac_pro (
 	id_2 INT AUTO_INCREMENT PRIMARY KEY,
     id_1 VARCHAR(20) NOT NULL,
     program_code VARCHAR(10) NOT NULL,
-    FOREIGN KEY (id_1) REFERENCES year_faculty(id_1),
-    FOREIGN KEY (program_code) REFERENCES program(pro_code),
+    FOREIGN KEY (id_1) REFERENCES year_faculty(id_1) ON UPDATE CASCADE,
+    FOREIGN KEY (program_code) REFERENCES program(pro_code) ON UPDATE CASCADE,
 	UNIQUE KEY (id_1, program_code)
 );
 
@@ -80,26 +80,26 @@ CREATE TABLE year_fac_pro_mo (
 	id_3 INT AUTO_INCREMENT PRIMARY KEY,
     id_2 INT NOT NULL,
     module_code VARCHAR(10) NOT NULL,
-    FOREIGN KEY (id_2) REFERENCES year_fac_pro(id_2),
-    FOREIGN KEY (module_code) REFERENCES module(mo_code),
+    FOREIGN KEY (id_2) REFERENCES year_fac_pro(id_2) ON UPDATE CASCADE,
+    FOREIGN KEY (module_code) REFERENCES module(mo_code) ON UPDATE CASCADE,
 	UNIQUE KEY (id_2, module_code)
 );
 
 CREATE TABLE class (
-	class_code VARCHAR(10) PRIMARY KEY,
+	class_code INT AUTO_INCREMENT PRIMARY KEY,
     size INTEGER NOT NULL,
     semester_code VARCHAR(10) NOT NULL,
     id_3 INT NOT NULL,
-    FOREIGN KEY (semester_code) REFERENCES semester(sem_code),
-    FOREIGN KEY (id_3) REFERENCES year_fac_pro_mo(id_3)
+    FOREIGN KEY (semester_code) REFERENCES semester(sem_code) ON UPDATE CASCADE,
+    FOREIGN KEY (id_3) REFERENCES year_fac_pro_mo(id_3) ON UPDATE CASCADE
 );
 
 CREATE TABLE teaching (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	class_code VARCHAR(10) NOT NULL,
-    lecturer_code VARCHAR(10) NOT NULL,
-    FOREIGN KEY (class_code) REFERENCES class(class_code),
-    FOREIGN KEY (lecturer_code) REFERENCES lecturer(lec_code),
+	class_code INT NOT NULL,
+    lecturer_code INT NOT NULL,
+    FOREIGN KEY (class_code) REFERENCES class(class_code) ON UPDATE CASCADE,
+    FOREIGN KEY (lecturer_code) REFERENCES lecturer(lec_code) ON UPDATE CASCADE,
 	UNIQUE KEY (class_code, lecturer_code)
 );
 
