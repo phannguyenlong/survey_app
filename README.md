@@ -81,7 +81,7 @@
     - table_name = "lecturer": old_key, name 
     - table_name = "aca_year": old_key, new_key
     - table_name = "module" or "program" or "faculty": old_key, new_key, name
-  (except for old_key, the other param set null)
+    - *(except for old_key, the other param set null)*
 - **procedure name:** table_name + "Interact" (*"delete", key*)
 
 `PUT` **/database/interactTable?table_name=''&**
@@ -112,7 +112,7 @@
     - table_name = "lecturer": old_key, name 
     - table_name = "aca_year": old_key, new_key
     - table_name = "module" or "program" or "faculty": old_key, new_key, name
-  (set null for new_key)
+    - *(set null for new_key)*
 - **procedure name:** table_name + "Interact" (*"create"*, *other param that is not null in order `key, name, code, code2, id, size`*)
   - The database has to generate the procedure name
   - Then need to check and add param that is not null **in order like above**
