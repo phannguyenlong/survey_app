@@ -128,6 +128,8 @@ BEGIN
 END //
 DELIMITER ;
 
+-- ================================== 11 PROCEDURE for Database page====================================
+
 -- Interact with year_faculty
 DROP PROCEDURE IF EXISTS java_app.year_facultyInteract;
 DELIMITER  //
@@ -205,49 +207,6 @@ BEGIN
 		WHEN action="create" THEN
 			INSERT INTO teaching(class_code,lecturer_code) VALUES (c_code,lec_code);
 	END CASE;
-END//
-DELIMITER ;
-											    
--- getNumberOfAnswer Procedure
-DROP PROCEDURE IF EXISTS getNumberOfAnswer;
-DELIMITER  //
-CREATE PROCEDURE getNumberOfAnswer(array_teaching_id VARCHAR(30), answer_id INT)
-BEGIN
-SET @teachingId_arr = array_teaching_id;
-IF answer_id = 1 THEN
-	SET @s=CONCAT('SELECT	
-				sum(answer_',answer_id,'= "Never") as Option1, 
-				sum(answer_',answer_id,'= "Rarely") as Option2,
-				sum(answer_',answer_id,'= "Sometimes") as Option3,
-				sum(answer_',answer_id,'= "Often") as Option4,
-				sum(answer_',answer_id,'= "Always") as Option5,
-				0 as Option6
-			FROM questionaire 
-			WHERE teaching_id IN (', @teachingID_arr, ');');
-ELSEIF answer_id = 2 THEN
-	SET @s=CONCAT('SELECT 
-				sum(answer_',answer_id,'= "Male") as Option1, 
-				sum(answer_',answer_id,'= "Female") as Option2,
-				sum(answer_',answer_id,'= "Other") as Option3,
-				0 as Option4,
-				0 as Option5,
-				0 as Option6
-			FROM questionaire 
-			WHERE teaching_id IN (', @teachingID_arr, ');');
-ELSEIF answer_id IN (3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19) THEN
-	SET @s=CONCAT('SELECT	
-				sum(answer_',answer_id,'= "1") as Option1, 
-				sum(answer_',answer_id,'= "2") as Option2,
-				sum(answer_',answer_id,'= "3") as Option3,
-				sum(answer_',answer_id,'= "4") as Option4,
-				sum(answer_',answer_id,'= "5") as Option5,
-				sum(answer_',answer_id,'= "NA") as Option6
-			FROM questionaire 
-			WHERE teaching_id IN (', @teachingID_arr, ');');
-END IF;
-PREPARE stmt1 FROM @s;
-EXECUTE stmt1;
-DEALLOCATE PREPARE stmt1;
 END//
 DELIMITER ;
 
@@ -389,4 +348,49 @@ BEGIN
 			INSERT INTO class(size, semester_code, id_3) VALUES (csize, code, id);
 	END CASE;
 END //
+DELIMITER ;
+
+-- ==================================  END of 11 PROCEDURE for Database page ====================================
+
+-- getNumberOfAnswer Procedure
+DROP PROCEDURE IF EXISTS getNumberOfAnswer;
+DELIMITER  //
+CREATE PROCEDURE getNumberOfAnswer(array_teaching_id VARCHAR(30), answer_id INT)
+BEGIN
+SET @teachingId_arr = array_teaching_id;
+IF answer_id = 1 THEN
+	SET @s=CONCAT('SELECT	
+				sum(answer_',answer_id,'= "Never") as Option1, 
+				sum(answer_',answer_id,'= "Rarely") as Option2,
+				sum(answer_',answer_id,'= "Sometimes") as Option3,
+				sum(answer_',answer_id,'= "Often") as Option4,
+				sum(answer_',answer_id,'= "Always") as Option5,
+				0 as Option6
+			FROM questionaire 
+			WHERE teaching_id IN (', @teachingID_arr, ');');
+ELSEIF answer_id = 2 THEN
+	SET @s=CONCAT('SELECT 
+				sum(answer_',answer_id,'= "Male") as Option1, 
+				sum(answer_',answer_id,'= "Female") as Option2,
+				sum(answer_',answer_id,'= "Other") as Option3,
+				0 as Option4,
+				0 as Option5,
+				0 as Option6
+			FROM questionaire 
+			WHERE teaching_id IN (', @teachingID_arr, ');');
+ELSEIF answer_id IN (3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19) THEN
+	SET @s=CONCAT('SELECT	
+				sum(answer_',answer_id,'= "1") as Option1, 
+				sum(answer_',answer_id,'= "2") as Option2,
+				sum(answer_',answer_id,'= "3") as Option3,
+				sum(answer_',answer_id,'= "4") as Option4,
+				sum(answer_',answer_id,'= "5") as Option5,
+				sum(answer_',answer_id,'= "NA") as Option6
+			FROM questionaire 
+			WHERE teaching_id IN (', @teachingID_arr, ');');
+END IF;
+PREPARE stmt1 FROM @s;
+EXECUTE stmt1;
+DEALLOCATE PREPARE stmt1;
+END//
 DELIMITER ;
