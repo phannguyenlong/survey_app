@@ -53,8 +53,8 @@
 - **procedure name:** getNumberOfAnswer(*array_teaching_id, answer_id*)
     - Filter questionaire table using `teaching_id` 
     - Return table sum of each option for that answer_id *(including number of NA question)
-    - Then the server will calculate each the `n`, `Mean`, `sd`, `reponse_rate`, `sum`
-    - Finally send the reponse to the client
+    - Then the server will send option1 -> option6 to client
+    - Client will calculate each the `n`, `Mean`, `sd`, `reponse_rate`, `sum`
 - **output:**
 
 | **Option1** | **Option2** | **Option3** | **Option4** | **Option5** | **Option6** | **n** | **mean** | **sd** | **reponse_rate** | **sum** |
