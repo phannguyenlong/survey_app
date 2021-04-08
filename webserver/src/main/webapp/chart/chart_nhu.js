@@ -6,24 +6,33 @@ $(document).ready(function() {
 
 function filterChart() {
     getAcademicYear();
-    $("#sem").click(function() {
-        getSemester();
+    $("#aca_code").change(() => {
+        // console.log("hell")
+        getSemester()
     })
-    $("#fal").click(function() {
+    $("#sem").change(function() {
+        // getSemester();
         getFaculty();
     })
-    $("#prog").click(function() {
+    $("#fal").change(function() {
+        // getFaculty();
         getProgram();
     })
-    $("#mod").click(function() {
+    $("#prog").change(function() {
+        // getProgram();
         getModule();
     })
-    $("#class_code").click(function() {
-        getClass();
+    $("#mod").change(function() {
+        // getModule();
+        getClass()
     })
-    $("#lect").click(function() {
+    $("#class_code").change(function() {
+        // getClass();
         getLecturer();
     })
+    // $("#lect").click(function() {
+    //     getLecturer();
+    // })
 }
 function getAcademicYear() {
     let codes = [];
@@ -54,8 +63,8 @@ function getSemester() {
                     codes.push(data[i].sem_code)
                 }
             }
-
-
+            // $("#sem option").not(":first").remove();
+            optionRemove(1)
             for (let i = 0; i < codes.length; i++) {
                 $("#sem").append(`<option value = "${codes[i]}"> ${codes[i]} </option>`)
             }
@@ -74,6 +83,8 @@ function getFaculty() {
                     codes.push(data[i].fa_code)
                 }
             }
+            // $("#fal option").not(":first").remove()
+            optionRemove(2)
             for (let i = 0; i < codes.length; i++) {
                 $("#fal").append(`<option value = "${codes[i]}"> ${codes[i]} </option>`)
             }
@@ -92,6 +103,8 @@ function getProgram() {
                     codes.push(data[i].pro_code)
                 }
             }
+            // $("#prog option").not(":first").remove()
+            optionRemove(3)
             for (let i = 0; i < codes.length; i++) {
                 $("#prog").append(`<option value = "${codes[i]}"> ${codes[i]} </option>`)
             }
@@ -110,6 +123,8 @@ function getModule() {
                     codes.push(data[i].mo_code)
                 }
             }
+            // $("#mod option").not(":first").remove()
+            optionRemove(4)
             for (let i = 0; i < codes.length; i++) {
                 $("#mod").append(`<option value = "${codes[i]}"> ${codes[i]} </option>`)
             }
@@ -128,6 +143,8 @@ function getClass() {
                     codes.push(data[i].class_code)
                 }
             }
+            // $("#class_code option").not(":first").remove()
+            optionRemove(5)
             for (let i = 0; i < codes.length; i++) {
                 $("#class_code").append(`<option value = "${codes[i]}"> ${codes[i]} </option>`)
             }
@@ -146,9 +163,16 @@ function getLecturer() {
                     codes.push(data[i].lec_code)
                 }
             }
+            $("#lect option").not(":first").remove()
             for (let i = 0; i < codes.length; i++) {
                 $("#lect").append(`<option value = "${codes[i]}"> ${codes[i]} </option>`)
             }
         }
     })
+}
+
+function optionRemove(start) {
+    optionField = ["sem", "fal", "prog", "mod", "class_code", "lect"]
+    for (let i = start - 1; i < optionField.length; i++)
+        $(`#${optionField[i]} option`).not(":first").remove()
 }
