@@ -378,7 +378,7 @@ ELSEIF answer_id = 2 THEN
 				0 as Option6
 			FROM questionaire 
 			WHERE teaching_id IN (', @teachingID_arr, ');');
-ELSEIF answer_id IN (3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19) THEN
+ELSE
 	SET @s=CONCAT('SELECT	
 				sum(answer_',answer_id,'= "1") as Option1, 
 				sum(answer_',answer_id,'= "2") as Option2,
