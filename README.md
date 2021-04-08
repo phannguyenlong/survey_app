@@ -42,49 +42,62 @@
 - **input:** 
     - aca_code, sem_code, fa_code, pro_code, mo_code, class_code, lec_code
     - *NOTE:* the input paramter can be null (if null, skip filter that parameter)
-- **procedure name:** Validate(*academic_year, semester, faculty, program, module, lecturer, class*)
+- **procedure name:** Validate(*academic_year, semester, faculty, program, module, lecturer, class, teaching_id*)
 - **output:** return (Academic Year, Semester, Faculty, Faculty_name, Program, Program_name, Module, Module_name, Class_code, Lecturer, Lecturer_name)
 - **EX:** /chart/validate?aca_code=null&sem_code='WS20'&fa_code=null&pro_code=null&mo_code=null&class_code=null&lec_code='23'
 
-`GET` **/chart/numberOfAnswer?class_code=''&lecturer_code=''**
-- **input:** class_code, lecturer_code
-- **procedure name:** getNumberOfAnswer(*class_code, lecturer_code*)
-    - Find `teaching_id` using `class_code`, `lecturer_code`
+`GET` **/chart/numberOfAnswer?teaching_id_arr=''&answer_id=''**
+- **input:** 
+    - teaching_id_arr: array of teaching id *(ex: teaching_id_arr="1,17")
+    - answer_id: index of answer *(ex: answer of question 1 ==> answer_id=1)*
+- **procedure name:** getNumberOfAnswer(*array_teaching_id, answer_id*)
     - Filter questionaire table using `teaching_id` 
-    - Return table sum of each option for each answer
+    - Return table sum of each option for that answer_id *(including number of NA question)
+    - Then the server will calculate each the `n`, `Mean`, `sd`, `reponse_rate`, `sum`
+    - Finally send the reponse to the client
 - **output:**
 
-| **Table**                    | **Option1** | **Option2** | **Option3** | **Option4** | **Option5** |
-|------------------------------|-------------|-------------|-------------|-------------|-------------|
-| A1                           | 20          | 30          | 40          | 20          | 10          |
-| A2                           | 30          | 20          | 25          | 15          | 66          |
-| ...                          | ...         | ...         | ...         | ...         | ...         |
-| A19 (dont count question 20) | ...         | ...         | ...         | ...         | ...         |
-
-`GET` **/chart/propertiesOfAnswer?class_code=''&lecturer_code=''**
-- **input:** class_code, lecturer_code
-- **procedure name:** getPropertiesOfAnswer(*class_code, lecturer_code*)
-    - Find `teaching_id` using `class_code`, `lecturer_code`
-    - Filter questionaire table using `teaching_id`
-    - sum:= `SELECT COUNT(*) FROM qfilterd_table`
-    - Return table sum of each option for each answer
-- **output:**
-
-| **Table**                    | **n**     | **Mean (AVG)** | **sd (STD)** | **reponse_rate** | **sum** |
-|------------------------------|------------|----------------|--------------|------------------|---------|
-| A1                           | (sum - NA) | ...            | ...          | n/sum * 100      | 200     |
-| A2                           | (sum - NA) | ...            | ...          | n/sum * 100      | 200     |
-| ...                          | (sum - NA) | ...            | ...          | n/sum * 100      | 200     |
-| A19 (dont count question 20) | (sum - NA) | ...            | ...          | n/sum * 100      | 200     |
+| **Option1** | **Option2** | **Option3** | **Option4** | **Option5** | **Option6** | **n** | **mean** | **sd** | **reponse_rate** | **sum** |
+|-------------|-------------|-------------|-------------|-------------|-------------|-------|----------|--------|------------------|---------|
+| 20          | 30          | 40          | 20          | 10          | 10          | 30    | 4.4      | 20     | 10               | 130     |
 
 
 ### III. Database
-`GET` **/database/dumpingTable?table_name=''**
-- **input:** table_name with option `{aca_year, faculty, program, module, semster, class, lecturer, teaching}`
-- **procedure name:** dumpTable(*table_name*)
-- **output:** fix for each option.
-  - Faculty ==> aca_year | faculty
-  - program ==> aca_year | faculty| program
-  - class ==> aca | faculty | program | module | semester | class
-  - ...
+`GET` **/database/interactTable?table_name=''**
+- **input:** 
+  - table_name with option `{aca_year, faculty, program, module, semster, class, lecturer, teaching, year_faculty, year_fac_pro, year_fac_pro_mo}`
+- **procedure name:** table_name + "Interact" (*"dump"*)
+- **output:** content of that table
 
+`DELETE` **/database/interactTable?table_name=''&key**
+- **input:**
+  - table_name with option `{aca_year, faculty, program, module, semster, class, lecturer, teaching, year_faculty, year_fac_pro, year_fac_pro_mo}`
+  - key: primary key in that table
+- **procedure name:** table_name + "Interact" (*"delete", key*)
+
+
+`PUT` **/database/interactTable?table_name=''&old_key=''&new_key=''&name=''&code=''&code2=''&id=''&size=''**
+- **input:**
+  - table_name with option `{aca_year, faculty, program, module, semster, class, lecturer, teaching, year_faculty, year_fac_pro, year_fac_pro_mo}`
+  - old_key, new_key: old and new primary key of that table
+  - name: name column in table (if possible, if not set *null* - *for ex: table module, program, faculty, lecturer*) 
+  - code: additional code (if not set null - *for ex: year_faculty, year_fac_pro, year_fac_pro_mo, teaching, class*)
+  - code2: second additional code (if not set null - *for ex: teaching*)
+  - id: additional id (if not set null - *for ex: year_faculty, year_fac_pro, year_fac_pro_mo, class*)
+  - size: size for class table (if not class table, set null)
+- **procedure name:** table_name + "Interact" (*"update"*, *other param that is not null in order `old_key, new_key, name, code, code2, id, size`*)
+  - The database has to generate the procedure name
+  - Then need to check and add param that is not null **in order like above**
+
+`POST` **/database/interactTable?table_name=''&key=''&name=''&code=''&code2=''&id=''&size=''**
+- **input:**
+  - table_name with option `{aca_year, faculty, program, module, semster, class, lecturer, teaching, year_faculty, year_fac_pro, year_fac_pro_mo}`
+  - key: key for that table (if key of that table is auto_increment, set null - *for ex: teaching, class, lecterer, year_faculty, year_fac_pro, year_fac_pro_mo*)
+  - name: name column in table (if possible, if not set *null* - *for ex: table module, program, faculty, lecturer*) 
+  - code: additional code (if not set null - *for ex: year_faculty, year_fac_pro, year_fac_pro_mo, teaching, class*)
+  - code2: second additional code (if not set null - *for ex: teaching*)
+  - id: additional id (if not set null - *for ex: year_faculty, year_fac_pro, year_fac_pro_mo, class*)
+  - size: size for class table (if not class table, set null)
+- **procedure name:** table_name + "Interact" (*"create"*, *other param that is not null in order `key, name, code, code2, id, size`*)
+  - The database has to generate the procedure name
+  - Then need to check and add param that is not null **in order like above**
