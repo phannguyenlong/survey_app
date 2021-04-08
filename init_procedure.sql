@@ -353,7 +353,7 @@ DELIMITER ;
 -- ==================================  END of 11 PROCEDURE for Database page ====================================
 
 -- getNumberOfAnswer Procedure
-DROP PROCEDURE IF EXISTS getNumberOfAnswer;
+DROP PROCEDURE IF EXISTS java_app.getNumberOfAnswer;
 DELIMITER  //
 CREATE PROCEDURE getNumberOfAnswer(array_teaching_id VARCHAR(30), answer_id INT)
 BEGIN
