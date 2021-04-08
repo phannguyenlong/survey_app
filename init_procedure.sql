@@ -251,3 +251,142 @@ DEALLOCATE PREPARE stmt1;
 END//
 DELIMITER ;
 
+-- Interact with faculty
+DROP PROCEDURE IF EXISTS java_app.facultyInteract;
+DELIMITER //
+CREATE PROCEDURE facultyInteract(action VARCHAR(10),old_key VARCHAR(10),new_key VARCHAR(10),fname VARCHAR(50))
+BEGIN
+	CASE
+		WHEN action = "dump" THEN
+			SELECT * FROM faculty ORDER BY fa_code;
+		WHEN action = "delete" THEN
+			DELETE FROM faculty  WHERE fa_code = old_key;
+		WHEN action = "update" THEN
+			UPDATE faculty 
+				SET fa_code = IFNULL(new_key, old_key), name = IFNULL(fname, name) 
+                WHERE fa_code = old_key;
+		WHEN action = "create" THEN 
+			INSERT INTO faculty(fa_code, name) VALUES (new_key, fname);
+	END CASE;
+END //
+DELIMITER ;
+
+-- Interact with program
+DROP PROCEDURE IF EXISTS java_app.programInteract;
+DELIMITER //
+CREATE PROCEDURE programInteract(action VARCHAR(10),old_key VARCHAR(10),new_key VARCHAR(10),pname VARCHAR(50))
+BEGIN
+	CASE
+		WHEN action = "dump" THEN
+			SELECT * FROM program ORDER BY pro_code;
+		WHEN action = "delete" THEN
+			DELETE FROM program  WHERE pro_code = old_key;
+		WHEN action = "update" THEN
+			UPDATE program 
+				SET pro_code = IFNULL(new_key, old_key), name = IFNULL(pname, name) 
+                WHERE pro_code = old_key;
+		WHEN action = "create" THEN 
+			INSERT INTO program(pro_code, name) VALUES (new_key, pname);
+	END CASE;
+END //
+DELIMITER ;
+
+-- Interact with module
+DROP PROCEDURE IF EXISTS java_app.moduleInteract;
+DELIMITER //
+CREATE PROCEDURE moduleInteract(action VARCHAR(10),old_key VARCHAR(10),new_key VARCHAR(10),mname VARCHAR(50))
+BEGIN
+	CASE
+		WHEN action = "dump" THEN
+			SELECT * FROM module ORDER BY mo_code;
+		WHEN action = "delete" THEN
+			DELETE FROM module  WHERE mo_code = old_key;
+		WHEN action = "update" THEN
+			UPDATE module 
+				SET mo_code = IFNULL(new_key, old_key), name = IFNULL(mname, name) 
+                WHERE mo_code = old_key;
+		WHEN action = "create" THEN 
+			INSERT INTO module(mo_code, name) VALUES (new_key, mname);
+	END CASE;
+END //
+DELIMITER ;
+
+-- Interact with academic_year
+DROP PROCEDURE IF EXISTS java_app.aca_yearInteract;
+DELIMITER //
+CREATE PROCEDURE aca_yearInteract(action VARCHAR(10),old_key VARCHAR(10),new_key VARCHAR(10))
+BEGIN
+	CASE
+		WHEN action = "dump" THEN
+			SELECT * FROM academic_year ORDER BY aca_code;
+		WHEN action = "delete" THEN
+			DELETE FROM academic_year  WHERE aca_code = old_key;
+		WHEN action = "update" THEN
+			UPDATE academic_year 
+				SET aca_code = IFNULL(new_key, old_key) 
+                WHERE aca_code = old_key;
+		WHEN action = "create" THEN 
+			INSERT INTO academic_year(aca_code) VALUES (new_key);
+	END CASE;
+END //
+DELIMITER ;
+
+-- Interact with semester
+DROP PROCEDURE IF EXISTS java_app.semesterInteract;
+DELIMITER //
+CREATE PROCEDURE semesterInteract(action VARCHAR(10),old_key VARCHAR(10),new_key VARCHAR(10),code VARCHAR(10))
+BEGIN
+	CASE
+		WHEN action = "dump" THEN
+			SELECT * FROM semester ORDER BY academic_code;
+		WHEN action = "delete" THEN
+			DELETE FROM semester WHERE sem_code = old_key;
+		WHEN action = "update" THEN
+			UPDATE semester 
+				SET sem_code = IFNULL(new_key, old_key), academic_code = IFNULL(code, academic_code) 
+                WHERE sem_code = old_key;
+		WHEN action = "create" THEN 
+			INSERT INTO semester(sem_code, academic_code) VALUES (new_key, code);
+	END CASE;
+END //
+DELIMITER ;
+
+-- Interact with lecturer
+DROP PROCEDURE IF EXISTS java_app.lecturerInteract;
+DELIMITER //
+CREATE PROCEDURE lecturerInteract(action VARCHAR(10),old_key INT,lname VARCHAR(30))
+BEGIN
+	CASE
+		WHEN action = "dump" THEN
+			SELECT * FROM lecturer ORDER BY lec_code;
+		WHEN action = "delete" THEN
+			DELETE FROM lecturer WHERE lec_code = old_key;
+		WHEN action = "update" THEN
+			UPDATE lecturer 
+				SET name = IFNULL(lname, name) 
+                WHERE lec_code = old_key;
+		WHEN action = "create" THEN 
+			INSERT INTO lecturer(name) VALUES (lname);
+	END CASE;
+END //
+DELIMITER ;
+
+-- Interact with class
+DROP PROCEDURE IF EXISTS java_app.classInteract;
+DELIMITER //
+CREATE PROCEDURE classInteract(action VARCHAR(10),old_key INT,csize INT,code VARCHAR(10),id INT)
+BEGIN
+	CASE
+		WHEN action = "dump" THEN
+			SELECT * FROM class ORDER BY class_code;
+		WHEN action = "delete" THEN
+			DELETE FROM class WHERE class_code = old_key;
+		WHEN action = "update" THEN
+			UPDATE class 
+				SET size = IFNULL(csize, size), semester_code = IFNULL(code, semester_code), id_3 = IFNULL(id, id_3)
+                WHERE class_code = old_key;
+		WHEN action = "create" THEN 
+			INSERT INTO class(size, semester_code, id_3) VALUES (csize, code, id);
+	END CASE;
+END //
+DELIMITER ;
