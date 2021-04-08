@@ -266,7 +266,7 @@ BEGIN
 				SET fa_code = IFNULL(new_key, old_key), name = IFNULL(fname, name) 
                 WHERE fa_code = old_key;
 		WHEN action = "create" THEN 
-			INSERT INTO faculty(fa_code, name) VALUES (new_key, fname);
+			INSERT INTO faculty(fa_code, name) VALUES (old_key, fname);
 	END CASE;
 END //
 DELIMITER ;
@@ -286,7 +286,7 @@ BEGIN
 				SET pro_code = IFNULL(new_key, old_key), name = IFNULL(pname, name) 
                 WHERE pro_code = old_key;
 		WHEN action = "create" THEN 
-			INSERT INTO program(pro_code, name) VALUES (new_key, pname);
+			INSERT INTO program(pro_code, name) VALUES (old_key, pname);
 	END CASE;
 END //
 DELIMITER ;
@@ -306,7 +306,7 @@ BEGIN
 				SET mo_code = IFNULL(new_key, old_key), name = IFNULL(mname, name) 
                 WHERE mo_code = old_key;
 		WHEN action = "create" THEN 
-			INSERT INTO module(mo_code, name) VALUES (new_key, mname);
+			INSERT INTO module(mo_code, name) VALUES (old_key, mname);
 	END CASE;
 END //
 DELIMITER ;
@@ -326,7 +326,7 @@ BEGIN
 				SET aca_code = IFNULL(new_key, old_key) 
                 WHERE aca_code = old_key;
 		WHEN action = "create" THEN 
-			INSERT INTO academic_year(aca_code) VALUES (new_key);
+			INSERT INTO academic_year(aca_code) VALUES (old_key);
 	END CASE;
 END //
 DELIMITER ;
@@ -346,7 +346,7 @@ BEGIN
 				SET sem_code = IFNULL(new_key, old_key), academic_code = IFNULL(code, academic_code) 
                 WHERE sem_code = old_key;
 		WHEN action = "create" THEN 
-			INSERT INTO semester(sem_code, academic_code) VALUES (new_key, code);
+			INSERT INTO semester(sem_code, academic_code) VALUES (old_key, code);
 	END CASE;
 END //
 DELIMITER ;
