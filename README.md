@@ -46,9 +46,11 @@
 - **output:** return (Academic Year, Semester, Faculty, Faculty_name, Program, Program_name, Module, Module_name, Class_code, Lecturer, Lecturer_name)
 - **EX:** /chart/validate?aca_code=null&sem_code='WS20'&fa_code=null&pro_code=null&mo_code=null&class_code=null&lec_code='23'
 
-`GET` **/chart/numberOfAnswer?teaching_id=''&answer_id=''**
-- **input:** teaching_id, answer_id
-- **procedure name:** getNumberOfAnswer(*teaching_id, answer_id*)
+`GET` **/chart/numberOfAnswer?teaching_id_arr=''&answer_id=''**
+- **input:** 
+    - teaching_id_arr: array of teaching id *(ex: teaching_id_arr="1,17")
+    - answer_id: index of answer *(ex: answer of question 1 ==> answer_id=1)*
+- **procedure name:** getNumberOfAnswer(*array_teaching_id, answer_id*)
     - Filter questionaire table using `teaching_id` 
     - Return table sum of each option for that answer_id *(including number of NA question)
     - Then the server will calculate each the `n`, `Mean`, `sd`, `reponse_rate`, `sum`
