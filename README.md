@@ -59,45 +59,72 @@
 
 | **Option1** | **Option2** | **Option3** | **Option4** | **Option5** | **Option6** | **n** | **mean** | **sd** | **reponse_rate** | **sum** |
 |-------------|-------------|-------------|-------------|-------------|-------------|-------|----------|--------|------------------|---------|
-| 20          | 30          | 40          | 20          | 10          | 10          | 30    | 4.4      | 20     | 10               | 130     |
+| 20          | 30          | 40          | 20          | 10          | 10          | 120   | 4.4      | 20     | 10               | 130     |
 
 
 ### III. Database
 `GET` **/database/interactTable?table_name=''**
 - **input:** 
-  - table_name with option `{aca_year, faculty, program, module, semster, class, lecturer, teaching, year_faculty, year_fac_pro, year_fac_pro_mo}`
+  - table_name with option `{aca_year, faculty, program, module, semester, class, lecturer, teaching, year_faculty, year_fac_pro, year_fac_pro_mo}`
 - **procedure name:** table_name + "Interact" (*"dump"*)
 - **output:** content of that table
 
-`DELETE` **/database/interactTable?table_name=''&key**
+`DELETE` **/database/interactTable?table_name=''&old_key**
 - **input:**
-  - table_name with option `{aca_year, faculty, program, module, semster, class, lecturer, teaching, year_faculty, year_fac_pro, year_fac_pro_mo}`
-  - key: primary key in that table
+  - table_name with option `{aca_year, faculty, program, module, semester, class, lecturer, teaching, year_faculty, year_fac_pro, year_fac_pro_mo}` and old_key
+   + table_name = "year_faculty": old_key, new_key, a_code, f_code
+   + table_name = "year_fac_pro": old_key, id, code
+   + table_name = "year_fac_pro_mo": old_key, id, code
+   + table_name = "class": old_key,size,code,id
+   + table_name = "teaching": old_key,c_code, lec_code
+   + table_name = "semester": old_key, new_key, code
+   + table_name = "lecturer": old_key, name 
+   + table_name = "aca_year": old_key, new_key
+   + table_name = "module" or "program" or "faculty": old_key, new_key, name
+    - Which:
+     + old_key, new_key: old and new primary key of that table
+     + name: name column in table (if possible, if not set *null* - *for ex: table module, program, faculty, lecturer*) 
+     + code: additional code (if not set null - *for ex: year_faculty, year_fac_pro, year_fac_pro_mo, teaching, class*)
+     + id: additional id (if not set null - *for ex: year_faculty, year_fac_pro, year_fac_pro_mo, class*)
+     + size: size for class table (if not class table, set null)
 - **procedure name:** table_name + "Interact" (*"delete", key*)
 
-
-`PUT` **/database/interactTable?table_name=''&old_key=''&new_key=''&name=''&code=''&code2=''&id=''&size=''**
+`PUT` **/database/interactTable?table_name=''&**
 - **input:**
-  - table_name with option `{aca_year, faculty, program, module, semster, class, lecturer, teaching, year_faculty, year_fac_pro, year_fac_pro_mo}`
-  - old_key, new_key: old and new primary key of that table
-  - name: name column in table (if possible, if not set *null* - *for ex: table module, program, faculty, lecturer*) 
-  - code: additional code (if not set null - *for ex: year_faculty, year_fac_pro, year_fac_pro_mo, teaching, class*)
-  - code2: second additional code (if not set null - *for ex: teaching*)
-  - id: additional id (if not set null - *for ex: year_faculty, year_fac_pro, year_fac_pro_mo, class*)
-  - size: size for class table (if not class table, set null)
+  - table_name with option `{aca_year, faculty, program, module, semester, class, lecturer, teaching, year_faculty, year_fac_pro, year_fac_pro_mo}`
+   + table_name = "year_faculty": old_key, new_key, a_code, f_code
+   + table_name = "year_fac_pro": old_key, id, code
+   + table_name = "year_fac_pro_mo": old_key, id, code
+   + table_name = "class": old_key, size, code, id
+   + table_name = "teaching": old_key, c_code, lec_code
+   + table_name = "semester": old_key, new_key, code
+   + table_name = "lecturer": old_key, name 
+   + table_name = "aca_year": old_key, new_key
+   + table_name = "module" or "program" or "faculty": old_key, new_key, name
+    - which:
+     + old_key, new_key: old and new primary key of that table
+     + name: name column in table (if possible, if not set *null* - *for ex: table module, program, faculty, lecturer*) 
+     + code: additional code (if not set null - *for ex: year_faculty, year_fac_pro, year_fac_pro_mo, teaching, class*)
+     + id: additional id (if not set null - *for ex: year_faculty, year_fac_pro, year_fac_pro_mo, class*)
+     + size: size for class table (if not class table, set null)
 - **procedure name:** table_name + "Interact" (*"update"*, *other param that is not null in order `old_key, new_key, name, code, code2, id, size`*)
   - The database has to generate the procedure name
   - Then need to check and add param that is not null **in order like above**
 
-`POST` **/database/interactTable?table_name=''&key=''&name=''&code=''&code2=''&id=''&size=''**
+`POST` **/database/interactTable?table_name=''&key**
 - **input:**
-  - table_name with option `{aca_year, faculty, program, module, semster, class, lecturer, teaching, year_faculty, year_fac_pro, year_fac_pro_mo}`
-  - key: key for that table (if key of that table is auto_increment, set null - *for ex: teaching, class, lecterer, year_faculty, year_fac_pro, year_fac_pro_mo*)
-  - name: name column in table (if possible, if not set *null* - *for ex: table module, program, faculty, lecturer*) 
-  - code: additional code (if not set null - *for ex: year_faculty, year_fac_pro, year_fac_pro_mo, teaching, class*)
-  - code2: second additional code (if not set null - *for ex: teaching*)
-  - id: additional id (if not set null - *for ex: year_faculty, year_fac_pro, year_fac_pro_mo, class*)
-  - size: size for class table (if not class table, set null)
+  - table_name with option `{aca_year, faculty, program, module, semester, class, lecturer, teaching, year_faculty, year_fac_pro, year_fac_pro_mo}`
+   + table_name = "year_faculty": old_key, new_key, a_code, f_code
+   + table_name = "year_fac_pro": old_key, id, code
+   + table_name = "year_fac_pro_mo": old_key, id, code
+   + table_name = "class": old_key, size, code, id
+   + table_name = "teaching": old_key, c_code, lec_code
+   + table_name = "semester": old_key, new_key, code
+   + table_name = "lecturer": old_key, name 
+   + table_name = "aca_year": old_key, new_key
+   + table_name = "module" or "program" or "faculty": old_key, new_key, name
+    - which:
+     + key: key for that table (if key of that table is auto_increment, set null - *for ex: teaching, class, lecterer, year_faculty, year_fac_pro, year_fac_pro_mo*)
 - **procedure name:** table_name + "Interact" (*"create"*, *other param that is not null in order `key, name, code, code2, id, size`*)
   - The database has to generate the procedure name
   - Then need to check and add param that is not null **in order like above**
