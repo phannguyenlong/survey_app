@@ -128,56 +128,6 @@ BEGIN
 END //
 DELIMITER ;
 
--- Get table
-DROP PROCEDURE IF EXISTS java_app.dumpTable;
-DELIMITER  //
-CREATE PROCEDURE dumpTable(table_name VARCHAR(10)) 
-BEGIN
-	CASE 
-		WHEN table_name = "teaching" THEN 
-			SELECT id AS teaching_id,class_code,lecturer_code,l.name FROM teaching t
-            JOIN lecturer l ON l.lec_code=t.lecturer_code
-            ORDER BY id;
-		WHEN table_name = "lecturer" THEN
-			SELECT * FROM lecturer
-            ORDER BY lec_code;
-		WHEN table_name = "semester" THEN
-			SELECT * FROM semester
-            ORDER BY academic_code;
-		WHEN table_name = "aca_year" THEN
-			SELECT * FROM academic_year
-            ORDER BY aca_code;
-		WHEN table_name = "faculty" THEN
-			SELECT f.fa_code,f.name AS faculty_name,yf.academic_code FROM faculty f
-            JOIN year_faculty yf ON yf.faculty_code=f.fa_code 
-            ORDER BY f.name,yf.academic_code;
-		WHEN table_name = "program" THEN
-			SELECT p.pro_code,p.name AS program_name,f.fa_code,f.name AS faculty_name,yf.academic_code FROM program p
-            JOIN year_fac_pro yfp ON yfp.program_code=p.pro_code
-            JOIN year_faculty yf ON yf.id_1=yfp.id_1
-            JOIN faculty f ON f.fa_code=yf.faculty_code
-            ORDER BY p.name,f.name,yf.academic_code;
-		WHEN table_name = "module" THEN
-			SELECT m.mo_code,m.name AS module_name,p.pro_code,p.name AS program_name,f.fa_code,f.name AS faculty_name,yf.academic_code FROM module m
-            JOIN year_fac_pro_mo yfpm ON m.mo_code=yfpm.module_code
-            JOIN year_fac_pro yfp ON yfpm.id_2= yfp.id_2
-            JOIN program p ON p.pro_code=yfp.program_code
-            JOIN year_faculty yf ON yf.id_1=yfp.id_1
-            JOIN faculty f ON f.fa_code=yf.faculty_code
-            ORDER BY m.name,p.name,f.name,yf.academic_code;
-		WHEN table_name = "class" THEN
-			SELECT c.class_code,c.size,m.mo_code,m.name AS module_name,p.pro_code,p.name AS program_name,f.fa_code,f.name AS faculty_name,yf.academic_code FROM class c
-            JOIN year_fac_pro_mo yfpm ON yfpm.id_3=c.id_3
-            JOIN module m ON m.mo_code=yfpm.module_code
-            JOIN year_fac_pro yfp ON yfpm.id_2= yfp.id_2
-            JOIN program p ON p.pro_code=yfp.program_code
-            JOIN year_faculty yf ON yf.id_1=yfp.id_1
-            JOIN faculty f ON f.fa_code=yf.faculty_code
-            ORDER BY c.class_code;
-	END CASE;
-END//
-DELIMITER ;
-
 -- getNumberOfAnswer Procedure
 DROP PROCEDURE IF EXISTS java_app.getNumberOfAnswer;
 DELIMITER  //
@@ -431,4 +381,84 @@ BEGIN
 		(t.lecturer_code = lecturer);
 
 END //
+DELIMITER ;
+
+-- Interact with year_faculty
+DROP PROCEDURE IF EXISTS java_app.year_facultyInteract;
+DELIMITER  //
+CREATE PROCEDURE year_facultyInteract(action VARCHAR(10),old_key VARCHAR(20),new_key VARCHAR(20),a_code VARCHAR(10),f_code VARCHAR(10))
+BEGIN
+	CASE
+		WHEN action="dump" THEN 
+			SELECT * FROM year_faculty ORDER BY id_1;
+        WHEN action="delete" THEN 
+			DELETE FROM year_faculty WHERE id_1 = old_key;
+		WHEN action="update" THEN 
+			UPDATE year_faculty
+			SET id_1 = IFNULL(new_key,old_key), academic_code = IFNULL(a_code,academic_code),faculty_code = IFNULL(f_code,faculty_code)
+			WHERE id_1 = old_key;
+		WHEN action="create" THEN
+			INSERT INTO year_faculty(id_1,academic_code,faculty_code) VALUES (old_key,a_code,f_code);
+	END CASE;
+END//
+DELIMITER ;
+
+-- Interact with year_fac_pro
+DROP PROCEDURE IF EXISTS java_app.year_fac_proInteract;
+DELIMITER  //
+CREATE PROCEDURE year_fac_proInteract(action VARCHAR(10),old_key INT,id VARCHAR(20),code VARCHAR(10))
+BEGIN
+	CASE
+		WHEN action="dump" THEN 
+			SELECT * FROM year_fac_pro ORDER BY id_2;
+        WHEN action="delete" THEN 
+			DELETE FROM year_fac_pro WHERE id_2 = old_key;
+		WHEN action="update" THEN 
+			UPDATE year_fac_pro
+			SET id_1 = IFNULL(id,id_1),program_code = IFNULL(code,program_code)
+			WHERE id_2 = old_key;
+		WHEN action="create" THEN
+			INSERT INTO year_fac_pro(id_1,program_code) VALUES (id,code);
+	END CASE;
+END//
+DELIMITER ;
+
+-- Interact with year_fac_pro_mo
+DROP PROCEDURE IF EXISTS java_app.year_fac_pro_moInteract;
+DELIMITER  //
+CREATE PROCEDURE year_fac_pro_moInteract(action VARCHAR(10),old_key INT,id INT,code VARCHAR(10))
+BEGIN
+	CASE
+		WHEN action="dump" THEN 
+			SELECT * FROM year_fac_pro_mo ORDER BY id_3;
+        WHEN action="delete" THEN 
+			DELETE FROM year_fac_pro_mo WHERE id_3 = old_key;
+		WHEN action="update" THEN 
+			UPDATE year_fac_pro_mo
+			SET id_2 = IFNULL(id,id_2),module_code = IFNULL(code,module_code)
+			WHERE id_3 = old_key;
+		WHEN action="create" THEN
+			INSERT INTO year_fac_pro_mo(id_2,module_code) VALUES (id,code);
+	END CASE;
+END//
+DELIMITER ;
+
+-- Interact with teaching
+DROP PROCEDURE IF EXISTS java_app.teachingInteract;
+DELIMITER  //
+CREATE PROCEDURE teachingInteract(action VARCHAR(10),old_key INT,c_code INT,lec_code INT)
+BEGIN
+	CASE
+		WHEN action="dump" THEN 
+			SELECT * FROM teaching ORDER BY id;
+        WHEN action="delete" THEN 
+			DELETE FROM teaching WHERE id = old_key;
+		WHEN action="update" THEN 
+			UPDATE teaching
+			SET class_code = IFNULL(c_code,class_code),lecturer_code = IFNULL(lec_code,lecturer_code)
+			WHERE id= old_key;
+		WHEN action="create" THEN
+			INSERT INTO teaching(class_code,lecturer_code) VALUES (c_code,lec_code);
+	END CASE;
+END//
 DELIMITER ;
