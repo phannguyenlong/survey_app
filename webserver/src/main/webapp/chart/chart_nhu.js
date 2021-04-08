@@ -7,7 +7,6 @@ $(document).ready(function() {
 function filterChart() {
     getAcademicYear();
     $("#aca_code").change(() => {
-        // console.log("hell")
         getSemester()
     })
     $("#sem").change(function() {
