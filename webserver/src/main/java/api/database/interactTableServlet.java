@@ -71,7 +71,6 @@ public class interactTableServlet extends HttpServlet {
             params = new String[]{ "old_key", "new_key", "name" };
     	}
 
-    	
     	PreparedStatement st = conn.prepareStatement(query);
     	
 		for (int i = 1; i <= params.length; i++)
@@ -115,7 +114,23 @@ public class interactTableServlet extends HttpServlet {
     
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        StringBuffer data = new StringBuffer();
+        String line = null;
+
         try {
+            BufferedReader reader = req.getReader();
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+                data.append(line);
+            }
+        } catch (Exception e) {
+            resp.setStatus(500);
+        }
+        
+        System.out.println(data);
+
+    	try {
         	DatabaseConnect DB = new DatabaseConnect();
             Connection conn = DB.getConnection();
         	List<String> tableNameList = Arrays.asList("year_faculty", "year_fac_pro", "year_fac_pro_mo", "class", "teaching", "semester", "aca_year", "lecturer", "module", "program", "faculty");
@@ -125,17 +140,8 @@ public class interactTableServlet extends HttpServlet {
         		throw new Exception("Invalid Table Name");
         	}
         	PreparedStatement st = createStatement(req, "update");
-            ResultSet res = st.executeQuery();
-            /*
-            List<Map<String, Object>> json_resp = null;
-            json_resp = DB.ResultSetToJSON(res);
-
-            resp.setContentType("application/json");
-            resp.setCharacterEncoding("UTF-8");
-            resp.addHeader("Access-Control-Allow-Origin", "*"); // remove CORS policy
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.writeValue(resp.getOutputStream(), json_resp);*/
-
+        	
+        	st.executeUpdate();
             DB.closeConnect();
             
         } catch (Exception ex) {
@@ -171,22 +177,9 @@ public class interactTableServlet extends HttpServlet {
         		throw new Exception("Invalid Table Name");
         	}
         	PreparedStatement st = createStatement(req, "create");
-            ResultSet res = st.executeQuery();
-            /*
-            List<Map<String, Object>> json_resp = DB.ResultSetToJSON(res);
-            JsonNode json = mapper.readTree(data.toString());
-
-            resp.setContentType("application/json");
-            resp.setCharacterEncoding("UTF-8");
-            resp.addHeader("Access-Control-Allow-Origin", "*"); // remove CORS policy
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.writeValue(resp.getOutputStream(), json_resp);*/
-
-            DB.closeConnect();
             System.out.println(st);
             
             st.executeUpdate();
-            // DB.doQuery(query);
             DB.closeConnect();
         } catch (Exception e) {
             resp.setStatus(500);
@@ -307,16 +300,8 @@ public class interactTableServlet extends HttpServlet {
 	            st.setString(3, "null");
 			}
             System.out.println(st);
-            ResultSet res = st.executeQuery();
-            /*
-            List<Map<String, Object>> json_resp = DB.ResultSetToJSON(res);
-
-            resp.setContentType("application/json");
-            resp.setCharacterEncoding("UTF-8");
-            resp.addHeader("Access-Control-Allow-Origin", "*"); // remove CORS policy
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.writeValue(resp.getOutputStream(), json_resp);*/
-
+            
+            st.executeUpdate();
             DB.closeConnect();
         } catch (Exception ex) {
             resp.setStatus(500);
