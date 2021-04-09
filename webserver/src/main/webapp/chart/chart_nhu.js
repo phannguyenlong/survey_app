@@ -2,6 +2,7 @@ $(document).ready(function() {
     $("#header").load("/webserver/header.html");
     $("#footer").load("/webserver/footer.html");
     filterChart();
+    getChart();
 })
 
 function filterChart() {
@@ -174,4 +175,45 @@ function optionRemove(start) {
     optionField = ["sem", "fal", "prog", "mod", "class_code", "lect"]
     for (let i = start - 1; i < optionField.length; i++)
         $(`#${optionField[i]} option`).not(":first").remove()
+}
+
+function getChart() {
+    let myChart = document.getElementById('questionnaireChart').getContext('2d');
+
+    let barChart =new Chart(myChart, {
+        type: 'bar',
+        data: {
+            labels: ['1', '2', '3', '4', '5'],
+            datasets: [{
+                label: 'Response',
+                data:[
+                    100,
+                    20,
+                    30,
+                    40,
+                    50
+                ]
+            }]
+        },
+        options:{
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginatZero: true,
+                        min: 0,
+                        max: 100
+                    }
+                }]
+            }
+        }
+    })
+}
+
+let dataSet = [];
+function addData() {
+    $.ajax({
+        type: 'GET',
+        url: "http://localhost:8080/webserver/chart/numberOfAnswer",
+    })
+
 }
