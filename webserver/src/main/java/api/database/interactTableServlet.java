@@ -191,114 +191,16 @@ public class interactTableServlet extends HttpServlet {
     @Override
 	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
 	{	
-		try 
-		{ 
-			List<String> Table_Names = Arrays.asList("year_faculty", "year_fac_pro", "year_fac_pro_mo", "class", "teaching", "semester", "aca_year", "lecturer", "module", "program", "faculty");
-        	
-			String table_name = req.getParameter("table_name");
-			
-			String query = "";
-			PreparedStatement st = null;
-			
-			DatabaseConnect DB = new DatabaseConnect();
+    	try {
+        	DatabaseConnect DB = new DatabaseConnect();
             Connection conn = DB.getConnection();
-			
-			if(!Table_Names.contains(table_name))
-			{
-				System.out.println(table_name + " doesnt exist");
-				return;
-			}
-
-			if(table_name.equals("year_faculty"))
-			{
-		    	query = "CALL " + table_name + "Interact" + "(\"delete\", ?, ?, ?, ?)";
-	            st = conn.prepareStatement(query);	        	
-	            
-	            st.setString(1, req.getParameter("old_key"));
-	            
-	            st.setString(2, "null");
-	            st.setString(3, "null");
-	            st.setString(4, "null");
-			} 
-			else if (table_name.equals("year_fac_pro"))
-			{
-	    		query = "CALL " + table_name + "Interact" + "(\"delete\", ?, ?, ?)";
-	        	
-	            st = conn.prepareStatement(query);	        	
-	            
-	            st.setString(1, req.getParameter("old_key"));
-	            st.setString(2, "null");
-	            st.setString(3, "null");
-			}
-			else if (table_name.equals("year_fac_pro_mo"))
-			{
-	    		query = "CALL " + table_name + "Interact" + "(\"delete\", ?, ?, ?)";
-	        	
-	            st = conn.prepareStatement(query);	        	
-	            
-	            st.setString(1, req.getParameter("old_key"));
-	            st.setString(2, "null");
-	            st.setString(3, "null");
-			}
-			else if (table_name.equals("class"))
-			{
-	    		query = "CALL " + table_name + "Interact" + "(\"delete\", ?, ?, ?, ?)";
-	        	
-	            st = conn.prepareStatement(query);	        	
-	            
-	            st.setString(1, req.getParameter("old_key"));
-	            st.setString(2, "null");
-	            st.setString(3, "null");
-	            st.setString(4, "null");
-			}
-			else if (table_name.equals("teaching"))
-			{
-	    		query = "CALL " + table_name + "Interact" + "(\"delete\", ?, ?, ?)";
-	        	
-	            st = conn.prepareStatement(query);	        	
-	            
-	            st.setString(1, req.getParameter("old_key"));
-	            st.setString(2, "null");
-	            st.setString(3, "null");
-			}
-			else if (table_name.equals("semester"))
-			{
-	    		query = "CALL " + table_name + "Interact" + "(\"delete\", ?, ?, ?)";
-	        	
-	            st = conn.prepareStatement(query);	        	
-	            
-	            st.setString(1, req.getParameter("old_key"));
-	            st.setString(2, "null");
-	            st.setString(3, "null");
-			}
-			else if (table_name.equals("lecturer"))
-			{
-	    		query = "CALL " + table_name + "Interact" + "(\"delete\", ?, ?)";
-	        	
-	            st = conn.prepareStatement(query);	        	
-	            
-	            st.setString(1, req.getParameter("old_key"));
-	            st.setString(2, "null");
-			}
-			else if (table_name.equals("aca_year"))
-			{
-	    		query = "CALL " + table_name + "Interact" + "(\"delete\", ?, ?, ?)";
-	        	
-	            st = conn.prepareStatement(query);	        	
-	            
-	            st.setString(1, req.getParameter("old_key"));
-	            st.setString(2, "null");
-			}
-			else if (table_name.equals("module") || table_name.equals("program") || table_name.equals("faculty"))
-			{
-	    		query = "CALL " + table_name + "Interact" + "(\"delete\", ?, ?, ?)";
-	        	
-	            st = conn.prepareStatement(query);	        	
-	            
-	            st.setString(1, req.getParameter("old_key"));
-	            st.setString(2, "null");
-	            st.setString(3, "null");
-			}
+        	List<String> tableNameList = Arrays.asList("year_faculty", "year_fac_pro", "year_fac_pro_mo", "class", "teaching", "semester", "aca_year", "lecturer", "module", "program", "faculty");
+        	String tableName = req.getParameter("table_name");
+        	System.out.println(tableName);
+        	if (!tableNameList.contains(tableName)) {
+        		throw new Exception("Invalid Table Name");
+        	}
+        	PreparedStatement st = createStatement(req, "delete");
             System.out.println(st);
             
             st.executeUpdate();
