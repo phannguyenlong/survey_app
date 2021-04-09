@@ -36,14 +36,14 @@ public class getNumberOfAnswerServlet extends HttpServlet {
             Connection conn = DB.getConnection();
             PreparedStatement st = conn.prepareStatement(query);
 
-            st.setString(1, req.getParameter("class_code"));
+            st.setString(1, req.getParameter("teaching_id_arr"));
             st.setString(2, req.getParameter("lecturer_code"));
             
             System.out.println(st);
 
             ResultSet res = st.executeQuery();
+            
             List<Map<String, Object>> json_resp = DB.ResultSetToJSON(res);
-
             resp.setContentType("application/json");
             resp.setCharacterEncoding("UTF-8");
             resp.addHeader("Access-Control-Allow-Origin", "*"); // remove CORS policy
