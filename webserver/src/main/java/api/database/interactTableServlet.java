@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import util.DatabaseConnect;
@@ -75,8 +74,11 @@ public class interactTableServlet extends HttpServlet {
     	
     	PreparedStatement st = conn.prepareStatement(query);
     	
-    	for (int i = 1; i <= params.length; i++)
-            st.setString(i, req.getParameter(params[i-1]).equals("null") ? null : req.getParameter(params[i-1]));
+		for (int i = 1; i <= params.length; i++)
+			st.setString(i,
+					!req.getParameterMap().containsKey(params[i - 1]) || req.getParameter(params[i - 1]).equals("null") 
+							? null
+							: req.getParameter(params[i - 1]));
     	System.out.println(st);
     	return st;
     }
