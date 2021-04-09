@@ -1,219 +1,202 @@
-$(document).ready(function() {
+chartArr = []  // array for chart
+teaching_id = []
+
+$(document).ready(function () {
+    init()
     $("#header").load("/webserver/header.html");
     $("#footer").load("/webserver/footer.html");
     filterChart();
     getChart();
 })
 
-function filterChart() {
-    getAcademicYear();
-    $("#aca_code").change(() => {
-        getSemester()
-    })
-    $("#sem").change(function() {
-        // getSemester();
-        getFaculty();
-    })
-    $("#fal").change(function() {
-        // getFaculty();
-        getProgram();
-    })
-    $("#prog").change(function() {
-        // getProgram();
-        getModule();
-    })
-    $("#mod").change(function() {
-        // getModule();
-        getClass()
-    })
-    $("#class_code").change(function() {
-        // getClass();
-        getLecturer();
-    })
-    // $("#lect").click(function() {
-    //     getLecturer();
-    // })
+function init() {
+    for (let i = 1; i < 20; i++) {
+        $(".chartContainer").append(`<h3>Tom dep trai nhat qua dat ${i}</h3><canvas id="questionnaireChart${i}" style="width: 80%; height:300px;";></canvas>`)
+        let myChart = document.getElementById(`questionnaireChart${i}`).getContext('2d');
+        let barChart = new Chart(myChart, {
+            type: 'bar',
+            data: {
+                labels: ["Option1", "Option2", "Option3", "Option4", "Option5", "Option6"],
+                datasets: [{
+                    label: 'Response',
+                    data: [0,0,0,0,0,0]
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginatZero: true,
+                            min: 0,
+                            max: 100
+                        }
+                    }]
+                }
+            }
+        })
+        chartArr.push(barChart)
+    }
 }
+
+function filterChart() {
+    console.log(teaching_id.length)
+    getAcademicYear();
+    $("#aca_code").change(() => getSemester())
+    $("#sem").change(() => getFaculty())
+    $("#fal").change(() => getProgram())
+    $("#prog").change(() => getModule())
+    $("#mod").change(() => getClass())
+    $("#class_code").change(() => getLecturer())
+}
+
+let test
+
 function getAcademicYear() {
-    let codes = [];
+    teaching_id = []
     $.ajax({
         type: 'GET',
         url: "http://localhost:8080/webserver/chart/validate?aca_code=null&sem_code=null&fa_code=null&pro_code=null&mo_code=null&class_code=null&lec_code=null",
         success: function (data) {
-            for (let i = 0; i < data.length; i++) {
-                if (!codes.includes(data[i].aca_code)){
-                    codes.push(data[i].aca_code)
-                }
-            }
-            for (let i=0; i<codes.length; i++) {
-                $("#aca_code").append(`<option value = "${codes[i]}"> ${codes[i]} </option>`)
+            test = data
+            $("#aca_code").append(`<option value = "${data[0].aca_code}"> ${data[0].aca_code} </option>`)
+            teaching_id.push(data[0].teaching_id)
+            for (let i = 1; i < data.length; i++) {
+                if (data[i].aca_code != data[i-1].aca_code)
+                    $("#aca_code").append(`<option value = "${data[i].aca_code}"> ${data[i].aca_code} </option>`)
+                teaching_id.push(data[i].teaching_id)
             }
         }
     })
 }
 
 function getSemester() {
-    let codes = []
+    teaching_id = []
     $.ajax({
         type: 'GET',
         url: `http://localhost:8080/webserver/chart/validate?aca_code=${String($("#aca_code option:selected").val())}&sem_code=null&fa_code=null&pro_code=null&mo_code=null&class_code=null&lec_code=null`,
         success: function (data) {
-            for (let i = 0; i < data.length; i++) {
-                if (!codes.includes(data[i].sem_code)) {
-                    codes.push(data[i].sem_code)
-                }
-            }
-            // $("#sem option").not(":first").remove();
             optionRemove(1)
-            for (let i = 0; i < codes.length; i++) {
-                $("#sem").append(`<option value = "${codes[i]}"> ${codes[i]} </option>`)
+            $("#sem").append(`<option value = "${data[0].sem_code}"> ${data[0].sem_code} </option>`)
+            teaching_id.push(data[0].teaching_id)
+            for (let i = 1; i < data.length; i++) {
+                if (data[i].sem_code != data[i - 1].sem_code)
+                    $("#sem").append(`<option value = "${data[i].sem_code}"> ${data[i].sem_code} </option>`)
+                teaching_id.push(data[i].teaching_id)
             }
         }
     })
 }
 
 function getFaculty() {
-    let codes = []
+    teaching_id = []
     $.ajax({
         type: 'GET',
         url: `http://localhost:8080/webserver/chart/validate?aca_code=${String($("#aca_code option:selected").val())}&sem_code=${String($("#sem option:selected").val())}&fa_code=null&pro_code=null&mo_code=null&class_code=null&lec_code=null`,
         success: function (data) {
-            for (let i = 0; i < data.length; i++) {
-                if (!codes.includes(data[i].fa_code)) {
-                    codes.push(data[i].fa_code)
-                }
-            }
-            // $("#fal option").not(":first").remove()
             optionRemove(2)
-            for (let i = 0; i < codes.length; i++) {
-                $("#fal").append(`<option value = "${codes[i]}"> ${codes[i]} </option>`)
+            $("#fal").append(`<option value = "${data[0].fa_code}"> ${data[0].fa_code} - ${data[0].fa_name}</option>`)
+            teaching_id.push(data[0].teaching_id)
+            for (let i = 1; i < data.length; i++) {
+                if (data[i].fa_code != data[i - 1].fa_code)
+                    $("#fal").append(`<option value = "${data[i].fa_code}"> ${data[i].fa_code} - ${data[i].fa_name} </option>`)
+                teaching_id.push(data[i].teaching_id)
             }
         }
     })
 }
 
 function getProgram() {
-    let codes = []
+    teaching_id = []
     $.ajax({
         type: 'GET',
         url: `http://localhost:8080/webserver/chart/validate?aca_code=${String($("#aca_code option:selected").val())}&sem_code=${String($("#sem option:selected").val())}&fa_code=${String($("#fal option:selected").val())}&pro_code=null&mo_code=null&class_code=null&lec_code=null`,
         success: function (data) {
-            for (let i = 0; i < data.length; i++) {
-                if (!codes.includes(data[i].pro_code)) {
-                    codes.push(data[i].pro_code)
-                }
-            }
-            // $("#prog option").not(":first").remove()
             optionRemove(3)
-            for (let i = 0; i < codes.length; i++) {
-                $("#prog").append(`<option value = "${codes[i]}"> ${codes[i]} </option>`)
+            $("#prog").append(`<option value = "${data[0].pro_code}"> ${data[0].pro_code} - ${data[0].pro_name} </option>`)
+            teaching_id.push(data[0].teaching_id)
+            for (let i = 1; i < data.length; i++) {
+                if (data[i].pro_code != data[i - 1].pro_code)
+                    $("#prog").append(`<option value = "${data[i].pro_code}"> ${data[i].pro_code} - ${data[i].pro_name} </option>`)
+                teaching_id.push(data[i].teaching_id)
             }
         }
     })
 }
 
 function getModule() {
-    let codes = []
+    teaching_id = []
     $.ajax({
         type: 'GET',
         url: `http://localhost:8080/webserver/chart/validate?aca_code=${String($("#aca_code option:selected").val())}&sem_code=${String($("#sem option:selected").val())}&fa_code=${String($("#fal option:selected").val())}&pro_code=${String($("#prog option:selected").val())}&mo_code=null&class_code=null&lec_code=null`,
         success: function (data) {
-            for (let i = 0; i < data.length; i++) {
-                if (!codes.includes(data[i].mo_code)) {
-                    codes.push(data[i].mo_code)
-                }
-            }
-            // $("#mod option").not(":first").remove()
             optionRemove(4)
-            for (let i = 0; i < codes.length; i++) {
-                $("#mod").append(`<option value = "${codes[i]}"> ${codes[i]} </option>`)
+            $("#mod").append(`<option value = "${data[0].mo_code}"> ${data[0].mo_code} - ${data[0].mo_name} </option>`)
+            teaching_id.push(data[0].teaching_id)
+            for (let i = 1; i < data.length; i++) {
+                if (data[i].mo_code != data[i - 1].mo_code)
+                    $("#mod").append(`<option value = "${data[i].mo_code}"> ${data[i].mo_code} - ${data[i].mo_name} </option>`)
+                teaching_id.push(data[i].teaching_id)
             }
         }
     })
 }
 
 function getClass() {
-    let codes = []
+    teaching_id = []
     $.ajax({
         type: 'GET',
         url: `http://localhost:8080/webserver/chart/validate?aca_code=${String($("#aca_code option:selected").val())}&sem_code=${String($("#sem option:selected").val())}&fa_code=${String($("#fal option:selected").val())}&pro_code=${String($("#prog option:selected").val())}&mo_code=${String($("#mod option:selected").val())}&class_code=null&lec_code=null`,
         success: function (data) {
-            for (let i = 0; i < data.length; i++) {
-                if (!codes.includes(data[i].class_code)) {
-                    codes.push(data[i].class_code)
-                }
-            }
-            // $("#class_code option").not(":first").remove()
             optionRemove(5)
-            for (let i = 0; i < codes.length; i++) {
-                $("#class_code").append(`<option value = "${codes[i]}"> ${codes[i]} </option>`)
+            $("#class_code").append(`<option value = "${data[0].class_code}"> ${data[0].class_code} </option>`)
+            teaching_id.push(data[0].teaching_id)
+            for (let i = 1; i < data.length; i++) {
+                if (data[i].class_code != data[i - 1].class_code)
+                    $("#class_code").append(`<option value = "${data[i].class_code}"> ${data[i].class_code} </option>`)
+                teaching_id.push(data[i].teaching_id)
             }
         }
     })
 }
 
 function getLecturer() {
-    let codes = []
+    teaching_id = []
     $.ajax({
         type: 'GET',
         url: `http://localhost:8080/webserver/chart/validate?aca_code=${String($("#aca_code option:selected").val())}&sem_code=${String($("#sem option:selected").val())}&fa_code=${String($("#fal option:selected").val())}&pro_code=${String($("#prog option:selected").val())}&mo_code=${String($("#mod option:selected").val())}&class_code=${String($("#class_code option:selected").val())}&lec_code=null`,
         success: function (data) {
-            for (let i = 0; i < data.length; i++) {
-                if (!codes.includes(data[i].lec_code)) {
-                    codes.push(data[i].lec_code)
-                }
-            }
             $("#lect option").not(":first").remove()
-            for (let i = 0; i < codes.length; i++) {
-                $("#lect").append(`<option value = "${codes[i]}"> ${codes[i]} </option>`)
+            $("#lect").append(`<option value = "${data[0].lec_code}"> ${data[0].lec_code} - ${data[0].lec_name} </option>`)
+            teaching_id.push(data[0].teaching_id)
+            for (let i = 1; i < data.length; i++) {
+                if (data[i].lec_code != data[i - 1].lec_code) 
+                    $("#lect").append(`<option value = "${data[i].lec_code}"> ${data[i].lec_code} - ${data[i].lec_name} </option>`)
+                teaching_id.push(data[i].teaching_id)
             }
         }
     })
 }
 
+// Use for remove option in each select
 function optionRemove(start) {
     optionField = ["sem", "fal", "prog", "mod", "class_code", "lect"]
     for (let i = start - 1; i < optionField.length; i++)
         $(`#${optionField[i]} option`).not(":first").remove()
 }
 
-function getChart() {
-    let myChart = document.getElementById('questionnaireChart').getContext('2d');
-
-    let barChart =new Chart(myChart, {
-        type: 'bar',
-        data: {
-            labels: ['1', '2', '3', '4', '5'],
-            datasets: [{
-                label: 'Response',
-                data:[
-                    100,
-                    20,
-                    30,
-                    40,
-                    50
-                ]
-            }]
-        },
-        options:{
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginatZero: true,
-                        min: 0,
-                        max: 100
-                    }
-                }]
+// Visualize chart
+function visualize() {
+    teaching_id = [...new Set(teaching_id)] // using of set remove duplicate
+    console.log(teaching_id.join(","))
+    for (let i = 1; i < 20; i++) {
+        $.ajax({
+            type: 'GET',
+            url: `http://localhost:8080/webserver/chart/numberOfAnswer?teaching_id_arr=${teaching_id.join(",")}&answer_id=${i}`,
+            success: data => {
+                chartArr[i - 1].data.labels = Object.keys(data[0])
+                chartArr[i-1].data.datasets[0].data = Object.values(data[0])
+                chartArr[i-1].update()
             }
-        }
-    })
-}
-
-let dataSet = [];
-function addData() {
-    $.ajax({
-        type: 'GET',
-        url: "http://localhost:8080/webserver/chart/numberOfAnswer",
-    })
-
+        })
+    }
 }
