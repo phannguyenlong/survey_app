@@ -37,7 +37,7 @@ public class getNumberOfAnswerServlet extends HttpServlet {
             PreparedStatement st = conn.prepareStatement(query);
 
             st.setString(1, req.getParameter("teaching_id_arr"));
-            st.setString(2, req.getParameter("lecturer_code"));
+            st.setString(2, req.getParameter("answer_id"));
             
             System.out.println(st);
 
