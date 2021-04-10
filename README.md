@@ -103,15 +103,15 @@
 `POST` **/database/interactTable?table_name=''&**
 - **input:**
   - table_name with option `{aca_year, faculty, program, module, semester, class, lecturer, teaching, year_faculty, year_fac_pro, year_fac_pro_mo}`
-    - table_name = "year_faculty": old_key, new_key, a_code, f_code
+    - table_name = "year_faculty": old_key, a_code, f_code
     - table_name = "year_fac_pro": old_key, id, code
     - table_name = "year_fac_pro_mo": old_key, id, code
     - table_name = "class": old_key,size,code,id
     - table_name = "teaching": old_key,c_code, lec_code
-    - table_name = "semester": old_key, new_key, code
+    - table_name = "semester": old_key, code
     - table_name = "lecturer": old_key, name 
-    - table_name = "aca_year": old_key, new_key
-    - table_name = "module" or "program" or "faculty": old_key, new_key, name
+    - table_name = "aca_year": old_key
+    - table_name = "module" or "program" or "faculty": old_key, name
     - *(set null for new_key)*
 - **procedure name:** table_name + "Interact" (*"create"*, *other param that is not null in order `key, name, code, code2, id, size`*)
   - The database has to generate the procedure name
