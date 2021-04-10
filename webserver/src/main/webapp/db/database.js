@@ -81,7 +81,7 @@ function getTable(option) {
 					tr.append(th)
             	}
             	
-            	delete_bnt = $(`<button class=\"bnt_delete\" value="${option}" id="${"delete"+x}"></button>`).text("Delete")
+            	delete_bnt = $(`<button class=\"bnt_delete action_btn\" value="${option}" id="${"delete"+x}"></button>`).text("Delete")
             	tr.append(delete_bnt)
             	
             	table.append(tr)
@@ -89,56 +89,32 @@ function getTable(option) {
             
             
             add_bnt = $(`<button class=\"bnt_add table_btn\" value="${option}"></button>`).text("Add")
-            add_form = $(`<div class="add_form_${option}"></div>`)
-			keys = addKey[option]
-            for(let i =0;i<keys.length;i++){
-            	label = $(`<span></span>`).text(keys[i])
-            	input = $(`<input type="text" class="${'input_'+keys[i]}" name="${keys[i]}" />`)
-				add_form.append(label, input, $(`<br>`))
-			}
-			submitBtn = $(`<button>Submit</button>`)
-			submitBtn.click(() => {
-				let arr = $(`.add_form_${option} input`)
-				let params = '';
-				for (let i = 0; i < keys.length; i++) {
-					params += `&${keys[i]}=${arr[i].value}`
-				}
-				addRow(option, params)
-			})
-
-            add_form.append(submitBtn)
-            divElement.append(table,add_bnt, add_form)
+            divElement.append(table,add_bnt)
             
             $(`#${option}`).append(divElement)
-			add_form.hide()
             
 			add_bnt.click(function () {
-				// tr = $(`<tr ></tr>`)
-				// for(let i =0;i<keys.length;i++){
-				// 	th = $(`<th><div class="add_form_${option}"><input type="text" class="${'input_' + keys[i]}" name="${keys[i]}"/></th></div>`)
-				// 	tr.append(th)
-				// }
-				// submitBtn = $(`<button>Submit</button>`)
-				// submitBtn.click(() => {
-				// 	let arr = $(`.add_form_${option} input`)
-				// 	let params = '';
-				// 	for (let i = 0; i < keys.length; i++) {
-				// 		params += `&${keys[i]}=${arr[i].value}`
-				// 	}
-				// 	addRow(option, params)
-				// })
-				// tr.append($(`<th></th>`).append(submitBtn))
-				// table.append(tr)
-
-				count = count+1
-				console.log(count)
-				if(count%2==1){
-					add_form.show()
-				}
-				else{
-					add_form.hide()
-				}
-            	
+				if ($(`#${option + 1}`).children().last().attr("id") != "input_row") {
+					keys = addKey[option]
+					tr = $(`<tr id="input_row"></tr>`)
+					for (let i = 0; i < keys.length; i++) {
+						th = $(`<th><div class="add_form_${option}"><input type="text" placeholder="${keys[i]}" class="${'input_' + keys[i]}" name="${keys[i]}"/></th></div>`)
+						tr.append(th)
+					}
+					submitBtn = $(`<button class="action_btn">Submit</button>`)
+					submitBtn.click(() => {
+						let arr = $(`.add_form_${option} input`)
+						let params = '';
+						for (let i = 0; i < keys.length; i++) {
+							params += `&${keys[i]}=${arr[i].value}`
+						}
+						addRow(option, params)
+						getTable(option)
+					})
+					tr.append($(`<th></th>`).append(submitBtn))
+					$(`#${option + 1}`).append(tr)
+				} else
+					$(`#${option + 1}`).children().last().remove()
 			})
                       
             $(".bnt_delete").click(function(){
@@ -147,7 +123,7 @@ function getTable(option) {
             	selector = $(this).siblings(".content_tr_"+key)[0]
 				result_key = $(selector).text()
 				deleteRow(value, result_key)
-				// delete : $($(this).parent()[0]).content_tr
+				getTable(option)
 			})
 	
 		},
@@ -157,6 +133,7 @@ function getTable(option) {
 function addRow(table, param) {
 	$.ajax({
 		type: 'POST',
+		async: false, // turn of async for reload table properly
 		url: "http://localhost:8080/webserver/database/interactTable?table_name=" + table + param,
 		success: data => alertMessage("success", 'Success', `Add row to table ${table} successfully. Please reload to see change`),
 		error: () => alertMessage('error', 'Error', `Cannot add to table ${table} cause error. Please check any duplicate key`)
@@ -167,9 +144,10 @@ function addRow(table, param) {
 function deleteRow(table, key){
 	$.ajax({
 		type: 'DELETE',
+		async: false, // turn of async for reload table properly
 		url: "http://localhost:8080/webserver/database/interactTable?table_name=" + table + "&old_key=" + key,
 		success: data => alertMessage("success", 'Success', `Delete row in table ${table} successfully. Please reload to see change`),
-		error: () => alertMessage('error', 'Error', `Cannot add to table ${table} cause error. Please check delete all foreign key contraint before delete`)
+		error: () => alertMessage('error', 'Error', `Cannot deleete data from table ${table} cause error. Please check delete all foreign key contraint before delete`)
 	})
 }
 
