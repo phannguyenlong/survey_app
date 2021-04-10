@@ -52,6 +52,7 @@ function init() {
 	
 
 }
+let test
 function getTable(option) {
 	$.ajax({
 		type: 'GET',
@@ -85,28 +86,31 @@ function getTable(option) {
             
             add_bnt = $(`<button class=\"bnt_add\" value="${option}"></button>`).text("Add")
             $(`#${option}`).append(add_bnt)
-            add_form = $(`<form class="add_form" method="POST" action="${'http://localhost:8080/webserver/database/interactTable'}"></form>`)
-            add_form.append($(`<input readonly type="text" name="table_name" value="${new String(option)}"/>`),$(`<br>`))
-            keys = addKey[option]
+            add_form = $(`<div class="add_form_${option}"></div>`)
+            // add_form.append($(`<input readonly type="text" name="table_name" value="${new String(option)}"/>`),$(`<br>`))
+			keys = addKey[option]
             for(let i =0;i<keys.length;i++){
             	label = $(`<span></span>`).text(keys[i])
             	input = $(`<input type="text" class="${'input_'+keys[i]}" name="${keys[i]}" />`)
             	add_form.append(label,input,$(`<br>`))
-            }
-            add_form.append($(`<input class = "submit_add" type="submit" value = "submit" id="${'submit_add_'+option}">`))
+			}
+			submitBtn = $(`<button>Submit</button>`)
+			submitBtn.click(() => {
+				let arr = $(`.add_form_${option} input`)
+				let params = '';
+				for (let i = 0; i < keys.length; i++) {
+					// console.log(arr[i].value)
+					params += `&${keys[i]}=${arr[i].value}`
+				}
+				addRow(option, params)
+			})
+
+            add_form.append(submitBtn)
             $(`#${option}`).append(add_form)
 			add_form.hide()
-			
-			add_form.submit(e => {
-				// e.preventDefault()
-				$('<input />').attr('type', 'hidden')
-					.attr('name', param.name)
-					.attr('value', param.value)
-					.appendTo('#commentForm');
-				return false;
-			})
             
-            $(".bnt_add").click(function(){
+			$(".bnt_add").click(function () {
+				console.log("aaaaaa")
             	add_form.toggle()
 			})
             
@@ -126,8 +130,14 @@ function getTable(option) {
 	})
 		
 }
-function addRow(table, data) {
-
+function addRow(table, param) {
+	$.ajax({
+		type: 'POST',
+		url: "http://localhost:8080/webserver/database/interactTable?table_name="+table+param,
+		success: function(data, textStatus, jqXHR) {
+				alert(data)
+			}
+		})
 }
 
 
