@@ -95,7 +95,16 @@ function getTable(option) {
             }
             add_form.append($(`<input class = "submit_add" type="submit" value = "submit" id="${'submit_add_'+option}">`))
             $(`#${option}`).append(add_form)
-            add_form.hide()
+			add_form.hide()
+			
+			add_form.submit(e => {
+				// e.preventDefault()
+				$('<input />').attr('type', 'hidden')
+					.attr('name', param.name)
+					.attr('value', param.value)
+					.appendTo('#commentForm');
+				return false;
+			})
             
             $(".bnt_add").click(function(){
             	add_form.toggle()
@@ -117,6 +126,11 @@ function getTable(option) {
 	})
 		
 }
+function addRow(table, data) {
+
+}
+
+
 function deleteRow(table, key){
 	$.ajax({
 		type: 'DELETE',
