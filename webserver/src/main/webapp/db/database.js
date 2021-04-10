@@ -9,9 +9,11 @@ var primaryKey = {aca_year:"aca_code",faculty:"fa_code",program:"pro_code",modul
 				  teaching:"id",year_faculty:"id_1",
 				  year_fac_pro:"id_2",year_fac_pro_mo:"id_3"}
 
-var addKey = {faculty:["old_key","name"]}
+var addKey = {faculty:["old_key","name"],module:["old_key","name"],program:["old_key","name"],aca_year:["old_key"],lecturer:["old_key"],
+semester:["old_key","code"],teaching:["old_key","c_code","lec_code"],class:["old_key","size","code","id"],year_fac_pro_mo: ["old_key","id","code"],
+year_fac_pro:["old_key","id","code"],year_faculty:["old_key","a_code","f_code"]}
 
-// ID: value = div, value1 = table, value2 = getbnt, value3=bnt_show, value4=bnt_hide
+// ID: value = div, value1 = table, value2 = getbnt, value3=bnt_show, value4=bnt_hide, value5=div(table,bnt_add,form)
 function init() {
 	tables = [["aca_year","Academic Year"],["faculty","Faculty"],
 	["program","Program"],["module","Module"],
@@ -52,15 +54,17 @@ function init() {
 	
 
 }
-let test
 function getTable(option) {
+	var count=0
 	$.ajax({
 		type: 'GET',
 		url: "http://localhost:8080/webserver/database/interactTable?table_name="+option,
 		success: function(data, textStatus, jqXHR) {
+			$(`.${option+5}`).remove()
+			
             let json = JSON.parse(JSON.stringify(data))
             columns = Object.keys(json[0])  // get All keys of object json.
-            
+            var divElement = $(`<div class="${option+5}"></div>`)
             // create Table:
             tr = $(`<tr ></tr>`)
             for(let j =0;j<columns.length;j++){
@@ -68,7 +72,6 @@ function getTable(option) {
             	tr.append(th)
             }
             table = $(`<table id="${option+1}" class="table"></table>`).append(tr)
-            $(`#${option}`).append(table)
             
             for(let x = 0;x<json.length;x++){
             	tr = $(`<tr ></tr>`)
@@ -80,12 +83,11 @@ function getTable(option) {
             	delete_bnt = $(`<button class=\"bnt_delete\" value="${option}" id="${"delete"+x}"></button>`).text("Delete")
             	tr.append(delete_bnt)
             	
-            	$(`#${option+1}`).append(tr)
+            	table.append(tr)
             }
             
             
             add_bnt = $(`<button class=\"bnt_add\" value="${option}"></button>`).text("Add")
-            $(`#${option}`).append(add_bnt)
             add_form = $(`<div class="add_form_${option}"></div>`)
             // add_form.append($(`<input readonly type="text" name="table_name" value="${new String(option)}"/>`),$(`<br>`))
 			keys = addKey[option]
@@ -106,17 +108,23 @@ function getTable(option) {
 			})
 
             add_form.append(submitBtn)
-            $(`#${option}`).append(add_form)
+            divElement.append(table,add_bnt,add_form)
+            
+            $(`#${option}`).append(divElement)
 			add_form.hide()
             
 			$(".bnt_add").click(function () {
-				console.log("aaaaaa")
-            	add_form.toggle()
+				count = count+1
+				console.log(count)
+				if(count%2==1){
+					add_form.show()
+				}
+				else{
+					add_form.hide()
+				}
+            	
 			})
-            
-
-            $(`#${option+2}`).attr('disabled','disabled');
-            
+                      
             $(".bnt_delete").click(function(){
             	value = this.value
             	key = primaryKey[value]
