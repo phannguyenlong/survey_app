@@ -6,20 +6,24 @@ $(document).ready(function () {
     $("#header").load("/webserver/header.html");
     $("#footer").load("/webserver/footer.html");
     filterChart();
-    getChart();
+    visualize();
 })
 
 function init() {
     for (let i = 1; i < 20; i++) {
-        $(".chartContainer").append(`<h3>Tom dep trai nhat qua dat ${i}</h3><canvas id="questionnaireChart${i}" style="width: 80%; height:300px;";></canvas>`)
+        $(".chartContainer").append(`<h2 style="text-align: center">Tom dep trai nhat qua dat ${i}</h2><canvas id="questionnaireChart${i}" style="width: 800px; height:500px; margin-bottom: 50px;"></canvas>`)
         let myChart = document.getElementById(`questionnaireChart${i}`).getContext('2d');
         let barChart = new Chart(myChart, {
             type: 'bar',
             data: {
                 labels: ["Option1", "Option2", "Option3", "Option4", "Option5", "Option6"],
                 datasets: [{
-                    label: 'Response',
-                    data: [0,0,0,0,0,0]
+                    label: 'Number of response',
+                    data: [0,0,0,0,0,0],
+                    backgroundColor: '#FFA552',
+                    borderColor: '#fd800d',
+                    borderWidth: 1,
+                    hoverBackgroundColor: '#fd800d'
                 }]
             },
             options: {
@@ -28,7 +32,8 @@ function init() {
                         ticks: {
                             beginatZero: true,
                             min: 0,
-                            max: 100
+                            max: 10,
+                            stepSize: 2
                         }
                     }]
                 }
