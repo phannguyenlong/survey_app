@@ -104,7 +104,8 @@ BEGIN
         (p.pro_code = program OR program IS NULL) AND
         (m.mo_code = module OR module IS NULL) AND
         (l.lec_code = lecturer OR lecturer IS NULL) AND
-        (c.class_code = class OR class IS NULL);
+        (c.class_code = class OR class IS NULL)
+	ORDER BY a.aca_code, s.sem_code, f.fa_code, p.pro_code, m.mo_code, c.class_code, l.lec_code, t.id;
 END //
 DELIMITER ;
 
@@ -355,7 +356,7 @@ DELIMITER ;
 -- getNumberOfAnswer Procedure
 DROP PROCEDURE IF EXISTS java_app.getNumberOfAnswer;
 DELIMITER  //
-CREATE PROCEDURE getNumberOfAnswer(array_teaching_id VARCHAR(30), answer_id INT)
+CREATE PROCEDURE getNumberOfAnswer(array_teaching_id VARCHAR(500), answer_id INT)
 BEGIN
 SET @teachingId_arr = array_teaching_id;
 IF answer_id = 1 THEN
