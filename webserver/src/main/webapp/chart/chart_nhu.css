@@ -17,7 +17,7 @@ h1{
     height: 42px;
     border-radius: 15px;
     border-color: #FFA552;
-    width: 254px;
+    width: 285px;
     color: #ffffff;
     font-weight: bold;
     box-shadow: 5px 5px 3px #bfbfbf;
@@ -25,7 +25,7 @@ h1{
 }
 
 .selectBox {
-    margin: 5px 10px;
+    margin: 5px 12px;
 }
 
 .dropdownList{
