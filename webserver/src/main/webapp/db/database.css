@@ -3,7 +3,56 @@ body {
 }
 #main{
 	margin: 100px 10px 0 10px;
+	text-align: center;
 }
 .content_tr{
 	font-weight:normal
+}
+
+.table_content {
+	background-color: #D5D5D5;
+	padding: 10px 30px 10px 30px;
+	width: 80%;
+	margin: 0px auto 10px auto;
+	border-radius: 20px;
+	transition: height 3s, transform 2s;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.table_content td, .table_content th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.table_content tr:nth-child(even){background-color: #f2f2f2;}
+
+.table_content tr:hover {background-color: #ddd;}
+
+.table_content th {
+  padding-top: 12px;
+  text-align: center;
+  padding-bottom: 12px;
+  text-align: center;
+  color: black;
+}
+
+.table_btn {
+	background-color: #FD800D;
+	color: white;
+	font-weight: bold;
+	border-radius: 10px;
+	padding: 5px 10px 5px 10px;
+	margin: 0px 10px 10px 10px;
+}
+
+.table_row {
+	background-color: #FFBA7A;
+	border-radius: 10px;
+	margin: 10px;
+}
+
+.action_btn {
+	border-radius: 10px;
+	margin: 5px 0 0 0;
+	padding: 5px 10px 5px 10px;
 }
