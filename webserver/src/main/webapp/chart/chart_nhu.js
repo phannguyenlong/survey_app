@@ -6,7 +6,7 @@ $(document).ready(function () {
     $("#header").load("/webserver/header.html");
     $("#footer").load("/webserver/footer.html");
     filterChart();
-    visualize();
+    //visualize();
 })
 
 function init() {
@@ -191,6 +191,17 @@ function optionRemove(start) {
         $(`#${optionField[i]} option`).not(":first").remove()
 }
 
+function percentageCalculate(test) {
+    let percentageValue = []
+    for (x of Object.values(test[0])){
+        pData = x/(jStat.sum(Object.values(test[0])))*100
+        //console.log(pData)
+        //console.log(jStat.sum(Object.values(test[0])))
+        percentageValue.push(pData.toFixed(2))
+    }
+    return percentageValue
+}
+
 // Visualize chart
 function visualize() {
     teaching_id = [...new Set(teaching_id)] // using of set remove duplicate
@@ -201,8 +212,11 @@ function visualize() {
             url: `http://localhost:8080/webserver/chart/numberOfAnswer?teaching_id_arr=${teaching_id.join(",")}&answer_id=${i}`,
             success: data => {
                 chartArr[i-1].data.labels = Object.keys(data[0])
-                chartArr[i-1].data.datasets[0].data = Object.values(data[0])
+                arrayPercentage = percentageCalculate(data)
+                console.log(arrayPercentage)
+                chartArr[i-1].data.datasets[0].data = arrayPercentage
                 chartArr[i-1].update()
+                //console.log(jStat.sum(Object.values(data[0])))
             }
         })
     }
