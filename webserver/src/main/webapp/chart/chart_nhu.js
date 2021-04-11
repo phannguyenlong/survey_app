@@ -10,13 +10,20 @@ $(document).ready(function () {
 })
 
 function init() {
+  let chartName = ["Gender","Clearance of the Module Objectives", "Useful & Sufficient Learning Materials",
+                  "Relevance of the Module Content","Interesting Lessons","Time Spent on Module Workload Outside Classroon",
+                  "Module Workload","Difficulty of the Module","Understandable Presentation of the Module Contents",
+                  "Variety of Learning Activities","Supportive learning activities","Appropriate Assessment Method",
+                  "Lecturer's Encouragement in Critial Thinking and Logics","Helpful Feedback from Lecturer",
+                  "Language Skill (English/German)","Appreciation of Students' Ideas and Contributions","Lecturer's In-class Encouragement in Discussion and Questions",
+                  "Offering Consulation to Individuals for Academic Support"]
     for (let i = 1; i < 20; i++) {
-        $(".chartContainer").append(`<h2 style="text-align: center">Tom dep trai nhat qua dat ${i}</h2><canvas id="questionnaireChart${i}" style="width: 800px; height:500px; margin-bottom: 50px;"></canvas>`)
+        $(".chartContainer").append(`<h2 style="text-align: center">${chartName[i]}</h2><canvas id="questionnaireChart${i}" style="width: 800px; height:500px; margin-bottom: 50px;"></canvas>`)
         let myChart = document.getElementById(`questionnaireChart${i}`).getContext('2d');
         let barChart = new Chart(myChart, {
             type: 'bar',
             data: {
-                labels: ["Option1", "Option2", "Option3", "Option4", "Option5", "Option6"],
+                labels: ["Strongly disagree = 1", "2", "3", "4", "Strongly agree = 5", "Not applicable"],
                 datasets: [{
                     label: 'Number of response',
                     data: [0,0,0,0,0,0],
@@ -31,9 +38,7 @@ function init() {
                     yAxes: [{
                         ticks: {
                             beginatZero: true,
-                            min: 0,
-                            max: 10,
-                            stepSize: 2
+                            min: 0
                         }
                     }]
                 }
@@ -54,15 +59,12 @@ function filterChart() {
     $("#class_code").change(() => getLecturer())
 }
 
-let test
-
 function getAcademicYear() {
     teaching_id = []
     $.ajax({
         type: 'GET',
         url: "http://localhost:8080/webserver/chart/validate?aca_code=null&sem_code=null&fa_code=null&pro_code=null&mo_code=null&class_code=null&lec_code=null",
         success: function (data) {
-            test = data
             $("#aca_code").append(`<option value = "${data[0].aca_code}"> ${data[0].aca_code} </option>`)
             teaching_id.push(data[0].teaching_id)
             for (let i = 1; i < data.length; i++) {
@@ -174,7 +176,7 @@ function getLecturer() {
             $("#lect").append(`<option value = "${data[0].lec_code}"> ${data[0].lec_code} - ${data[0].lec_name} </option>`)
             teaching_id.push(data[0].teaching_id)
             for (let i = 1; i < data.length; i++) {
-                if (data[i].lec_code != data[i - 1].lec_code) 
+                if (data[i].lec_code != data[i - 1].lec_code)
                     $("#lect").append(`<option value = "${data[i].lec_code}"> ${data[i].lec_code} - ${data[i].lec_name} </option>`)
                 teaching_id.push(data[i].teaching_id)
             }
