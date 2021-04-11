@@ -198,7 +198,7 @@ function visualize() {
             type: 'GET',
             url: `http://localhost:8080/webserver/chart/numberOfAnswer?teaching_id_arr=${teaching_id.join(",")}&answer_id=${i}`,
             success: data => {
-                chartArr[i - 1].data.labels = Object.keys(data[0])
+                chartArr[i-1].data.labels = Object.keys(data[0])
                 chartArr[i-1].data.datasets[0].data = Object.values(data[0])
                 chartArr[i-1].update()
             }
