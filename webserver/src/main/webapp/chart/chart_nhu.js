@@ -40,8 +40,8 @@ function init() {
                             beginatZero: true,
                             min: 0
                             /**max: this.max,
-                            callback: function () {
-                                return (this.max * 100).toFixed(0) + '%';
+                            callback: function (value) {
+                                return Math.round(value/this.max * 100).toFixed(0) + '%';
                             }**/
                         }
 
@@ -236,7 +236,6 @@ function visualize() {
                 chartArr[i-1].data.datasets[0].data = arrayPercentage
                 chartArr[i-1].update()
                 //console.log(jStat.sum(Object.values(data[0])))
-                console.log(Object.values(data[0]))
             }
         })
     }
