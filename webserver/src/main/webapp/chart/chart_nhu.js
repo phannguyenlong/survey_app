@@ -18,7 +18,7 @@ function init() {
                   "Language Skill (English/German)","Appreciation of Students' Ideas and Contributions","Lecturer's In-class Encouragement in Discussion and Questions",
                   "Offering Consulation to Individuals for Academic Support"]
     for (let i = 0; i < 19; i++) {
-        $(".chartContainer").append(`<h2 style="text-align: center">Percentage of Respondents by ${chartName[i]}</h2><canvas id="questionnaireChart${i}" style="width: 800px; height:500px; margin-bottom: 50px;"></canvas>`)
+        $(".chartContainer").append(`<h2 style="text-align: center">Percentage of Respondents by ${chartName[i]}</h2><canvas id="questionnaireChart${i}" style="width: 800px; height:500px; margin-bottom: 75px;"></canvas>`)
         let myChart = document.getElementById(`questionnaireChart${i}`).getContext('2d');
         let barChart = new Chart(myChart, {
             type: 'bar',
@@ -38,11 +38,14 @@ function init() {
                     yAxes: [{
                         ticks: {
                             beginatZero: true,
-                            min: 0
-                            /**max: this.max,
-                            callback: function (value) {
-                                return Math.round(value/this.max * 100).toFixed(0) + '%';
-                            }**/
+                            min: 0,
+                            max: 100
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: "Percentage",
+                            fontColor: '#979797',
+                            fontSize: 24
                         }
 
                     }]
@@ -52,7 +55,7 @@ function init() {
                         formatter: (value, ctx) => {
                             let datasets = ctx.chart.data.datasets;
                             if (datasets.indexOf(ctx.dataset) === datasets.length - 1) {
-                                let percentage = Math.round(value*100) + '%';
+                                let percentage = value + '%';
                                 return percentage;
                             } else {
                                 return percentage;
@@ -213,10 +216,10 @@ function optionRemove(start) {
 function percentageCalculate(test) {
     let percentageValue = []
     for (x of Object.values(test[0])){
-        pData = x/(jStat.sum(Object.values(test[0])))
+        pData = x/(jStat.sum(Object.values(test[0])))*100
         //console.log(pData)
         //console.log(jStat.sum(Object.values(test[0])))
-        percentageValue.push(pData.toFixed(2))
+        percentageValue.push(pData.toFixed(1))
     }
     return percentageValue
 }
