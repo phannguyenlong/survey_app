@@ -52,7 +52,7 @@ function init() {
                         formatter: (value, ctx) => {
                             let datasets = ctx.chart.data.datasets;
                             if (datasets.indexOf(ctx.dataset) === datasets.length - 1) {
-                                let percentage = Math.round(value * 100) + '%';
+                                let percentage = Math.round(value*100) + '%';
                                 return percentage;
                             } else {
                                 return percentage;
@@ -236,6 +236,7 @@ function visualize() {
                 chartArr[i-1].data.datasets[0].data = arrayPercentage
                 chartArr[i-1].update()
                 //console.log(jStat.sum(Object.values(data[0])))
+                console.log(Object.values(data[0]))
             }
         })
     }
