@@ -10,15 +10,15 @@ $(document).ready(function () {
 })
 
 function init() {
-  let chartName = ["Gender","Clearance of the Module Objectives", "Useful & Sufficient Learning Materials",
+  let chartName = ["Class Attendance", "Gender","Clearance of the Module Objectives", "Useful & Sufficient Learning Materials",
                   "Relevance of the Module Content","Interesting Lessons","Time Spent on Module Workload Outside Classroon",
                   "Module Workload","Difficulty of the Module","Understandable Presentation of the Module Contents",
                   "Variety of Learning Activities","Supportive learning activities","Appropriate Assessment Method",
                   "Lecturer's Encouragement in Critial Thinking and Logics","Helpful Feedback from Lecturer",
                   "Language Skill (English/German)","Appreciation of Students' Ideas and Contributions","Lecturer's In-class Encouragement in Discussion and Questions",
                   "Offering Consulation to Individuals for Academic Support"]
-    for (let i = 1; i < 20; i++) {
-        $(".chartContainer").append(`<h2 style="text-align: center">${chartName[i]}</h2><canvas id="questionnaireChart${i}" style="width: 800px; height:500px; margin-bottom: 50px;"></canvas>`)
+    for (let i = 0; i < 19; i++) {
+        $(".chartContainer").append(`<h2 style="text-align: center">Percentage of Respondents by ${chartName[i]}</h2><canvas id="questionnaireChart${i}" style="width: 800px; height:500px; margin-bottom: 50px;"></canvas>`)
         let myChart = document.getElementById(`questionnaireChart${i}`).getContext('2d');
         let barChart = new Chart(myChart, {
             type: 'bar',
@@ -38,20 +38,14 @@ function init() {
                     yAxes: [{
                         ticks: {
                             beginatZero: true,
-                            min: 0,
-                            max: this.max,
-                            callback: function (value) {
-                                return (value / this.max * 100).toFixed(0) + '%';
-                            },
-                        },
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Percentage'
+                            min: 0
+                            /**max: this.max,
+                            callback: function () {
+                                return (this.max * 100).toFixed(0) + '%';
+                            }**/
                         }
+
                     }]
-                },
-                tooltips: {
-                    enable: false,
                 },
                 plugins: {
                     datalabels: {
