@@ -38,9 +38,34 @@ function init() {
                     yAxes: [{
                         ticks: {
                             beginatZero: true,
-                            min: 0
+                            min: 0,
+                            max: this.max,
+                            callback: function (value) {
+                                return (value / this.max * 100).toFixed(0) + '%';
+                            },
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Percentage'
                         }
                     }]
+                },
+                tooltips: {
+                    enable: false,
+                },
+                plugins: {
+                    datalabels: {
+                        formatter: (value, ctx) => {
+                            let datasets = ctx.chart.data.datasets;
+                            if (datasets.indexOf(ctx.dataset) === datasets.length - 1) {
+                                let percentage = Math.round(value * 100) + '%';
+                                return percentage;
+                            } else {
+                                return percentage;
+                            }
+                        },
+                        color: '#fff',
+                    }
                 }
             }
         })
@@ -194,7 +219,7 @@ function optionRemove(start) {
 function percentageCalculate(test) {
     let percentageValue = []
     for (x of Object.values(test[0])){
-        pData = x/(jStat.sum(Object.values(test[0])))*100
+        pData = x/(jStat.sum(Object.values(test[0])))
         //console.log(pData)
         //console.log(jStat.sum(Object.values(test[0])))
         percentageValue.push(pData.toFixed(2))
@@ -213,7 +238,7 @@ function visualize() {
             success: data => {
                 chartArr[i-1].data.labels = Object.keys(data[0])
                 arrayPercentage = percentageCalculate(data)
-                console.log(arrayPercentage)
+                //console.log(arrayPercentage)
                 chartArr[i-1].data.datasets[0].data = arrayPercentage
                 chartArr[i-1].update()
                 //console.log(jStat.sum(Object.values(data[0])))
