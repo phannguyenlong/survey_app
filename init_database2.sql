@@ -8,6 +8,8 @@
 
 -- ======================CREATE TABLE path======================
 -- Clean up old tablequestionquestion
+DROP TABLE IF EXISTS deans;
+DROP TABLE IF EXISTS program_coordinator;
 DROP TABLE IF EXISTS questionaire;
 DROP TABLE IF EXISTS teaching;
 DROP TABLE IF EXISTS class;
@@ -20,6 +22,7 @@ DROP TABLE IF EXISTS module;
 DROP TABLE IF EXISTS program;
 DROP TABLE IF EXISTS faculty;
 DROP TABLE IF EXISTS lecturer;
+DROP TABLE IF EXISTS login;
 DROP TABLE IF EXISTS question;
 
 -- Create table
@@ -42,9 +45,16 @@ CREATE TABLE academic_year (
 	aca_code VARCHAR(10) PRIMARY KEY
 );
 
+CREATE TABLE login(
+	username VARCHAR(20) PRIMARY KEY,
+    pass VARCHAR(20) NOT NULL
+);
+
 CREATE TABLE lecturer (
 	lec_code INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(30) NOT NULL
+    name VARCHAR(30) NOT NULL,
+    username VARCHAR(20) NOT NULL,
+    FOREIGN KEY (username) REFERENCES login(username)
 );
 
 CREATE TABLE semester (
@@ -147,6 +157,29 @@ CREATE TABLE questionaire (
             (answer_18 BETWEEN 1 AND 5 or answer_18 = "NA") and 
 			(answer_19 BETWEEN 1 AND 5 or answer_19 = "NA"))
 );
+
+CREATE TABLE deans(	
+	username VARCHAR(20) NOT NULL,
+	start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    faculty_code VARCHAR(10) NOT NULL,
+    PRIMARY KEY (start_date,faculty_code),
+	FOREIGN KEY (username) REFERENCES login(username),
+    FOREIGN KEY (faculty_code) REFERENCES faculty(fa_code),
+    CHECK (start_date < end_date)
+);
+
+CREATE TABLE program_coordinator(
+	username VARCHAR(20) NOT NULL,
+	start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    program_code VARCHAR(10) NOT NULL,
+    PRIMARY KEY (start_date,program_code),
+	FOREIGN KEY (username) REFERENCES login(username),
+    FOREIGN KEY (program_code) REFERENCES program(pro_code),
+    CHECK (start_date < end_date)
+);
+
 -- ======================Insert Data======================
 
 -- Falcuty
