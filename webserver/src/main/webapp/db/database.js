@@ -9,6 +9,10 @@ var primaryKey = {aca_year:"aca_code",faculty:"fa_code",program:"pro_code",modul
 				  teaching:"id",year_faculty:"id_1",
 				  year_fac_pro:"id_2",year_fac_pro_mo:"id_3"}
 
+var modifyKey = {faculty:["new_key","name"],module:["new_key","name"],program:["new_key","name"],aca_year:["new_key"],lecturer:["new_key"],
+semester:["new_key","code"],teaching:["new_key","c_code","lec_code"],class:["new_key","size","code","id"],year_fac_pro_mo: ["new_key","id","code"],
+year_fac_pro:["new_key","id","code"],year_faculty:["new_key","a_code","f_code"]}
+
 var addKey = {faculty:["old_key","name"],module:["old_key","name"],program:["old_key","name"],aca_year:["old_key"],lecturer:["old_key"],
 semester:["old_key","code"],teaching:["old_key","c_code","lec_code"],class:["old_key","size","code","id"],year_fac_pro_mo: ["old_key","id","code"],
 year_fac_pro:["old_key","id","code"],year_faculty:["old_key","a_code","f_code"]}
@@ -82,7 +86,8 @@ function getTable(option) {
             	}
             	
             	delete_bnt = $(`<button class=\"bnt_delete action_btn\" value="${option}" id="${"delete"+x}"></button>`).text("Delete")
-            	tr.append(delete_bnt)
+            	modify_bnt = $(`<button class=\"bnt_modify action_btn\" value="${option}"></button>`).text("Modify")
+            	tr.append(modify_bnt,delete_bnt)
             	
             	table.append(tr)
             }
@@ -125,6 +130,37 @@ function getTable(option) {
 				deleteRow(value, result_key)
 				getTable(option)
 			})
+			
+			$(".bnt_modify").click(function(){
+				value = this.value
+            	key = primaryKey[value]
+            	selector = $(this).siblings(".content_tr_"+key)[0]
+				result_key = $(selector).text()
+				
+				
+				keys = modifyKey[option]
+				tr = $(`<tr id="input_row"></tr>`)
+				for (let i = 0; i < keys.length; i++) {
+					th = $(`<th><div class="modify_form_${option}"><input type="text" placeholder="${keys[i]}" class="${'input_' + keys[i]}" name="${keys[i]}"/></th></div>`)
+					tr.append(th)
+				}
+				submitBtn = $(`<button class="action_btn">Submit</button>`)
+				submitBtn.click(() => {
+					let arr = $(`.modify_form_${option} input`)
+					let params = '';
+					for (let i = 0; i < keys.length; i++) {
+						params += `&${keys[i]}=${arr[i].value}`
+					}
+					console.log(result_key)
+					modifyRow(option, result_key,params)
+					getTable(option)
+				})
+				tr.append($(`<th></th>`).append(submitBtn))
+				//$(this).parent()[0].insertAfter(tr);
+				tr.insertAfter($(this).parent()[0])
+				
+				
+			})
 	
 		},
 	})
@@ -148,6 +184,17 @@ function deleteRow(table, key){
 		url: "http://localhost:8080/webserver/database/interactTable?table_name=" + table + "&old_key=" + key,
 		success: data => alertMessage("success", 'Success', `Delete row in table ${table} successfully. Please reload to see change`),
 		error: () => alertMessage('error', 'Error', `Cannot deleete data from table ${table} cause error. Please check delete all foreign key contraint before delete`)
+	})
+}
+
+function modifyRow(table,key,param){
+	$.ajax({
+		type: 'PUT',
+		async: false,
+		url: "http://localhost:8080/webserver/database/interactTable?table_name="+table+"&old_key="+key+param,
+		success:data => alertMessage("success",'Success',`Modify row successfully`),
+		error: () => alertMessage('error', 'Error', `Cannot modify to table ${table} cause error. Please check any duplicate key`)
+		
 	})
 }
 
