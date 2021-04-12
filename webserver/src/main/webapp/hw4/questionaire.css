@@ -58,12 +58,12 @@ body {
   color: rgba(255, 255, 255, 0.9);
   height: 35px;
   border-radius: 10px;
-  background-color: #ffba7a;
+  background-color: #FFA552;
 }
 .select {
   background-color: #fd800d;
   border-radius: 10px;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.25);
+  box-shadow: 5px 5px 3px #bfbfbf;
   color: white;
   padding: 10px;
   margin-left: 100px;
@@ -90,13 +90,14 @@ body {
 
 /* CSS for submit button */
 #submit_bnt {
-  background: #d44000;
-  border-radius: 100px;
-  padding: 10px 30px;
-  color: #ffefcf;
-  text-decoration: none;
-  transition: all 0.5s;;
-  margin-bottom: 10px;
+  background-color: #fd800d;
+  height: 48px;
+  border-radius: 15px;
+  border-color: #FFA552;
+  width: 130px;
+  color: #ffffff;
+  font-weight: bold;
+  box-shadow: 5px 5px 3px #bfbfbf;
 }
 
 #submit_bnt span {

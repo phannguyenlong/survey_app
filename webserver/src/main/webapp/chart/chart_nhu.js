@@ -10,15 +10,15 @@ $(document).ready(function () {
 })
 
 function init() {
-  let chartName = ["Gender","Clearance of the Module Objectives", "Useful & Sufficient Learning Materials",
+  let chartName = ["Class Attendance", "Gender","Clearance of the Module Objectives", "Useful & Sufficient Learning Materials",
                   "Relevance of the Module Content","Interesting Lessons","Time Spent on Module Workload Outside Classroon",
                   "Module Workload","Difficulty of the Module","Understandable Presentation of the Module Contents",
                   "Variety of Learning Activities","Supportive learning activities","Appropriate Assessment Method",
                   "Lecturer's Encouragement in Critial Thinking and Logics","Helpful Feedback from Lecturer",
                   "Language Skill (English/German)","Appreciation of Students' Ideas and Contributions","Lecturer's In-class Encouragement in Discussion and Questions",
                   "Offering Consulation to Individuals for Academic Support"]
-    for (let i = 1; i < 20; i++) {
-        $(".chartContainer").append(`<h2 style="text-align: center">${chartName[i]}</h2><canvas id="questionnaireChart${i}" style="width: 800px; height:500px; margin-bottom: 50px;"></canvas>`)
+    for (let i = 0; i < 19; i++) {
+        $(".chartContainer").append(`<h2 style="text-align: center">Percentage of Respondents by ${chartName[i]}</h2><canvas id="questionnaireChart${i}" style="width: 800px; height:500px; margin-bottom: 50px;"></canvas>`)
         let myChart = document.getElementById(`questionnaireChart${i}`).getContext('2d');
         let barChart = new Chart(myChart, {
             type: 'bar',
@@ -39,8 +39,27 @@ function init() {
                         ticks: {
                             beginatZero: true,
                             min: 0
+                            /**max: this.max,
+                            callback: function (value) {
+                                return Math.round(value/this.max * 100).toFixed(0) + '%';
+                            }**/
                         }
+
                     }]
+                },
+                plugins: {
+                    datalabels: {
+                        formatter: (value, ctx) => {
+                            let datasets = ctx.chart.data.datasets;
+                            if (datasets.indexOf(ctx.dataset) === datasets.length - 1) {
+                                let percentage = Math.round(value*100) + '%';
+                                return percentage;
+                            } else {
+                                return percentage;
+                            }
+                        },
+                        color: '#fff',
+                    }
                 }
             }
         })
@@ -194,7 +213,7 @@ function optionRemove(start) {
 function percentageCalculate(test) {
     let percentageValue = []
     for (x of Object.values(test[0])){
-        pData = x/(jStat.sum(Object.values(test[0])))*100
+        pData = x/(jStat.sum(Object.values(test[0])))
         //console.log(pData)
         //console.log(jStat.sum(Object.values(test[0])))
         percentageValue.push(pData.toFixed(2))
@@ -213,7 +232,7 @@ function visualize() {
             success: data => {
                 chartArr[i-1].data.labels = Object.keys(data[0])
                 arrayPercentage = percentageCalculate(data)
-                console.log(arrayPercentage)
+                //console.log(arrayPercentage)
                 chartArr[i-1].data.datasets[0].data = arrayPercentage
                 chartArr[i-1].update()
                 //console.log(jStat.sum(Object.values(data[0])))
