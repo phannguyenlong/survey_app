@@ -1018,3 +1018,91 @@ insert into questionaire (teaching_id, answer_1, answer_2, answer_3, answer_4, a
 insert into questionaire (teaching_id, answer_1, answer_2, answer_3, answer_4, answer_5, answer_6, answer_7, answer_8, answer_9, answer_10, answer_11, answer_12, answer_13, answer_14, answer_15, answer_16, answer_17, answer_18, answer_19, answer_20) values (111, 'Always', 'Other', '2', '3', 'NA', '1', 3, 2, 1, '3', '1', '1', '2', '3', '3', '4', '2', '2', '2', null);
 insert into questionaire (teaching_id, answer_1, answer_2, answer_3, answer_4, answer_5, answer_6, answer_7, answer_8, answer_9, answer_10, answer_11, answer_12, answer_13, answer_14, answer_15, answer_16, answer_17, answer_18, answer_19, answer_20) values (111, 'Rarely', 'Female', '4', 'NA', '4', '2', 3, 1, 4, '1', '3', '4', '5', '4', '2', '3', 'NA', 'NA', '1', null);
 
+-- program_coordinator
+-- BA
+insert into program_coordinator (username, start_date, end_date, program_code) values ('nlacelett0', '2017-08-19','2018-08-19', 'BA');
+
+-- BIS
+insert into program_coordinator (username, start_date, end_date, program_code) values ('pokierane', '2016-08-19','2017-08-19', 'BIS');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('ssynanc', '2017-08-19','2018-08-19', 'BIS');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('cdomelowa', '2018-08-19','2019-08-19', 'BIS');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('pokierane', '2019-08-19','2020-08-19', 'BIS');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('agoord', '2020-08-19','2021-08-19', 'BIS');
+
+-- CE
+insert into program_coordinator (username, start_date, end_date, program_code) values ('oneller5', '2019-08-19','2020-08-19', 'CE');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('rsummerson7', '2020-08-19','2021-08-19', 'CE');
+
+-- CLAW
+insert into program_coordinator (username, start_date, end_date, program_code) values ('rwoodesj', '2019-08-19','2020-08-19', 'CLAW');
+
+-- COMP
+insert into program_coordinator (username, start_date, end_date, program_code) values ('mcurmank', '2020-08-19','2021-08-19', 'COMP');
+
+-- CSE
+insert into program_coordinator (username, start_date, end_date, program_code) values ('pokierane', '2016-08-19','2017-08-19', 'CSE');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('pokierane', '2017-08-19','2018-08-19', 'CSE');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('ssynanc', '2018-08-19','2019-08-19', 'CSE');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('pokierane', '2019-08-19','2020-08-19', 'CSE');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('pokierane', '2020-08-19','2021-08-19', 'CSE');
+
+-- CVLAW
+insert into program_coordinator (username, start_date, end_date, program_code) values ('pgaitonef', '2020-08-19','2021-08-19', 'CVLAW');
+
+-- ECO
+insert into program_coordinator (username, start_date, end_date, program_code) values ('dbrawn3', '2019-08-19','2020-08-19', 'ECO');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('ggaddas1', '2020-08-19','2021-08-19', 'ECO');
+
+-- EE
+insert into program_coordinator (username, start_date, end_date, program_code) values ('osnibson8', '2017-08-19','2018-08-19', 'EE');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('osnibson8', '2018-08-19','2019-08-19', 'EE');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('osnibson8', '2019-08-19','2020-08-19', 'EE');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('rsummerson7', '2020-08-19','2021-08-19', 'EE');
+
+-- ELAW
+insert into program_coordinator (username, start_date, end_date, program_code) values ('mcheccuccii', '2018-08-19','2019-08-19', 'ELAW');
+
+-- ITSEC
+insert into program_coordinator (username, start_date, end_date, program_code) values ('pokierane', '2017-08-19','2018-08-19', 'ITSEC');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('pokierane', '2018-08-19','2019-08-19', 'ITSEC');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('pokierane', '2019-08-19','2020-08-19', 'ITSEC');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('etownrowb', '2020-08-19','2021-08-19', 'ITSEC');
+
+-- LOG
+insert into program_coordinator (username, start_date, end_date, program_code) values ('dbrawn3', '2018-08-19','2019-08-19', 'LOG');
+
+-- ME
+insert into program_coordinator (username, start_date, end_date, program_code) values ('oneller5', '2016-08-19','2017-08-19', 'ME');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('oneller5', '2017-08-19','2018-08-19', 'ME');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('rsummerson7', '2018-08-19','2019-08-19', 'ME');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('rsummerson7', '2019-08-19','2020-08-19', 'ME');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('rsummerson7', '2020-08-19','2021-08-19', 'ME');
+
+-- deans
+-- FECO
+insert into deans (username, start_date, end_date, faculty_code) values ('nlacelett0', '2017-08-19','2018-08-19', 'FECO');
+insert into deans (username, start_date, end_date, faculty_code) values ('nlacelett0', '2018-08-19','2019-08-19', 'FECO');
+insert into deans (username, start_date, end_date, faculty_code) values ('cmcian4', '2019-08-19','2020-08-19', 'FECO');
+insert into deans (username, start_date, end_date, faculty_code) values ('acudiff2', '2020-08-19','2021-08-19', 'FECO');
+
+-- FENG
+insert into deans (username, start_date, end_date, faculty_code) values ('oneller5', '2016-08-19','2017-08-19', 'FENG');
+insert into deans (username, start_date, end_date, faculty_code) values ('osnibson8', '2017-08-19','2018-08-19', 'FENG');
+insert into deans (username, start_date, end_date, faculty_code) values ('oneller5', '2018-08-19','2019-08-19', 'FENG');
+insert into deans (username, start_date, end_date, faculty_code) values ('jszymonowicz9', '2019-08-19','2020-08-19', 'FENG');
+insert into deans (username, start_date, end_date, faculty_code) values ('stebbut6', '2020-08-19','2021-08-19', 'FENG');
+
+-- FIT
+insert into deans (username, start_date, end_date, faculty_code) values ('ssynanc', '2016-08-19','2017-08-19', 'FIT');
+insert into deans (username, start_date, end_date, faculty_code) values ('ssynanc', '2017-08-19','2018-08-19', 'FIT');
+insert into deans (username, start_date, end_date, faculty_code) values ('ssynanc', '2018-08-19','2019-08-19', 'FIT');
+insert into deans (username, start_date, end_date, faculty_code) values ('agoord', '2019-08-19','2020-08-19', 'FIT');
+insert into deans (username, start_date, end_date, faculty_code) values ('ssynanc', '2020-08-19','2021-08-19', 'FIT');
+
+-- FLAW
+insert into deans (username, start_date, end_date, faculty_code) values ('mcheccuccii', '2018-08-19','2019-08-19', 'FLAW');
+insert into deans (username, start_date, end_date, faculty_code) values ('pgaitonef', '2019-08-19','2020-08-19', 'FLAW');
+insert into deans (username, start_date, end_date, faculty_code) values ('gfairburnh', '2020-08-19','2021-08-19', 'FLAW');
+
+-- FMUS
+insert into deans (username, start_date, end_date, faculty_code) values ('mcurmank', '2020-08-19','2021-08-19', 'FMUS');
