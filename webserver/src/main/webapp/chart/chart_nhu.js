@@ -222,19 +222,17 @@ function init() {
             }
         })
         chartArr.push(barChart)
-        $(".chartContainer").append(`<p id="numResp"> Number of Response =  </p>`)
-        $(".chartContainer").append(`<p id="respRate"> Response rate =  </p>`)
-        $(".chartContainer").append(`<p id="meanVal"> Mean = </p>`)
-        $(".chartContainer").append(`<p id="stDev"> Standard Deviation =  </p>`)
+        $(".chartContainer").append(`<p id="numResp_${i}"> Number of Response =  </p>`)
+        $(".chartContainer").append(`<p id="respRate_${i}"> Response rate =  </p>`)
+        $(".chartContainer").append(`<p id="meanVal_${i}"> Mean = </p>`)
+        $(".chartContainer").append(`<p id="stDev_${i}"> Standard Deviation =  </p>`)
     }
 }
 
 function percentageCalculate(test) {
     let percentageValue = []
-    for (x of Object.values(test[0])){
-        pData = x/(jStat.sum(Object.values(test[0])))*100
-        //console.log(pData)
-        //console.log(jStat.sum(Object.values(test[0])))
+    for (x of Object.values(test)){
+        pData = x/(jStat.sum(Object.values(test)))*100
         percentageValue.push(pData.toFixed(1))
     }
     return percentageValue
@@ -249,11 +247,31 @@ function visualize() {
             type: 'GET',
             url: `http://localhost:8080/webserver/chart/numberOfAnswer?teaching_id_arr=${teaching_id.join(",")}&answer_id=${i}`,
             success: data => {
-                chartArr[i-1].data.labels = Object.keys(data[0])
-                arrayPercentage = percentageCalculate(data)
-                //console.log(arrayPercentage)
+                orderedData = Object.keys(data[0]).sort().reduce(
+                    (obj,key) => {
+                        obj[key] = data[0][key];
+                        return obj;
+                    }, {}
+                );
+                //chartArr[i-1].data.labels = Object.keys(orderedData)
+                //console.log(orderedData)
+
+                let arrayPercentage = percentageCalculate(orderedData)
                 chartArr[i-1].data.datasets[0].data = arrayPercentage
                 chartArr[i-1].update()
+
+                sum = jStat.sum(Object.values(data))
+                numResp = sum - Object.values(data['Option6'])
+                respRate = numResp/sum*100
+                meanVal = jStat.mean(Object.values(data))
+                stDev = jStat.stdev(Object.values(data))
+
+                console.log(Object.values(data[0]['Option6']))
+
+                $(`#numResp_${i-1}`).append(numResp)
+                $(`#respRate_${i-1}`).append(respRate.toFixed(2) + '%')
+                $(`#meanVal_${i-1}`).append(meanVal.toFixed(2))
+                $(`#stDev_${i-1}`).append(stDev.toFixed(2))
             }
         })
     }
