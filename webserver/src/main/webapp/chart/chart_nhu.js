@@ -175,18 +175,49 @@ function init() {
         let barChart = new Chart(myChart, {
             type: 'bar',
             data: {
-                labels: ["Strongly disagree = 1", "2", "3", "4", "Strongly agree = 5", "Not applicable"],
                 datasets: [{
+                    // type: 'bar',
                     label: 'Percentage of response',
                     data: [0,0,0,0,0,0],
                     backgroundColor: '#FFA552',
                     borderColor: '#fd800d',
                     borderWidth: 1,
                     hoverBackgroundColor: '#fd800d'
-                }]
+                }
+                , {
+                    type: 'scatterWithErrorBars',
+                    label: 'Mean',
+                    xAxisID: 'mean_id',
+                    // yAxisID: 'invoice-amount',
+                    data: [{ x: 3.1, y: 90, xMin: 2, xMax: 5 }],
+                    backgroundColor: 'rgb(255, 99, 132)'
+                }
+                ],
+                labels: ["Strongly disagree = 1", "2", "3", "4", "Strongly agree = 5", "Not applicable"],
             },
             options: {
                 scales: {
+                    xAxes: [{
+                        display: true,
+                        stacked: true,
+                        scaleLabel: {
+                            display: true,
+                        },
+                        },{
+                        id: "mean_id",
+                        type: 'linear',
+                        display: false,
+                        stacked: false,
+                        scaleLabel: {
+                            display: false,
+                            labelString: 'Days'
+                        },
+                        ticks: {
+                            beginAtZero: true,
+                            stepSize: 0.1,
+                            suggestedMax: 6
+                        }
+                    }],
                     yAxes: [{
                         ticks: {
                             beginatZero: true,
@@ -208,13 +239,9 @@ function init() {
                 plugins: {
                     datalabels: {
                         formatter: (value, ctx) => {
-                            let datasets = ctx.chart.data.datasets;
-                            if (datasets.indexOf(ctx.dataset) === datasets.length - 1) {
-                                let percentage = value + '%';
-                                return percentage;
-                            } else {
-                                return percentage;
-                            }
+                            // let datasets = ctx.chart.data.datasets;
+                            let percentage = value + '%';
+                            return percentage;
                         },
                         color: '#fff',
                     }
