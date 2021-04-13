@@ -9,69 +9,12 @@ $(document).ready(function () {
     //visualize();
 })
 
-function init() {
-  let chartName = ["Class Attendance", "Gender","Clearance of the Module Objectives", "Useful & Sufficient Learning Materials",
-                  "Relevance of the Module Content","Interesting Lessons","Time Spent on Module Workload Outside Classroon",
-                  "Module Workload","Difficulty of the Module","Understandable Presentation of the Module Contents",
-                  "Variety of Learning Activities","Supportive learning activities","Appropriate Assessment Method",
-                  "Lecturer's Encouragement in Critial Thinking and Logics","Helpful Feedback from Lecturer",
-                  "Language Skill (English/German)","Appreciation of Students' Ideas and Contributions","Lecturer's In-class Encouragement in Discussion and Questions",
-                  "Offering Consulation to Individuals for Academic Support"]
-    for (let i = 0; i < 19; i++) {
-        $(".chartContainer").append(`<h2 style="text-align: center">Percentage of Respondents by ${chartName[i]}</h2><canvas id="questionnaireChart${i}" style="width: 800px; height:500px; margin-bottom: 75px;"></canvas>`)
-        let myChart = document.getElementById(`questionnaireChart${i}`).getContext('2d');
-        let barChart = new Chart(myChart, {
-            type: 'bar',
-            data: {
-                labels: ["Strongly disagree = 1", "2", "3", "4", "Strongly agree = 5", "Not applicable"],
-                datasets: [{
-                    label: 'Number of response',
-                    data: [0,0,0,0,0,0],
-                    backgroundColor: '#FFA552',
-                    borderColor: '#fd800d',
-                    borderWidth: 1,
-                    hoverBackgroundColor: '#fd800d'
-                }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginatZero: true,
-                            min: 0,
-                            max: 100
-                        },
-                        scaleLabel: {
-                            display: true,
-                            labelString: "Percentage",
-                            fontColor: '#979797',
-                            fontSize: 24
-                        }
-
-                    }]
-                },
-                plugins: {
-                    datalabels: {
-                        formatter: (value, ctx) => {
-                            let datasets = ctx.chart.data.datasets;
-                            if (datasets.indexOf(ctx.dataset) === datasets.length - 1) {
-                                let percentage = value + '%';
-                                return percentage;
-                            } else {
-                                return percentage;
-                            }
-                        },
-                        color: '#fff',
-                    }
-                }
-            }
-        })
-        chartArr.push(barChart)
-    }
-}
+/**
+ * Filter to visualize Chart
+ */
 
 function filterChart() {
-    console.log(teaching_id.length)
+    //console.log(teaching_id.length)
     getAcademicYear();
     $("#aca_code").change(() => getSemester())
     $("#sem").change(() => getFaculty())
@@ -213,6 +156,79 @@ function optionRemove(start) {
         $(`#${optionField[i]} option`).not(":first").remove()
 }
 
+
+/**
+ *  Visualize Chart and its Properties
+ */
+function init() {
+    let chartName = ["Class Attendance", "Gender","Clearance of the Module Objectives", "Useful & Sufficient Learning Materials",
+        "Relevance of the Module Content","Interesting Lessons","Time Spent on Module Workload Outside Classroon",
+        "Module Workload","Difficulty of the Module","Understandable Presentation of the Module Contents",
+        "Variety of Learning Activities","Supportive learning activities","Appropriate Assessment Method",
+        "Lecturer's Encouragement in Critial Thinking and Logics","Helpful Feedback from Lecturer",
+        "Language Skill (English/German)","Appreciation of Students' Ideas and Contributions","Lecturer's In-class Encouragement in Discussion and Questions",
+        "Offering Consulation to Individuals for Academic Support"]
+
+    for (let i = 0; i < 19; i++) {
+        $(".chartContainer").append(`<h2 style="text-align: center">Percentage of Respondents by ${chartName[i]}</h2><canvas id="questionnaireChart${i}" style="width: 800px; height:500px; "></canvas>`)
+        let myChart = document.getElementById(`questionnaireChart${i}`).getContext('2d');
+        let barChart = new Chart(myChart, {
+            type: 'bar',
+            data: {
+                labels: ["Strongly disagree = 1", "2", "3", "4", "Strongly agree = 5", "Not applicable"],
+                datasets: [{
+                    label: 'Percentage of response',
+                    data: [0,0,0,0,0,0],
+                    backgroundColor: '#FFA552',
+                    borderColor: '#fd800d',
+                    borderWidth: 1,
+                    hoverBackgroundColor: '#fd800d'
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginatZero: true,
+                            min: 0,
+                            max: 100,
+                            callback: function (value) {
+                                return value + '%';
+                            }
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: "Percentage",
+                            fontColor: '#979797',
+                            fontSize: 18
+                        }
+
+                    }]
+                },
+                plugins: {
+                    datalabels: {
+                        formatter: (value, ctx) => {
+                            let datasets = ctx.chart.data.datasets;
+                            if (datasets.indexOf(ctx.dataset) === datasets.length - 1) {
+                                let percentage = value + '%';
+                                return percentage;
+                            } else {
+                                return percentage;
+                            }
+                        },
+                        color: '#fff',
+                    }
+                }
+            }
+        })
+        chartArr.push(barChart)
+        $(".chartContainer").append(`<p id="numResp"> Number of Response =  </p>`)
+        $(".chartContainer").append(`<p id="respRate"> Response rate =  </p>`)
+        $(".chartContainer").append(`<p id="meanVal"> Mean = </p>`)
+        $(".chartContainer").append(`<p id="stDev"> Standard Deviation =  </p>`)
+    }
+}
+
 function percentageCalculate(test) {
     let percentageValue = []
     for (x of Object.values(test[0])){
@@ -227,7 +243,7 @@ function percentageCalculate(test) {
 // Visualize chart
 function visualize() {
     teaching_id = [...new Set(teaching_id)] // using of set remove duplicate
-    console.log(teaching_id.join(","))
+    //console.log(teaching_id.join(","))
     for (let i = 1; i < 20; i++) {
         $.ajax({
             type: 'GET',
@@ -238,7 +254,6 @@ function visualize() {
                 //console.log(arrayPercentage)
                 chartArr[i-1].data.datasets[0].data = arrayPercentage
                 chartArr[i-1].update()
-                //console.log(jStat.sum(Object.values(data[0])))
             }
         })
     }
