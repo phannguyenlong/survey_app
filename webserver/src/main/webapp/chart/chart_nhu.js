@@ -170,6 +170,19 @@ function init() {
         "Offering Consulation to Individuals for Academic Support"]
 
     for (let i = 0; i < 19; i++) {
+        let labelArr, xMax
+        if (i == 0) {
+            labelArr = ["Never", "Rarely", "Sometimes", "Often", "Always"]
+            xMax = 5.5
+        }
+        else if (i == 1) {
+            labelArr = ["Male", "Female", "Other"]
+            xMax = 3.5
+        }
+        else {
+            labelArr = ["Strongly disagree = 1", "2", "3", "4", "Strongly agree = 5", "Not applicable"]
+            xMax = 6.5
+        }
         $(".chartContainer").append(`<h2 style="text-align: center">Percentage of Respondents by ${chartName[i]}</h2><canvas id="questionnaireChart${i}" style="width: 800px; height:500px; "></canvas>`)
         let myChart = document.getElementById(`questionnaireChart${i}`).getContext('2d');
         let barChart = new Chart(myChart, {
@@ -189,11 +202,11 @@ function init() {
                     label: 'Mean',
                     xAxisID: 'mean_id',
                     // yAxisID: 'invoice-amount',
-                    data: [{ x: 3.1, y: 90, xMin: 2, xMax: 5 }],
+                    data: [{ x: 0.5, y: 0, xMin: 0, xMax: 0 }],
                     backgroundColor: 'rgb(255, 99, 132)'
                 }
                 ],
-                labels: ["Strongly disagree = 1", "2", "3", "4", "Strongly agree = 5", "Not applicable"],
+                labels: labelArr,
             },
             options: {
                 scales: {
@@ -213,9 +226,10 @@ function init() {
                             labelString: 'Days'
                         },
                         ticks: {
-                            beginAtZero: true,
-                            stepSize: 0.1,
-                            suggestedMax: 6
+                            // beginAtZero: true,
+                            stepSize: 0.5,
+                            suggestedMin: 0.5,
+                            suggestedMax: xMax
                         }
                     }],
                     yAxes: [{
@@ -265,10 +279,10 @@ function percentageCalculate(test) {
     return percentageValue
 }
 
+let test;
 // Visualize chart
 function visualize() {
     teaching_id = [...new Set(teaching_id)] // using of set remove duplicate
-    //console.log(teaching_id.join(","))
     for (let i = 1; i < 20; i++) {
         $.ajax({
             type: 'GET',
@@ -280,22 +294,21 @@ function visualize() {
                         return obj;
                     }, {}
                 );
-                //chartArr[i-1].data.labels = Object.keys(orderedData)
-                //console.log(orderedData)
-
+                test = orderedData;
+                // calculate stattistic
                 let arrayPercentage = percentageCalculate(orderedData)
-                chartArr[i-1].data.datasets[0].data = arrayPercentage
-                chartArr[i-1].update()
-
                 sum = jStat.sum(Object.values(orderedData))
                 numResp = sum - orderedData['Option6']
                 respRate = numResp/sum*100
-                meanVal = jStat.mean(Object.values(orderedData))
-                stDev = jStat.stdev(Object.values(orderedData))
-                console.log(sum)
-                console.log(numResp)
-                console.log(respRate)
-                console.log(orderedData['Option6'])
+                meanVal = weightedMean([1,2,3,4,5,0], Object.values(orderedData), sum)
+                stDev = findSd([1, 2, 3, 4, 5, 0], Object.values(orderedData), meanVal, sum)
+                
+                // update chart
+                chartArr[i - 1].data.datasets[0].data = arrayPercentage
+                max = Math.max(...Object.values(orderedData)) / sum * 100
+                max = max < 90 ? max + 10 : max
+                chartArr[i-1].data.datasets[1].data =  [{ x: meanVal, y: max, xMin: meanVal - stDev, xMax: meanVal + stDev }]
+                chartArr[i-1].update()
 
                 $(`#numResp_${i-1}`).append(numResp)
                 $(`#respRate_${i-1}`).append(respRate.toFixed(2) + '%')
@@ -304,4 +317,19 @@ function visualize() {
             }
         })
     }
+}
+
+
+function weightedMean(arrValues, arrWeights, sum) {
+    let mean = 0;
+    for (let i = 0; i < 6; i++)
+        mean += arrValues[i] * (arrWeights[i] / sum)
+    return mean;
+}
+
+function findSd(arrValues, arrWeights, mean, sum) {
+    let variance = 0;
+    for (let i = 0; i < 6; i++)
+        variance += arrWeights[i] * Math.pow(arrValues[i] - mean, 2)
+    return Math.sqrt(variance/sum)
 }
