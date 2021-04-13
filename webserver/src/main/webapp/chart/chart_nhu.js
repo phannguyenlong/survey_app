@@ -260,13 +260,15 @@ function visualize() {
                 chartArr[i-1].data.datasets[0].data = arrayPercentage
                 chartArr[i-1].update()
 
-                sum = jStat.sum(Object.values(data))
-                numResp = sum - Object.values(data['Option6'])
+                sum = jStat.sum(Object.values(orderedData))
+                numResp = sum - orderedData['Option6']
                 respRate = numResp/sum*100
-                meanVal = jStat.mean(Object.values(data))
-                stDev = jStat.stdev(Object.values(data))
-
-                console.log(Object.values(data[0]['Option6']))
+                meanVal = jStat.mean(Object.values(orderedData))
+                stDev = jStat.stdev(Object.values(orderedData))
+                console.log(sum)
+                console.log(numResp)
+                console.log(respRate)
+                console.log(orderedData['Option6'])
 
                 $(`#numResp_${i-1}`).append(numResp)
                 $(`#respRate_${i-1}`).append(respRate.toFixed(2) + '%')
