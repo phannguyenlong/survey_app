@@ -257,7 +257,10 @@ function init() {
                             let percentage = value + '%';
                             return percentage;
                         },
-                        color: '#fff'
+                        color: '#000',
+                        anchor: 'end',
+                        align: 'top',
+                        offset: 10
                     }
                 }
             }
