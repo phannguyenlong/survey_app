@@ -162,12 +162,12 @@ function optionRemove(start) {
  */
 function init() {
     let chartName = ["Class Attendance", "Gender","Clearance of the Module Objectives", "Useful & Sufficient Learning Materials",
-        "Relevance of the Module Content","Interesting Lessons","Time Spent on Module Workload Outside Classroon",
+        "Relevance of the Module Content","Interesting Lessons","Time Spent on Module Workload Outside Classroom",
         "Module Workload","Difficulty of the Module","Understandable Presentation of the Module Contents",
         "Variety of Learning Activities","Supportive learning activities","Appropriate Assessment Method",
-        "Lecturer's Encouragement in Critial Thinking and Logics","Helpful Feedback from Lecturer",
+        "Lecturer's Encouragement in Critical Thinking and Logic","Helpful Feedback from Lecturer",
         "Language Skill (English/German)","Appreciation of Students' Ideas and Contributions","Lecturer's In-class Encouragement in Discussion and Questions",
-        "Offering Consulation to Individuals for Academic Support"]
+        "Offering Consultation to Individuals for Academic Support"]
 
     for (let i = 0; i < 19; i++) {
         let labelArr, xMax
@@ -310,9 +310,17 @@ function visualize() {
                 sum = jStat.sum(Object.values(orderedData))
                 numResp = sum - orderedData['Option6']
                 respRate = numResp/sum*100
+
+                let arrValues = addValue(orderedData)
+                meanVal = jStat.mean(arrValues)
+                stDev = jStat.stdev(arrValues)
+                console.log(meanVal)
+
+                /**
                 meanVal = weightedMean([1,2,3,4,5,0], Object.values(orderedData), sum)
                 stDev = findSd([1, 2, 3, 4, 5, 0], Object.values(orderedData), meanVal, sum)
-                
+                */
+
                 // update chart
                 chartArr[i - 1].data.datasets[0].data = arrayPercentage
                 max = Math.max(...Object.values(orderedData)) / sum * 100
@@ -329,7 +337,30 @@ function visualize() {
     }
 }
 
+function addValue(test) {
+    let arrVal = []
+    for (j = 0 ; j < test['Option1']; j ++){
+        arrVal.push(1);
+    }
+    for (j = 0 ; j < test['Option2']; j ++){
+        arrVal.push(2)
+    }
+    for (j = 0 ; j < test['Option3']; j ++){
+        arrVal.push(3)
+    }
+    for (j = 0 ; j < test['Option4']; j ++){
+        arrVal.push(4)
+    }
+    for (j = 0 ; j < test['Option5']; j ++){
+        arrVal.push(5)
+    }
+    for (j = 0 ; j < test['Option6']; j ++){
+        arrVal.push(6)
+    }
+    return arrVal
+}
 
+/**
 function weightedMean(arrValues, arrWeights, sum) {
     let mean = 0;
     for (let i = 0; i < 6; i++)
@@ -342,4 +373,4 @@ function findSd(arrValues, arrWeights, mean, sum) {
     for (let i = 0; i < 6; i++)
         variance += arrWeights[i] * Math.pow(arrValues[i] - mean, 2)
     return Math.sqrt(variance/sum)
-}
+}*/
