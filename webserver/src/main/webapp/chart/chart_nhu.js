@@ -183,7 +183,7 @@ function init() {
             labelArr = ["Strongly disagree = 1", "2", "3", "4", "Strongly agree = 5", "Not applicable"]
             xMax = 6.5
         }
-        $(".chartContainer").append(`<h2 style="text-align: center">Percentage of Respondents by ${chartName[i]}</h2><canvas id="questionnaireChart${i}" style="width: 800px; height:500px; "></canvas>`)
+        $(".chartContainer").append(`<h2 style="text-align: center; margin-top: 50px">Percentage of Respondents by ${chartName[i]}</h2><canvas id="questionnaireChart${i}" style="width: 800px; height:500px; "></canvas>`)
         let myChart = document.getElementById(`questionnaireChart${i}`).getContext('2d');
         let barChart = new Chart(myChart, {
             type: 'bar',
@@ -223,7 +223,7 @@ function init() {
                         stacked: false,
                         scaleLabel: {
                             display: false,
-                            labelString: 'Days'
+                            labelString: 'Days',
                         },
                         ticks: {
                             // beginAtZero: true,
@@ -245,7 +245,7 @@ function init() {
                             display: true,
                             labelString: "Percentage",
                             fontColor: '#979797',
-                            fontSize: 18
+                            fontSize: 18,
                         }
 
                     }]
@@ -295,7 +295,8 @@ function visualize() {
                     }, {}
                 );
                 test = orderedData;
-                // calculate stattistic
+
+                // calculate statistic
                 let arrayPercentage = percentageCalculate(orderedData)
                 sum = jStat.sum(Object.values(orderedData))
                 numResp = sum - orderedData['Option6']
