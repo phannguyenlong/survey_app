@@ -42,8 +42,10 @@ CREATE TABLE module (
 );
 
 CREATE TABLE academic_year (
-	aca_code VARCHAR(10) PRIMARY KEY
+	aca_code INT AUTO_INCREMENT PRIMARY KEY,
+    aca_name VARCHAR(10) NOT NULL
 );
+
 
 CREATE TABLE login(
 	username VARCHAR(20) PRIMARY KEY,
@@ -59,7 +61,7 @@ CREATE TABLE lecturer (
 
 CREATE TABLE semester (
 	sem_code VARCHAR(10) PRIMARY KEY,
-    academic_code VARCHAR(10),
+    academic_code INT,
     FOREIGN KEY (academic_code) REFERENCES academic_year(aca_code) ON UPDATE CASCADE
 );
 
@@ -70,7 +72,7 @@ CREATE TABLE question (
 
 CREATE TABLE year_faculty (
 	id_1 VARCHAR(20) PRIMARY KEY,
-    academic_code VARCHAR(10) NOT NULL,
+    academic_code INT NOT NULL,
     faculty_code VARCHAR(10) NOT NULL,
     FOREIGN KEY (academic_code) REFERENCES academic_year(aca_code) ON UPDATE CASCADE,
     FOREIGN KEY (faculty_code) REFERENCES faculty(fa_code) ON UPDATE CASCADE,
@@ -116,8 +118,8 @@ CREATE TABLE teaching (
 CREATE TABLE questionaire (
 	questionaire_id INT AUTO_INCREMENT PRIMARY KEY,
     teaching_id INT NOT NULL,
-    answer_1 VARCHAR(9) NOT NULL,
-    answer_2 VARCHAR(6) NOT NULL,
+    answer_1 VARCHAR(9),
+    answer_2 VARCHAR(6),
     answer_3 VARCHAR(2) NOT NULL,
     answer_4 VARCHAR(2) NOT NULL,
     answer_5 VARCHAR(2) NOT NULL,
@@ -190,35 +192,35 @@ INSERT INTO faculty (fa_code, name) VALUE ('FLAW', 'Faculty of Law');
 INSERT INTO faculty (fa_code, name) VALUE ('FMUS', 'Faculty of Music');
 
 -- Academic year
-INSERT INTO academic_year (aca_code) VALUES ('2016-2017');
-INSERT INTO academic_year (aca_code) VALUES ('2017-2018');
-INSERT INTO academic_year (aca_code) VALUES ('2018-2019');
-INSERT INTO academic_year (aca_code) VALUES ('2019-2020');
-INSERT INTO academic_year (aca_code) VALUES ('2020-2021');
+INSERT INTO academic_year (aca_name) VALUES ('2016-2017');
+INSERT INTO academic_year (aca_name) VALUES ('2017-2018');
+INSERT INTO academic_year (aca_name) VALUES ('2018-2019');
+INSERT INTO academic_year (aca_name) VALUES ('2019-2020');
+INSERT INTO academic_year (aca_name) VALUES ('2020-2021');
 
 -- year_faculty
-INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2016-2017_FIT", "2016-2017", "FIT");
-INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2016-2017_FENG", "2016-2017", "FENG");
+INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2016-2017_FIT", 1, "FIT");
+INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2016-2017_FENG", 1, "FENG");
 
-INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2017-2018_FECO", "2017-2018", "FECO");
-INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2017-2018_FENG", "2017-2018", "FENG");
-INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2017-2018_FIT", "2017-2018", "FIT");
+INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2017-2018_FECO", 2, "FECO");
+INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2017-2018_FENG", 2, "FENG");
+INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2017-2018_FIT", 2, "FIT");
 
-INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2018-2019_FECO", "2018-2019", "FECO");
-INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2018-2019_FENG", "2018-2019", "FENG");
-INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2018-2019_FIT", "2018-2019", "FIT");
-INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2018-2019_FLAW", "2018-2019", "FLAW");
+INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2018-2019_FECO", 3, "FECO");
+INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2018-2019_FENG", 3, "FENG");
+INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2018-2019_FIT", 3, "FIT");
+INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2018-2019_FLAW", 3, "FLAW");
 
-INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2019-2020_FECO", "2019-2020", "FECO");
-INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2019-2020_FENG", "2019-2020", "FENG");
-INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2019-2020_FIT", "2019-2020", "FIT");
-INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2019-2020_FLAW", "2019-2020", "FLAW");
+INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2019-2020_FECO", 4, "FECO");
+INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2019-2020_FENG", 4, "FENG");
+INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2019-2020_FIT", 4, "FIT");
+INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2019-2020_FLAW", 4, "FLAW");
 
-INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2020-2021_FECO", "2020-2021", "FECO");
-INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2020-2021_FENG", "2020-2021", "FENG");
-INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2020-2021_FIT", "2020-2021", "FIT");
-INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2020-2021_FLAW", "2020-2021", "FLAW");
-INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2020-2021_FMUS", "2020-2021", "FMUS");
+INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2020-2021_FECO", 5, "FECO");
+INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2020-2021_FENG", 5, "FENG");
+INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2020-2021_FIT", 5, "FIT");
+INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2020-2021_FLAW", 5, "FLAW");
+INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2020-2021_FMUS", 5, "FMUS");
 
 -- Program
 -- Faculty of economic
@@ -522,16 +524,16 @@ INSERT INTO lecturer (lec_code, name, username) VALUES ('22', 'Demetria Loughrey
 INSERT INTO lecturer (lec_code, name, username) VALUES ('23', 'Le VZ', 'ojedrzejewskys');
 
 -- Semester
-INSERT INTO semester (sem_code, academic_code) VALUES ('WS16', '2016-2017');
-INSERT INTO semester (sem_code, academic_code) VALUES ('SS17', '2016-2017');
-INSERT INTO semester (sem_code, academic_code) VALUES ('WS17', '2017-2018');
-INSERT INTO semester (sem_code, academic_code) VALUES ('SS18', '2017-2018');
-INSERT INTO semester (sem_code, academic_code) VALUES ('WS18', '2018-2019');
-INSERT INTO semester (sem_code, academic_code) VALUES ('SS19', '2018-2019');
-INSERT INTO semester (sem_code, academic_code) VALUES ('WS19', '2019-2020');
-INSERT INTO semester (sem_code, academic_code) VALUES ('SS20', '2019-2020');
-INSERT INTO semester (sem_code, academic_code) VALUES ('WS20', '2020-2021');
-INSERT INTO semester (sem_code, academic_code) VALUES ('SS21', '2020-2021');
+INSERT INTO semester (sem_code, academic_code) VALUES ('WS16', 1);
+INSERT INTO semester (sem_code, academic_code) VALUES ('SS17', 1);
+INSERT INTO semester (sem_code, academic_code) VALUES ('WS17', 2);
+INSERT INTO semester (sem_code, academic_code) VALUES ('SS18', 2);
+INSERT INTO semester (sem_code, academic_code) VALUES ('WS18', 3);
+INSERT INTO semester (sem_code, academic_code) VALUES ('SS19', 3);
+INSERT INTO semester (sem_code, academic_code) VALUES ('WS19', 4);
+INSERT INTO semester (sem_code, academic_code) VALUES ('SS20', 4);
+INSERT INTO semester (sem_code, academic_code) VALUES ('WS20', 5);
+INSERT INTO semester (sem_code, academic_code) VALUES ('SS21', 5);
 
 -- Class
 -- CSE
