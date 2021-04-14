@@ -352,7 +352,6 @@ END //
 DELIMITER ;
 
 -- ==================================  END of 11 PROCEDURE for Database page ====================================
-
 -- getNumberOfAnswer Procedure
 DROP PROCEDURE IF EXISTS java_app.getNumberOfAnswer;
 DELIMITER  //
@@ -360,14 +359,17 @@ CREATE PROCEDURE getNumberOfAnswer(array_teaching_id VARCHAR(500), answer_id INT
 BEGIN
 SET @teachingId_arr = array_teaching_id;
 IF answer_id = 1 THEN
-	SET @s=CONCAT('SELECT	
+	SET @s=CONCAT('SELECT 
 				sum(answer_',answer_id,'= "Never") as Option1, 
 				sum(answer_',answer_id,'= "Rarely") as Option2,
 				sum(answer_',answer_id,'= "Sometimes") as Option3,
 				sum(answer_',answer_id,'= "Often") as Option4,
 				sum(answer_',answer_id,'= "Always") as Option5,
-				0 as Option6
-			FROM questionaire 
+				0 as Option6,
+				(SELECT sum(c.size)
+				 FROM  class c JOIN teaching t ON c.class_code = t.class_code
+				 WHERE t.id IN (', @teachingID_arr, ')) as class_size
+			FROM questionaire
 			WHERE teaching_id IN (', @teachingID_arr, ');');
 ELSEIF answer_id = 2 THEN
 	SET @s=CONCAT('SELECT 
@@ -376,7 +378,10 @@ ELSEIF answer_id = 2 THEN
 				sum(answer_',answer_id,'= "Other") as Option3,
 				0 as Option4,
 				0 as Option5,
-				0 as Option6
+				0 as Option6,
+				(SELECT sum(c.size)
+				 FROM  class c JOIN teaching t ON c.class_code = t.class_code
+				 WHERE t.id IN (', @teachingID_arr, ')) as class_size
 			FROM questionaire 
 			WHERE teaching_id IN (', @teachingID_arr, ');');
 ELSE
@@ -386,7 +391,10 @@ ELSE
 				sum(answer_',answer_id,'= "3") as Option3,
 				sum(answer_',answer_id,'= "4") as Option4,
 				sum(answer_',answer_id,'= "5") as Option5,
-				sum(answer_',answer_id,'= "NA") as Option6
+				sum(answer_',answer_id,'= "NA") as Option6,
+				(SELECT sum(c.size)
+				 FROM  class c JOIN teaching t ON c.class_code = t.class_code
+				 WHERE t.id IN (', @teachingID_arr, ')) as class_size
 			FROM questionaire 
 			WHERE teaching_id IN (', @teachingID_arr, ');');
 END IF;
