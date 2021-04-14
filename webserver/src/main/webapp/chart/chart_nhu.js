@@ -288,6 +288,12 @@ function visualize() {
             type: 'GET',
             url: `http://localhost:8080/webserver/chart/numberOfAnswer?teaching_id_arr=${teaching_id.join(",")}&answer_id=${i}`,
             success: data => {
+                /**
+                $(`#numResp_${i-1}`).remove()
+                $(`#respRate_${i-1}`).remove()
+                $(`#meanVal_${i-1}`).remove()
+                $(`#stDev_${i-1}`).remove()
+                */
                 orderedData = Object.keys(data[0]).sort().reduce(
                     (obj,key) => {
                         obj[key] = data[0][key];
