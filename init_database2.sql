@@ -42,8 +42,10 @@ CREATE TABLE module (
 );
 
 CREATE TABLE academic_year (
-	aca_code VARCHAR(10) PRIMARY KEY
+	aca_code INT AUTO_INCREMENT PRIMARY KEY,
+    aca_name VARCHAR(10) NOT NULL
 );
+
 
 CREATE TABLE login(
 	username VARCHAR(20) PRIMARY KEY,
@@ -59,7 +61,7 @@ CREATE TABLE lecturer (
 
 CREATE TABLE semester (
 	sem_code VARCHAR(10) PRIMARY KEY,
-    academic_code VARCHAR(10),
+    academic_code INT,
     FOREIGN KEY (academic_code) REFERENCES academic_year(aca_code) ON UPDATE CASCADE
 );
 
@@ -70,7 +72,7 @@ CREATE TABLE question (
 
 CREATE TABLE year_faculty (
 	id_1 VARCHAR(20) PRIMARY KEY,
-    academic_code VARCHAR(10) NOT NULL,
+    academic_code INT NOT NULL,
     faculty_code VARCHAR(10) NOT NULL,
     FOREIGN KEY (academic_code) REFERENCES academic_year(aca_code) ON UPDATE CASCADE,
     FOREIGN KEY (faculty_code) REFERENCES faculty(fa_code) ON UPDATE CASCADE,
@@ -116,8 +118,8 @@ CREATE TABLE teaching (
 CREATE TABLE questionaire (
 	questionaire_id INT AUTO_INCREMENT PRIMARY KEY,
     teaching_id INT NOT NULL,
-    answer_1 VARCHAR(9) NOT NULL,
-    answer_2 VARCHAR(6) NOT NULL,
+    answer_1 VARCHAR(9),
+    answer_2 VARCHAR(6),
     answer_3 VARCHAR(2) NOT NULL,
     answer_4 VARCHAR(2) NOT NULL,
     answer_5 VARCHAR(2) NOT NULL,
@@ -190,35 +192,35 @@ INSERT INTO faculty (fa_code, name) VALUE ('FLAW', 'Faculty of Law');
 INSERT INTO faculty (fa_code, name) VALUE ('FMUS', 'Faculty of Music');
 
 -- Academic year
-INSERT INTO academic_year (aca_code) VALUES ('2016-2017');
-INSERT INTO academic_year (aca_code) VALUES ('2017-2018');
-INSERT INTO academic_year (aca_code) VALUES ('2018-2019');
-INSERT INTO academic_year (aca_code) VALUES ('2019-2020');
-INSERT INTO academic_year (aca_code) VALUES ('2020-2021');
+INSERT INTO academic_year (aca_name) VALUES ('2016-2017');
+INSERT INTO academic_year (aca_name) VALUES ('2017-2018');
+INSERT INTO academic_year (aca_name) VALUES ('2018-2019');
+INSERT INTO academic_year (aca_name) VALUES ('2019-2020');
+INSERT INTO academic_year (aca_name) VALUES ('2020-2021');
 
 -- year_faculty
-INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2016-2017_FIT", "2016-2017", "FIT");
-INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2016-2017_FENG", "2016-2017", "FENG");
+INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2016-2017_FIT", 1, "FIT");
+INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2016-2017_FENG", 1, "FENG");
 
-INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2017-2018_FECO", "2017-2018", "FECO");
-INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2017-2018_FENG", "2017-2018", "FENG");
-INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2017-2018_FIT", "2017-2018", "FIT");
+INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2017-2018_FECO", 2, "FECO");
+INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2017-2018_FENG", 2, "FENG");
+INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2017-2018_FIT", 2, "FIT");
 
-INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2018-2019_FECO", "2018-2019", "FECO");
-INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2018-2019_FENG", "2018-2019", "FENG");
-INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2018-2019_FIT", "2018-2019", "FIT");
-INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2018-2019_FLAW", "2018-2019", "FLAW");
+INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2018-2019_FECO", 3, "FECO");
+INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2018-2019_FENG", 3, "FENG");
+INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2018-2019_FIT", 3, "FIT");
+INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2018-2019_FLAW", 3, "FLAW");
 
-INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2019-2020_FECO", "2019-2020", "FECO");
-INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2019-2020_FENG", "2019-2020", "FENG");
-INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2019-2020_FIT", "2019-2020", "FIT");
-INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2019-2020_FLAW", "2019-2020", "FLAW");
+INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2019-2020_FECO", 4, "FECO");
+INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2019-2020_FENG", 4, "FENG");
+INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2019-2020_FIT", 4, "FIT");
+INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2019-2020_FLAW", 4, "FLAW");
 
-INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2020-2021_FECO", "2020-2021", "FECO");
-INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2020-2021_FENG", "2020-2021", "FENG");
-INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2020-2021_FIT", "2020-2021", "FIT");
-INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2020-2021_FLAW", "2020-2021", "FLAW");
-INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2020-2021_FMUS", "2020-2021", "FMUS");
+INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2020-2021_FECO", 5, "FECO");
+INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2020-2021_FENG", 5, "FENG");
+INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2020-2021_FIT", 5, "FIT");
+INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2020-2021_FLAW", 5, "FLAW");
+INSERT INTO year_faculty (id_1, academic_code, faculty_code) VALUES ("2020-2021_FMUS", 5, "FMUS");
 
 -- Program
 -- Faculty of economic
@@ -465,42 +467,73 @@ INSERT INTO year_fac_pro_mo(id_2,module_code) VALUES (33,'KBS');
 INSERT INTO year_fac_pro_mo(id_2,module_code) VALUES (33,'NTT');
 INSERT INTO year_fac_pro_mo(id_2,module_code) VALUES (33,'MTCO');
 
+-- Login
+insert into login (username, pass) values ('nlacelett0', 'cgzCnFjRn2af');
+insert into login (username, pass) values ('ggaddas1', 'SyDzNyXefYK');
+insert into login (username, pass) values ('acudiff2', 'KkGy1w');
+insert into login (username, pass) values ('dbrawn3', 'uQRJe4FTmbu');
+insert into login (username, pass) values ('cmcian4', '9378mjC0143');
+insert into login (username, pass) values ('oneller5', 'ogcF7Zs6VXwT');
+insert into login (username, pass) values ('stebbut6', 'ZvHHKr');
+insert into login (username, pass) values ('rsummerson7', 'sWHjewE');
+insert into login (username, pass) values ('osnibson8', 'A8QI7f2nWpvN');
+insert into login (username, pass) values ('jszymonowicz9', 'A2aZtSOm');
+insert into login (username, pass) values ('cdomelowa', 'kNdT5Hts');
+insert into login (username, pass) values ('etownrowb', 'PWxhjJ9xv');
+insert into login (username, pass) values ('ssynanc', 'QUpNmP');
+insert into login (username, pass) values ('agoord', 'Ong1LSPP');
+insert into login (username, pass) values ('pokierane', 'RtmAihz1dO');
+insert into login (username, pass) values ('pgaitonef', 'MAI20F0B3n');
+insert into login (username, pass) values ('scrooseg', 'PpjTmvpAs');
+insert into login (username, pass) values ('gfairburnh', '7696dw6kaB9');
+insert into login (username, pass) values ('mcheccuccii', 'LjTw8p3');
+insert into login (username, pass) values ('rwoodesj', 'k6oDUQkHh');
+insert into login (username, pass) values ('mcurmank', 'R5GvU42y2d');
+insert into login (username, pass) values ('lvaillantl', 'leEfILHeHt');
+insert into login (username, pass) values ('gbalmadierm', 'PurZWlgQC');
+insert into login (username, pass) values ('afelipn', 'CocIf4qzW4fh');
+insert into login (username, pass) values ('bhartilo', '13kPOOqKAwS');
+insert into login (username, pass) values ('mmatussevichp', '0jwt0RHGcZbd');
+insert into login (username, pass) values ('kgrenshieldsq', 'V1N7EL');
+insert into login (username, pass) values ('yhinksenr', '4jPejEhQo');
+insert into login (username, pass) values ('ojedrzejewskys', 'WJWmXbac2sk');
+
 -- Lecturer
-INSERT INTO lecturer (lec_code, name) VALUES ('1', 'Jo Urvoy');
-INSERT INTO lecturer (lec_code, name) VALUES ('2', 'Winslow Flatt');
-INSERT INTO lecturer (lec_code, name) VALUES ('3', 'Estel Nenci');
-INSERT INTO lecturer (lec_code, name) VALUES ('4', 'Tiffy Falco');
-INSERT INTO lecturer (lec_code, name) VALUES ('5', 'Stephan Berard');
-INSERT INTO lecturer (lec_code, name) VALUES ('6', 'Sissy Ellamont');
-INSERT INTO lecturer (lec_code, name) VALUES ('7', 'Caresa Greengrass');
-INSERT INTO lecturer (lec_code, name) VALUES ('8', 'Cyril Fadden');
-INSERT INTO lecturer (lec_code, name) VALUES ('9', 'Anthe Roony');
-INSERT INTO lecturer (lec_code, name) VALUES ('10', 'Anjanette Andrivot');
-INSERT INTO lecturer (lec_code, name) VALUES ('11', 'Wiley Durno');
-INSERT INTO lecturer (lec_code, name) VALUES ('12', 'Peria Kaman');
-INSERT INTO lecturer (lec_code, name) VALUES ('13', 'Cleveland Hylden');
-INSERT INTO lecturer (lec_code, name) VALUES ('14', 'Barny Pizzie');
-INSERT INTO lecturer (lec_code, name) VALUES ('15', 'Sinclair Crommett');
-INSERT INTO lecturer (lec_code, name) VALUES ('16', 'Gerti Izat');
-INSERT INTO lecturer (lec_code, name) VALUES ('17', 'Brook Flattman');
-INSERT INTO lecturer (lec_code, name) VALUES ('18', 'Dunc Whife');
-INSERT INTO lecturer (lec_code, name) VALUES ('19', 'Hilde Booler');
-INSERT INTO lecturer (lec_code, name) VALUES ('20', 'Fredi Forty');
-INSERT INTO lecturer (lec_code, name) VALUES ('21', 'Layne Whitton');
-INSERT INTO lecturer (lec_code, name) VALUES ('22', 'Demetria Loughrey');
-INSERT INTO lecturer (lec_code, name) VALUES ('23', 'Le VZ');
+INSERT INTO lecturer (lec_code, name, username) VALUES ('1', 'Jo Urvoy', 'nlacelett0');
+INSERT INTO lecturer (lec_code, name, username) VALUES ('2', 'Winslow Flatt', 'ggaddas1');
+INSERT INTO lecturer (lec_code, name, username) VALUES ('3', 'Estel Nenci', 'acudiff2');
+INSERT INTO lecturer (lec_code, name, username) VALUES ('4', 'Tiffy Falco', 'dbrawn3');
+INSERT INTO lecturer (lec_code, name, username) VALUES ('5', 'Stephan Berard', 'cmcian4');
+INSERT INTO lecturer (lec_code, name, username) VALUES ('6', 'Sissy Ellamont', 'oneller5');
+INSERT INTO lecturer (lec_code, name, username) VALUES ('7', 'Caresa Greengrass', 'stebbut6');
+INSERT INTO lecturer (lec_code, name, username) VALUES ('8', 'Cyril Fadden', 'rsummerson7');
+INSERT INTO lecturer (lec_code, name, username) VALUES ('9', 'Anthe Roony', 'osnibson8');
+INSERT INTO lecturer (lec_code, name, username) VALUES ('10', 'Anjanette Andrivot', 'jszymonowicz9');
+INSERT INTO lecturer (lec_code, name, username) VALUES ('11', 'Wiley Durno', 'cdomelowa');
+INSERT INTO lecturer (lec_code, name, username) VALUES ('12', 'Peria Kaman', 'etownrowb');
+INSERT INTO lecturer (lec_code, name, username) VALUES ('13', 'Cleveland Hylden', 'ssynanc');
+INSERT INTO lecturer (lec_code, name, username) VALUES ('14', 'Barny Pizzie', 'agoord');
+INSERT INTO lecturer (lec_code, name, username) VALUES ('15', 'Sinclair Crommett', 'pokierane');
+INSERT INTO lecturer (lec_code, name, username) VALUES ('16', 'Gerti Izat', 'pgaitonef');
+INSERT INTO lecturer (lec_code, name, username) VALUES ('17', 'Brook Flattman', 'scrooseg');
+INSERT INTO lecturer (lec_code, name, username) VALUES ('18', 'Dunc Whife', 'gfairburnh');
+INSERT INTO lecturer (lec_code, name, username) VALUES ('19', 'Hilde Booler', 'mcheccuccii');
+INSERT INTO lecturer (lec_code, name, username) VALUES ('20', 'Fredi Forty', 'rwoodesj');
+INSERT INTO lecturer (lec_code, name, username) VALUES ('21', 'Layne Whitton', 'mcurmank');
+INSERT INTO lecturer (lec_code, name, username) VALUES ('22', 'Demetria Loughrey', 'lvaillantl');
+INSERT INTO lecturer (lec_code, name, username) VALUES ('23', 'Le VZ', 'ojedrzejewskys');
 
 -- Semester
-INSERT INTO semester (sem_code, academic_code) VALUES ('WS16', '2016-2017');
-INSERT INTO semester (sem_code, academic_code) VALUES ('SS17', '2016-2017');
-INSERT INTO semester (sem_code, academic_code) VALUES ('WS17', '2017-2018');
-INSERT INTO semester (sem_code, academic_code) VALUES ('SS18', '2017-2018');
-INSERT INTO semester (sem_code, academic_code) VALUES ('WS18', '2018-2019');
-INSERT INTO semester (sem_code, academic_code) VALUES ('SS19', '2018-2019');
-INSERT INTO semester (sem_code, academic_code) VALUES ('WS19', '2019-2020');
-INSERT INTO semester (sem_code, academic_code) VALUES ('SS20', '2019-2020');
-INSERT INTO semester (sem_code, academic_code) VALUES ('WS20', '2020-2021');
-INSERT INTO semester (sem_code, academic_code) VALUES ('SS21', '2020-2021');
+INSERT INTO semester (sem_code, academic_code) VALUES ('WS16', 1);
+INSERT INTO semester (sem_code, academic_code) VALUES ('SS17', 1);
+INSERT INTO semester (sem_code, academic_code) VALUES ('WS17', 2);
+INSERT INTO semester (sem_code, academic_code) VALUES ('SS18', 2);
+INSERT INTO semester (sem_code, academic_code) VALUES ('WS18', 3);
+INSERT INTO semester (sem_code, academic_code) VALUES ('SS19', 3);
+INSERT INTO semester (sem_code, academic_code) VALUES ('WS19', 4);
+INSERT INTO semester (sem_code, academic_code) VALUES ('SS20', 4);
+INSERT INTO semester (sem_code, academic_code) VALUES ('WS20', 5);
+INSERT INTO semester (sem_code, academic_code) VALUES ('SS21', 5);
 
 -- Class
 -- CSE
@@ -986,3 +1019,92 @@ insert into questionaire (teaching_id, answer_1, answer_2, answer_3, answer_4, a
 insert into questionaire (teaching_id, answer_1, answer_2, answer_3, answer_4, answer_5, answer_6, answer_7, answer_8, answer_9, answer_10, answer_11, answer_12, answer_13, answer_14, answer_15, answer_16, answer_17, answer_18, answer_19, answer_20) values (111, 'Often', 'Male', '4', '3', '4', '3', 2, 5, 3, '4', '2', '5', '5', 'NA', '1', '4', '5', '4', 'NA', null);
 insert into questionaire (teaching_id, answer_1, answer_2, answer_3, answer_4, answer_5, answer_6, answer_7, answer_8, answer_9, answer_10, answer_11, answer_12, answer_13, answer_14, answer_15, answer_16, answer_17, answer_18, answer_19, answer_20) values (111, 'Always', 'Other', '2', '3', 'NA', '1', 3, 2, 1, '3', '1', '1', '2', '3', '3', '4', '2', '2', '2', null);
 insert into questionaire (teaching_id, answer_1, answer_2, answer_3, answer_4, answer_5, answer_6, answer_7, answer_8, answer_9, answer_10, answer_11, answer_12, answer_13, answer_14, answer_15, answer_16, answer_17, answer_18, answer_19, answer_20) values (111, 'Rarely', 'Female', '4', 'NA', '4', '2', 3, 1, 4, '1', '3', '4', '5', '4', '2', '3', 'NA', 'NA', '1', null);
+
+-- program_coordinator
+-- BA
+insert into program_coordinator (username, start_date, end_date, program_code) values ('nlacelett0', '2017-08-19','2018-08-19', 'BA');
+
+-- BIS
+insert into program_coordinator (username, start_date, end_date, program_code) values ('pokierane', '2016-08-19','2017-08-19', 'BIS');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('ssynanc', '2017-08-19','2018-08-19', 'BIS');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('cdomelowa', '2018-08-19','2019-08-19', 'BIS');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('pokierane', '2019-08-19','2020-08-19', 'BIS');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('agoord', '2020-08-19','2021-08-19', 'BIS');
+
+-- CE
+insert into program_coordinator (username, start_date, end_date, program_code) values ('oneller5', '2019-08-19','2020-08-19', 'CE');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('rsummerson7', '2020-08-19','2021-08-19', 'CE');
+
+-- CLAW
+insert into program_coordinator (username, start_date, end_date, program_code) values ('rwoodesj', '2019-08-19','2020-08-19', 'CLAW');
+
+-- COMP
+insert into program_coordinator (username, start_date, end_date, program_code) values ('mcurmank', '2020-08-19','2021-08-19', 'COMP');
+
+-- CSE
+insert into program_coordinator (username, start_date, end_date, program_code) values ('pokierane', '2016-08-19','2017-08-19', 'CSE');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('pokierane', '2017-08-19','2018-08-19', 'CSE');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('ssynanc', '2018-08-19','2019-08-19', 'CSE');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('pokierane', '2019-08-19','2020-08-19', 'CSE');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('pokierane', '2020-08-19','2021-08-19', 'CSE');
+
+-- CVLAW
+insert into program_coordinator (username, start_date, end_date, program_code) values ('pgaitonef', '2020-08-19','2021-08-19', 'CVLAW');
+
+-- ECO
+insert into program_coordinator (username, start_date, end_date, program_code) values ('dbrawn3', '2019-08-19','2020-08-19', 'ECO');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('ggaddas1', '2020-08-19','2021-08-19', 'ECO');
+
+-- EE
+insert into program_coordinator (username, start_date, end_date, program_code) values ('osnibson8', '2017-08-19','2018-08-19', 'EE');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('osnibson8', '2018-08-19','2019-08-19', 'EE');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('osnibson8', '2019-08-19','2020-08-19', 'EE');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('rsummerson7', '2020-08-19','2021-08-19', 'EE');
+
+-- ELAW
+insert into program_coordinator (username, start_date, end_date, program_code) values ('mcheccuccii', '2018-08-19','2019-08-19', 'ELAW');
+
+-- ITSEC
+insert into program_coordinator (username, start_date, end_date, program_code) values ('pokierane', '2017-08-19','2018-08-19', 'ITSEC');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('pokierane', '2018-08-19','2019-08-19', 'ITSEC');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('pokierane', '2019-08-19','2020-08-19', 'ITSEC');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('etownrowb', '2020-08-19','2021-08-19', 'ITSEC');
+
+-- LOG
+insert into program_coordinator (username, start_date, end_date, program_code) values ('dbrawn3', '2018-08-19','2019-08-19', 'LOG');
+
+-- ME
+insert into program_coordinator (username, start_date, end_date, program_code) values ('oneller5', '2016-08-19','2017-08-19', 'ME');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('oneller5', '2017-08-19','2018-08-19', 'ME');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('rsummerson7', '2018-08-19','2019-08-19', 'ME');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('rsummerson7', '2019-08-19','2020-08-19', 'ME');
+insert into program_coordinator (username, start_date, end_date, program_code) values ('rsummerson7', '2020-08-19','2021-08-19', 'ME');
+
+-- deans
+-- FECO
+insert into deans (username, start_date, end_date, faculty_code) values ('nlacelett0', '2017-08-19','2018-08-19', 'FECO');
+insert into deans (username, start_date, end_date, faculty_code) values ('nlacelett0', '2018-08-19','2019-08-19', 'FECO');
+insert into deans (username, start_date, end_date, faculty_code) values ('cmcian4', '2019-08-19','2020-08-19', 'FECO');
+insert into deans (username, start_date, end_date, faculty_code) values ('acudiff2', '2020-08-19','2021-08-19', 'FECO');
+
+-- FENG
+insert into deans (username, start_date, end_date, faculty_code) values ('oneller5', '2016-08-19','2017-08-19', 'FENG');
+insert into deans (username, start_date, end_date, faculty_code) values ('osnibson8', '2017-08-19','2018-08-19', 'FENG');
+insert into deans (username, start_date, end_date, faculty_code) values ('oneller5', '2018-08-19','2019-08-19', 'FENG');
+insert into deans (username, start_date, end_date, faculty_code) values ('jszymonowicz9', '2019-08-19','2020-08-19', 'FENG');
+insert into deans (username, start_date, end_date, faculty_code) values ('stebbut6', '2020-08-19','2021-08-19', 'FENG');
+
+-- FIT
+insert into deans (username, start_date, end_date, faculty_code) values ('ssynanc', '2016-08-19','2017-08-19', 'FIT');
+insert into deans (username, start_date, end_date, faculty_code) values ('ssynanc', '2017-08-19','2018-08-19', 'FIT');
+insert into deans (username, start_date, end_date, faculty_code) values ('ssynanc', '2018-08-19','2019-08-19', 'FIT');
+insert into deans (username, start_date, end_date, faculty_code) values ('agoord', '2019-08-19','2020-08-19', 'FIT');
+insert into deans (username, start_date, end_date, faculty_code) values ('ssynanc', '2020-08-19','2021-08-19', 'FIT');
+
+-- FLAW
+insert into deans (username, start_date, end_date, faculty_code) values ('mcheccuccii', '2018-08-19','2019-08-19', 'FLAW');
+insert into deans (username, start_date, end_date, faculty_code) values ('pgaitonef', '2019-08-19','2020-08-19', 'FLAW');
+insert into deans (username, start_date, end_date, faculty_code) values ('gfairburnh', '2020-08-19','2021-08-19', 'FLAW');
+
+-- FMUS
+insert into deans (username, start_date, end_date, faculty_code) values ('mcurmank', '2020-08-19','2021-08-19', 'FMUS');

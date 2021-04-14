@@ -9,66 +9,12 @@ $(document).ready(function () {
     //visualize();
 })
 
-function init() {
-  let chartName = ["Class Attendance", "Gender","Clearance of the Module Objectives", "Useful & Sufficient Learning Materials",
-                  "Relevance of the Module Content","Interesting Lessons","Time Spent on Module Workload Outside Classroon",
-                  "Module Workload","Difficulty of the Module","Understandable Presentation of the Module Contents",
-                  "Variety of Learning Activities","Supportive learning activities","Appropriate Assessment Method",
-                  "Lecturer's Encouragement in Critial Thinking and Logics","Helpful Feedback from Lecturer",
-                  "Language Skill (English/German)","Appreciation of Students' Ideas and Contributions","Lecturer's In-class Encouragement in Discussion and Questions",
-                  "Offering Consulation to Individuals for Academic Support"]
-    for (let i = 0; i < 19; i++) {
-        $(".chartContainer").append(`<h2 style="text-align: center">Percentage of Respondents by ${chartName[i]}</h2><canvas id="questionnaireChart${i}" style="width: 800px; height:500px; margin-bottom: 50px;"></canvas>`)
-        let myChart = document.getElementById(`questionnaireChart${i}`).getContext('2d');
-        let barChart = new Chart(myChart, {
-            type: 'bar',
-            data: {
-                labels: ["Strongly disagree = 1", "2", "3", "4", "Strongly agree = 5", "Not applicable"],
-                datasets: [{
-                    label: 'Number of response',
-                    data: [0,0,0,0,0,0],
-                    backgroundColor: '#FFA552',
-                    borderColor: '#fd800d',
-                    borderWidth: 1,
-                    hoverBackgroundColor: '#fd800d'
-                }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginatZero: true,
-                            min: 0
-                            /**max: this.max,
-                            callback: function (value) {
-                                return Math.round(value/this.max * 100).toFixed(0) + '%';
-                            }**/
-                        }
-
-                    }]
-                },
-                plugins: {
-                    datalabels: {
-                        formatter: (value, ctx) => {
-                            let datasets = ctx.chart.data.datasets;
-                            if (datasets.indexOf(ctx.dataset) === datasets.length - 1) {
-                                let percentage = Math.round(value*100) + '%';
-                                return percentage;
-                            } else {
-                                return percentage;
-                            }
-                        },
-                        color: '#fff',
-                    }
-                }
-            }
-        })
-        chartArr.push(barChart)
-    }
-}
+/**
+ * Filter to visualize Chart
+ */
 
 function filterChart() {
-    console.log(teaching_id.length)
+    //console.log(teaching_id.length)
     getAcademicYear();
     $("#aca_code").change(() => getSemester())
     $("#sem").change(() => getFaculty())
@@ -210,33 +156,221 @@ function optionRemove(start) {
         $(`#${optionField[i]} option`).not(":first").remove()
 }
 
+
+/**
+ *  Visualize Chart and its Properties
+ */
+function init() {
+    let chartName = ["Class Attendance", "Gender","Clearance of the Module Objectives", "Useful & Sufficient Learning Materials",
+        "Relevance of the Module Content","Interesting Lessons","Time Spent on Module Workload Outside Classroom",
+        "Module Workload","Difficulty of the Module","Understandable Presentation of the Module Contents",
+        "Variety of Learning Activities","Supportive learning activities","Appropriate Assessment Method",
+        "Lecturer's Encouragement in Critical Thinking and Logic","Helpful Feedback from Lecturer",
+        "Language Skill (English/German)","Appreciation of Students' Ideas and Contributions","Lecturer's In-class Encouragement in Discussion and Questions",
+        "Offering Consultation to Individuals for Academic Support"]
+
+    for (let i = 0; i < 19; i++) {
+        let labelArr, xMax
+        if (i == 0) {
+            labelArr = ["Never", "Rarely", "Sometimes", "Often", "Always"]
+            xMax = 5.5
+        }
+        else if (i == 1) {
+            labelArr = ["Male", "Female", "Other"]
+            xMax = 3.5
+        }
+        else {
+            labelArr = ["Strongly disagree = 1", "2", "3", "4", "Strongly agree = 5", "Not applicable"]
+            xMax = 6.5
+        }
+        $(".chartContainer").append(`<h2 style="text-align: center; margin-top: 50px">Percentage of Respondents by ${chartName[i]}</h2><canvas id="questionnaireChart${i}" style="width: 800px; height:500px; "></canvas>`)
+        let myChart = document.getElementById(`questionnaireChart${i}`).getContext('2d');
+        let barChart = new Chart(myChart, {
+            type: 'bar',
+            data: {
+                datasets: [{
+                    // type: 'bar',
+                    label: 'Percentage of response',
+                    data: [0,0,0,0,0,0],
+                    backgroundColor: '#FFA552',
+                    borderColor: '#fd800d',
+                    borderWidth: 1,
+                    hoverBackgroundColor: '#fd800d'
+                }
+                , {
+                    type: 'scatterWithErrorBars',
+                    label: 'Mean',
+                    xAxisID: 'mean_id',
+                    // yAxisID: 'invoice-amount',
+                    data: [{ x: 0.5, y: 0, xMin: 0, xMax: 0 }],
+                    backgroundColor: 'rgb(255, 99, 132)'
+                }
+                ],
+                labels: labelArr,
+            },
+            options: {
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        stacked: true,
+                        scaleLabel: {
+                            display: true,
+                        },
+                        },{
+                        id: "mean_id",
+                        type: 'linear',
+                        display: false,
+                        stacked: false,
+                        scaleLabel: {
+                            display: false,
+                            labelString: 'Days',
+                        },
+                        ticks: {
+                            // beginAtZero: true,
+                            stepSize: 0.5,
+                            suggestedMin: 0.5,
+                            suggestedMax: xMax
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            beginatZero: true,
+                            min: 0,
+                            max: 100,
+                            callback: function (value) {
+                                return value + '%';
+                            }
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: "Percentage",
+                            fontColor: '#979797',
+                            fontSize: 18,
+                        }
+
+                    }]
+                },
+                plugins: {
+                    datalabels: {
+                        formatter: (value, ctx) => {
+                            // let datasets = ctx.chart.data.datasets;
+                            let percentage = value + '%';
+                            return percentage;
+                        },
+                        color: '#000',
+                        anchor: 'end',
+                        align: 'top',
+                        offset: 10
+                    }
+                }
+            }
+        })
+        chartArr.push(barChart)
+        $(".chartContainer").append(`<p id="numResp_${i}"> Number of Response =  </p>`)
+        $(".chartContainer").append(`<p id="respRate_${i}"> Response rate =  </p>`)
+        $(".chartContainer").append(`<p id="meanVal_${i}"> Mean = </p>`)
+        $(".chartContainer").append(`<p id="stDev_${i}"> Standard Deviation =  </p>`)
+    }
+}
+
 function percentageCalculate(test) {
     let percentageValue = []
-    for (x of Object.values(test[0])){
-        pData = x/(jStat.sum(Object.values(test[0])))
-        //console.log(pData)
-        //console.log(jStat.sum(Object.values(test[0])))
-        percentageValue.push(pData.toFixed(2))
+    for (x of Object.values(test)){
+        pData = x/(jStat.sum(Object.values(test)))*100
+        percentageValue.push(pData.toFixed(1))
     }
     return percentageValue
 }
 
+let test;
 // Visualize chart
 function visualize() {
     teaching_id = [...new Set(teaching_id)] // using of set remove duplicate
-    console.log(teaching_id.join(","))
     for (let i = 1; i < 20; i++) {
         $.ajax({
             type: 'GET',
             url: `http://localhost:8080/webserver/chart/numberOfAnswer?teaching_id_arr=${teaching_id.join(",")}&answer_id=${i}`,
             success: data => {
-                chartArr[i-1].data.labels = Object.keys(data[0])
-                arrayPercentage = percentageCalculate(data)
-                //console.log(arrayPercentage)
-                chartArr[i-1].data.datasets[0].data = arrayPercentage
+                /**
+                $(`#numResp_${i-1}`).remove()
+                $(`#respRate_${i-1}`).remove()
+                $(`#meanVal_${i-1}`).remove()
+                $(`#stDev_${i-1}`).remove()
+                */
+                orderedData = Object.keys(data[0]).sort().reduce(
+                    (obj,key) => {
+                        obj[key] = data[0][key];
+                        return obj;
+                    }, {}
+                );
+                test = orderedData;
+
+                // calculate statistic
+                let arrayPercentage = percentageCalculate(orderedData)
+                sum = jStat.sum(Object.values(orderedData))
+                numResp = sum - orderedData['Option6']
+                respRate = numResp/sum*100
+
+                let arrValues = addValue(orderedData)
+                meanVal = jStat.mean(arrValues)
+                stDev = jStat.stdev(arrValues)
+                console.log(meanVal)
+
+                /**
+                meanVal = weightedMean([1,2,3,4,5,0], Object.values(orderedData), sum)
+                stDev = findSd([1, 2, 3, 4, 5, 0], Object.values(orderedData), meanVal, sum)
+                */
+
+                // update chart
+                chartArr[i - 1].data.datasets[0].data = arrayPercentage
+                max = Math.max(...Object.values(orderedData)) / sum * 100
+                max = max < 90 ? max + 10 : max
+                chartArr[i-1].data.datasets[1].data =  [{ x: meanVal, y: max, xMin: meanVal - stDev, xMax: meanVal + stDev }]
                 chartArr[i-1].update()
-                //console.log(jStat.sum(Object.values(data[0])))
+
+                $(`#numResp_${i-1}`).append(numResp)
+                $(`#respRate_${i-1}`).append(respRate.toFixed(2) + '%')
+                $(`#meanVal_${i-1}`).append(meanVal.toFixed(2))
+                $(`#stDev_${i-1}`).append(stDev.toFixed(2))
             }
         })
     }
 }
+
+function addValue(test) {
+    let arrVal = []
+    for (j = 0 ; j < test['Option1']; j ++){
+        arrVal.push(1);
+    }
+    for (j = 0 ; j < test['Option2']; j ++){
+        arrVal.push(2)
+    }
+    for (j = 0 ; j < test['Option3']; j ++){
+        arrVal.push(3)
+    }
+    for (j = 0 ; j < test['Option4']; j ++){
+        arrVal.push(4)
+    }
+    for (j = 0 ; j < test['Option5']; j ++){
+        arrVal.push(5)
+    }
+    for (j = 0 ; j < test['Option6']; j ++){
+        arrVal.push(6)
+    }
+    return arrVal
+}
+
+/**
+function weightedMean(arrValues, arrWeights, sum) {
+    let mean = 0;
+    for (let i = 0; i < 6; i++)
+        mean += arrValues[i] * (arrWeights[i] / sum)
+    return mean;
+}
+
+function findSd(arrValues, arrWeights, mean, sum) {
+    let variance = 0;
+    for (let i = 0; i < 6; i++)
+        variance += arrWeights[i] * Math.pow(arrValues[i] - mean, 2)
+    return Math.sqrt(variance/sum)
+}*/
