@@ -257,7 +257,7 @@ function init() {
                             let percentage = value + '%';
                             return percentage;
                         },
-                        color: '#fff',
+                        color: '#fff'
                     }
                 }
             }
