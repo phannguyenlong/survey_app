@@ -1,0 +1,36 @@
+body{margin: 0}
+
+h1 {
+  text-align-last: center;
+}
+
+input {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
+
+#content {
+  background-color: lightgrey;
+  width: 250px;
+  height: 300px;
+  border: 20px blue;
+  padding: 80px;
+  margin-top: 140px;
+  margin-left: 550px;
+}
+
+button {
+  margin-bottom: 50px;
+  margin-top: 20px;
+  margin-left: 60px;
+  background-color: #fd800d;
+  height: 42px;
+  border-radius: 15px;
+  border-color: #FFA552;
+  width: 127px;
+  color: #ffffff;
+  font-weight: bolder;
+  box-shadow: 5px 5px 3px #bfbfbf;
+}
