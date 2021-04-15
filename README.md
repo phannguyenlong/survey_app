@@ -58,8 +58,9 @@
 `GET` **/chart/validate?aca_code=''&sem_code=''&fa_code=array_of_fa_code&pro_code=array_of_pro_code&mo_code=''&lec_code=array_of_lect_code&class_code=''**
 - **input:** 
     - aca_code, sem_code, fa_code, pro_code, mo_code, class_code, lec_code
-    - array_of_fa_code: array of faculty code *(ex: fa_code="ME,CS")
-    - same for array_of_pro_code, array_of_lect_code
+    - array_of_fa_code: array of faculty code *(ex: fa_code='ME','CS')
+    - same for array_of_pro_code
+    - array_of_lect_code: array of lecturer ode   *(ex: lec_code=1,3)*
     - *NOTE:* the input paramter can be null (if null, skip filter that parameter)
 - **procedure name:** Validate(*academic_year, semester, faculty, program, module, lecturer, class, teaching_id*)
 - **output:** return (Academic Year, Semester, Faculty, Faculty_name, Program, Program_name, Module, Module_name, Class_code, Lecturer, Lecturer_name)
