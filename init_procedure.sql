@@ -79,13 +79,16 @@ DROP PROCEDURE IF EXISTS java_app.Validate;
 DELIMITER  //
 CREATE PROCEDURE Validate(
 						academic_year VARCHAR(10),  semester VARCHAR(10), 
-                        faculty VARCHAR(10), program VARCHAR(10), 
-                        module VARCHAR(10), lecturer VARCHAR(10), class VARCHAR(10)) 
+                        arr_faculty VARCHAR(500), arr_program VARCHAR(500), 
+                        module VARCHAR(10), arr_lecturer VARCHAR(500), class VARCHAR(10)) 
 BEGIN
-	SELECT
-		a.aca_code, s.sem_code, f.fa_code, f.name AS fa_name, 
-        p.pro_code, p.name AS pro_name, m.mo_code, m.name AS mo_name, 
-        c.class_code, l.lec_code, l.name AS lec_name, t.id as teaching_id
+	SET @faculty_arr = arr_faculty;
+    SET @program_arr = arr_program;
+    SET @lecturer_arr = arr_lecturer;
+	SET @a=CONCAT('SELECT
+			a.aca_code, a.aca_name, s.sem_code, f.fa_code, f.name AS fa_name, 
+			p.pro_code, p.name AS pro_name, m.mo_code, m.name AS mo_name, 
+			c.class_code, l.lec_code, l.name AS lec_name, t.id as teaching_id
     FROM class c
 	JOIN teaching t ON c.class_code = t.class_code
 	JOIN lecturer l ON t.lecturer_code = l.lec_code
@@ -98,14 +101,17 @@ BEGIN
     JOIN year_faculty yf ON (yf.id_1 = yfp.id_1)
 	JOIN faculty f ON (f.fa_code = yf.faculty_code)
     WHERE 
-		(a.aca_code = academic_year OR academic_year IS NULL) AND
-		(s.sem_code = semester OR semester IS NULL) AND
-        (f.fa_code = faculty OR faculty IS NULL) AND
-        (p.pro_code = program OR program IS NULL) AND
-        (m.mo_code = module OR module IS NULL) AND
-        (l.lec_code = lecturer OR lecturer IS NULL) AND
-        (c.class_code = class OR class IS NULL)
-	ORDER BY a.aca_code, s.sem_code, f.fa_code, p.pro_code, m.mo_code, c.class_code, l.lec_code, t.id;
+		(a.aca_code = ',academic_year,' OR ',academic_year,' IS NULL) AND
+		(s.sem_code = "',semester,'" OR "',semester,'" = "null") AND
+        (f.fa_code IN (',@faculty_arr,') OR "',@faculty_arr,'" = "null") AND
+        (p.pro_code IN (',@program_arr,') OR "',@program_arr,'" = "null") AND
+        (m.mo_code = "',module,'" OR "',module,'" = "null") AND
+        (l.lec_code IN ( ',@lecturer_arr,') OR "',@lecturer_arr,'" = "null") AND
+        (c.class_code = ',class,' OR ',class,' IS NULL)
+	ORDER BY a.aca_code, s.sem_code, f.fa_code, p.pro_code, m.mo_code, c.class_code, l.lec_code, t.id;');
+    PREPARE stmt2 FROM @a;
+	EXECUTE stmt2;
+	DEALLOCATE PREPARE stmt2;
 END //
 DELIMITER ;
 
