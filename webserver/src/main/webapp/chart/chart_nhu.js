@@ -30,11 +30,11 @@ function getAcademicYear() {
         type: 'GET',
         url: "http://localhost:8080/webserver/chart/validate?aca_code=null&sem_code=null&fa_code=null&pro_code=null&mo_code=null&class_code=null&lec_code=null",
         success: function (data) {
-            $("#aca_code").append(`<option value = "${data[0].aca_code}"> ${data[0].aca_code} </option>`)
+            $("#aca_code").append(`<option value = "${data[0].aca_code}"> ${data[0].aca_code} - ${data[0].aca_name} </option>`)
             teaching_id.push(data[0].teaching_id)
             for (let i = 1; i < data.length; i++) {
                 if (data[i].aca_code != data[i-1].aca_code)
-                    $("#aca_code").append(`<option value = "${data[i].aca_code}"> ${data[i].aca_code} </option>`)
+                    $("#aca_code").append(`<option value = "${data[i].aca_code}"> ${data[i].aca_code} - ${data[i].aca_name} </option>`)
                 teaching_id.push(data[i].teaching_id)
             }
         }
@@ -253,9 +253,10 @@ function init() {
                 plugins: {
                     datalabels: {
                         formatter: (value, ctx) => {
-                            // let datasets = ctx.chart.data.datasets;
-                            let percentage = value + '%';
-                            return percentage;
+                            if (ctx.chart.data.datasets.indexOf(ctx.dataset) == 1) {
+                                return value.x.toFixed(2); // for error bar number
+                            }
+                            return value + "%"; // for bar number
                         },
                         color: '#000',
                         anchor: 'end',
@@ -275,8 +276,9 @@ function init() {
 
 function percentageCalculate(test) {
     let percentageValue = []
-    for (x of Object.values(test)){
-        pData = x/(jStat.sum(Object.values(test)))*100
+    let arr = Object.values(test).slice(0, -1)
+    for (x of arr){
+        pData = x/(jStat.sum(arr))*100
         percentageValue.push(pData.toFixed(1))
     }
     return percentageValue
@@ -291,12 +293,6 @@ function visualize() {
             type: 'GET',
             url: `http://localhost:8080/webserver/chart/numberOfAnswer?teaching_id_arr=${teaching_id.join(",")}&answer_id=${i}`,
             success: data => {
-                /**
-                $(`#numResp_${i-1}`).remove()
-                $(`#respRate_${i-1}`).remove()
-                $(`#meanVal_${i-1}`).remove()
-                $(`#stDev_${i-1}`).remove()
-                */
                 orderedData = Object.keys(data[0]).sort().reduce(
                     (obj,key) => {
                         obj[key] = data[0][key];
@@ -307,31 +303,25 @@ function visualize() {
 
                 // calculate statistic
                 let arrayPercentage = percentageCalculate(orderedData)
-                sum = jStat.sum(Object.values(orderedData))
+                sum = jStat.sum(Object.values(orderedData).slice(0, -1))
                 numResp = sum - orderedData['Option6']
-                respRate = numResp/sum*100
+                respRate = numResp/orderedData['class_size']*100
 
                 let arrValues = addValue(orderedData)
                 meanVal = jStat.mean(arrValues)
                 stDev = jStat.stdev(arrValues)
-                console.log(meanVal)
-
-                /**
-                meanVal = weightedMean([1,2,3,4,5,0], Object.values(orderedData), sum)
-                stDev = findSd([1, 2, 3, 4, 5, 0], Object.values(orderedData), meanVal, sum)
-                */
 
                 // update chart
                 chartArr[i - 1].data.datasets[0].data = arrayPercentage
-                max = Math.max(...Object.values(orderedData)) / sum * 100
+                max = Math.max(...Object.values(orderedData).slice(0, -1)) / sum * 100
                 max = max < 90 ? max + 10 : max
                 chartArr[i-1].data.datasets[1].data =  [{ x: meanVal, y: max, xMin: meanVal - stDev, xMax: meanVal + stDev }]
                 chartArr[i-1].update()
 
-                $(`#numResp_${i-1}`).append(numResp)
-                $(`#respRate_${i-1}`).append(respRate.toFixed(2) + '%')
-                $(`#meanVal_${i-1}`).append(meanVal.toFixed(2))
-                $(`#stDev_${i-1}`).append(stDev.toFixed(2))
+                $(`#numResp_${i-1}`).empty().append(`Number of Response =  ${numResp}`)
+                $(`#respRate_${i-1}`).empty().append(`Response rate = ${respRate.toFixed(2) + '%'}`)
+                $(`#meanVal_${i-1}`).empty().append(`Mean = ${meanVal.toFixed(2)}`)
+                $(`#stDev_${i-1}`).empty().append(`Standard Deviation =  ${stDev.toFixed(2)}`)
             }
         })
     }
@@ -359,18 +349,3 @@ function addValue(test) {
     }
     return arrVal
 }
-
-/**
-function weightedMean(arrValues, arrWeights, sum) {
-    let mean = 0;
-    for (let i = 0; i < 6; i++)
-        mean += arrValues[i] * (arrWeights[i] / sum)
-    return mean;
-}
-
-function findSd(arrValues, arrWeights, mean, sum) {
-    let variance = 0;
-    for (let i = 0; i < 6; i++)
-        variance += arrWeights[i] * Math.pow(arrValues[i] - mean, 2)
-    return Math.sqrt(variance/sum)
-}*/
