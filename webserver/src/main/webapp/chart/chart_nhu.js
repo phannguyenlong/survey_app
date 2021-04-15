@@ -81,7 +81,7 @@ function getProgram() {
     teaching_id = []
     $.ajax({
         type: 'GET',
-        url: `http://localhost:8080/webserver/chart/validate?aca_code=${String($("#aca_code option:selected").val())}&sem_code=${String($("#sem option:selected").val())}&fa_code=${String($("#fal option:selected").val())}&pro_code=null&mo_code=null&class_code=null&lec_code=null`,
+        url: `http://localhost:8080/webserver/chart/validate?aca_code=${String($("#aca_code option:selected").val())}&sem_code=${String($("#sem option:selected").val())}&fa_code='${String($("#fal option:selected").val())}'&pro_code=null&mo_code=null&class_code=null&lec_code=null`,
         success: function (data) {
             optionRemove(3)
             $("#prog").append(`<option value = "${data[0].pro_code}"> ${data[0].pro_code} - ${data[0].pro_name} </option>`)
@@ -99,7 +99,7 @@ function getModule() {
     teaching_id = []
     $.ajax({
         type: 'GET',
-        url: `http://localhost:8080/webserver/chart/validate?aca_code=${String($("#aca_code option:selected").val())}&sem_code=${String($("#sem option:selected").val())}&fa_code=${String($("#fal option:selected").val())}&pro_code=${String($("#prog option:selected").val())}&mo_code=null&class_code=null&lec_code=null`,
+        url: `http://localhost:8080/webserver/chart/validate?aca_code=${String($("#aca_code option:selected").val())}&sem_code=${String($("#sem option:selected").val())}&fa_code='${String($("#fal option:selected").val())}'&pro_code='${String($("#prog option:selected").val())}'&mo_code=null&class_code=null&lec_code=null`,
         success: function (data) {
             optionRemove(4)
             $("#mod").append(`<option value = "${data[0].mo_code}"> ${data[0].mo_code} - ${data[0].mo_name} </option>`)
@@ -117,7 +117,7 @@ function getClass() {
     teaching_id = []
     $.ajax({
         type: 'GET',
-        url: `http://localhost:8080/webserver/chart/validate?aca_code=${String($("#aca_code option:selected").val())}&sem_code=${String($("#sem option:selected").val())}&fa_code=${String($("#fal option:selected").val())}&pro_code=${String($("#prog option:selected").val())}&mo_code=${String($("#mod option:selected").val())}&class_code=null&lec_code=null`,
+        url: `http://localhost:8080/webserver/chart/validate?aca_code=${String($("#aca_code option:selected").val())}&sem_code=${String($("#sem option:selected").val())}&fa_code='${String($("#fal option:selected").val())}'&pro_code='${String($("#prog option:selected").val())}'&mo_code=${String($("#mod option:selected").val())}&class_code=null&lec_code=null`,
         success: function (data) {
             optionRemove(5)
             $("#class_code").append(`<option value = "${data[0].class_code}"> ${data[0].class_code} </option>`)
@@ -135,7 +135,7 @@ function getLecturer() {
     teaching_id = []
     $.ajax({
         type: 'GET',
-        url: `http://localhost:8080/webserver/chart/validate?aca_code=${String($("#aca_code option:selected").val())}&sem_code=${String($("#sem option:selected").val())}&fa_code=${String($("#fal option:selected").val())}&pro_code=${String($("#prog option:selected").val())}&mo_code=${String($("#mod option:selected").val())}&class_code=${String($("#class_code option:selected").val())}&lec_code=null`,
+        url: `http://localhost:8080/webserver/chart/validate?aca_code=${String($("#aca_code option:selected").val())}&sem_code=${String($("#sem option:selected").val())}&fa_code='${String($("#fal option:selected").val())}'&pro_code='${String($("#prog option:selected").val())}'&mo_code=${String($("#mod option:selected").val())}&class_code=${String($("#class_code option:selected").val())}&lec_code=null`,
         success: function (data) {
             $("#lect option").not(":first").remove()
             $("#lect").append(`<option value = "${data[0].lec_code}"> ${data[0].lec_code} - ${data[0].lec_name} </option>`)
