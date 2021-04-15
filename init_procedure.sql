@@ -371,12 +371,8 @@ IF answer_id = 1 THEN
 				sum(answer_',answer_id,'= "Sometimes") as Option3,
 				sum(answer_',answer_id,'= "Often") as Option4,
 				sum(answer_',answer_id,'= "Always") as Option5,
-				0 as Option6,
-				(SELECT sum(c.size)
-				 FROM  class c JOIN teaching t ON c.class_code = t.class_code
-				 WHERE t.id IN (', @teachingID_arr, ')) as class_size
-			FROM questionaire
-			WHERE teaching_id IN (', @teachingID_arr, ');');
+				0 as Option6,');
+				
 ELSEIF answer_id = 2 THEN
 	SET @s=CONCAT('SELECT 
 				sum(answer_',answer_id,'= "Male") as Option1, 
@@ -384,12 +380,7 @@ ELSEIF answer_id = 2 THEN
 				sum(answer_',answer_id,'= "Other") as Option3,
 				0 as Option4,
 				0 as Option5,
-				0 as Option6,
-				(SELECT sum(c.size)
-				 FROM  class c JOIN teaching t ON c.class_code = t.class_code
-				 WHERE t.id IN (', @teachingID_arr, ')) as class_size
-			FROM questionaire 
-			WHERE teaching_id IN (', @teachingID_arr, ');');
+				0 as Option6,');
 ELSE
 	SET @s=CONCAT('SELECT	
 				sum(answer_',answer_id,'= "1") as Option1, 
@@ -397,14 +388,15 @@ ELSE
 				sum(answer_',answer_id,'= "3") as Option3,
 				sum(answer_',answer_id,'= "4") as Option4,
 				sum(answer_',answer_id,'= "5") as Option5,
-				sum(answer_',answer_id,'= "NA") as Option6,
-				(SELECT sum(c.size)
+				sum(answer_',answer_id,'= "NA") as Option6,');
+END IF;
+SET @a=CONCAT(@s,'(SELECT sum(c.size)
 				 FROM  class c JOIN teaching t ON c.class_code = t.class_code
 				 WHERE t.id IN (', @teachingID_arr, ')) as class_size
-			FROM questionaire 
+			FROM questionaire
 			WHERE teaching_id IN (', @teachingID_arr, ');');
-END IF;
-PREPARE stmt1 FROM @s;
+SELECT @a;
+PREPARE stmt1 FROM @a;
 EXECUTE stmt1;
 DEALLOCATE PREPARE stmt1;
 END//
