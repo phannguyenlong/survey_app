@@ -409,3 +409,61 @@ EXECUTE stmt1;
 DEALLOCATE PREPARE stmt1;
 END//
 DELIMITER ;
+
+-- Validate Access Control
+DROP PROCEDURE IF EXISTS java_app.validateAccessControl;
+DELIMITER  //
+CREATE PROCEDURE validateAccessControl(arr_faculty VARCHAR(500), arr_program VARCHAR(500),arr_lecturer VARCHAR(500)) 
+BEGIN
+	SET @faculty_arr = arr_faculty;
+    SET @program_arr = arr_program;
+    SET @lecturer_arr = arr_lecturer;
+    SET @a=CONCAT('SELECT
+			a.aca_code, a.aca_name, s.sem_code, f.fa_code, f.name AS fa_name, 
+			p.pro_code, p.name AS pro_name, m.mo_code, m.name AS mo_name, 
+			c.class_code, l.lec_code, l.name AS lec_name, t.id as teaching_id
+    FROM class c
+	JOIN teaching t ON c.class_code = t.class_code
+	JOIN lecturer l ON t.lecturer_code = l.lec_code
+	JOIN semester s ON (s.sem_code = c.semester_code)
+	JOIN academic_year a ON (a.aca_code = s.academic_code)
+    JOIN year_fac_pro_mo yfpm ON (yfpm.id_3 = c.id_3)
+	JOIN module m ON (yfpm.module_code = m.mo_code)
+    JOIN year_fac_pro yfp ON (yfp.id_2 = yfpm.id_2 )
+	JOIN program p ON (p.pro_code = yfp.program_code)
+    JOIN year_faculty yf ON (yf.id_1 = yfp.id_1)
+	JOIN faculty f ON (f.fa_code = yf.faculty_code)
+    WHERE 
+		(f.fa_code IN (',@faculty_arr,')) OR
+        (p.pro_code IN (',@program_arr,')) OR
+        (l.lec_code IN ( ',@lecturer_arr,'))
+	ORDER BY a.aca_code, s.sem_code, f.fa_code, p.pro_code, m.mo_code, c.class_code, l.lec_code, t.id;');
+    PREPARE stmt2 FROM @a;
+	EXECUTE stmt2;
+	DEALLOCATE PREPARE stmt2;
+END //
+DELIMITER ;
+
+-- Controll access
+DROP PROCEDURE IF EXISTS java_app.controllAccess;
+DELIMITER  //
+CREATE PROCEDURE controllAccess(user VARCHAR(20)) 
+BEGIN
+	SET @faculty_arr = IFNULL(CONCAT("'",(SELECT group_concat(concat_ws(",", d.faculty_code) separator "', '") AS faculty
+		FROM deans d
+		JOIN login lo ON lo.username=d.username
+		WHERE lo.username = user),"'"),"'null'");
+    
+    SET @program_arr = IFNULL(CONCAT("'",(SELECT group_concat(concat_ws(",", pc.program_code) separator "', '") AS program
+		FROM program_coordinator pc
+		JOIN login lo ON lo.username=pc.username
+		WHERE lo.username = user),"'"),"'null'");
+    
+    SET @lecturer_arr = IFNULL((SELECT group_concat(concat_ws("',", l.lec_code) separator ", ") AS lecturer
+		FROM lecturer l
+		JOIN login lo ON lo.username=l.username
+		WHERE lo.username = user),"null");
+    
+    CALL validateAccessControl(@faculty_arr,@program_arr,@lecturer_arr);
+END //
+DELIMITER ;
