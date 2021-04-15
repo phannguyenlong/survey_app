@@ -395,7 +395,6 @@ SET @a=CONCAT(@s,'(SELECT sum(c.size)
 				 WHERE t.id IN (', @teachingID_arr, ')) as class_size
 			FROM questionaire
 			WHERE teaching_id IN (', @teachingID_arr, ');');
-SELECT @a;
 PREPARE stmt1 FROM @a;
 EXECUTE stmt1;
 DEALLOCATE PREPARE stmt1;
