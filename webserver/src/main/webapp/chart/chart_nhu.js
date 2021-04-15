@@ -22,6 +22,9 @@ function filterChart() {
     $("#prog").change(() => getModule())
     $("#mod").change(() => getClass())
     $("#class_code").change(() => getLecturer())
+    $("#lect").change(() => {
+        teaching_id = [$("#lect option:selected").val()]
+    })
 }
 
 function getAcademicYear() {
