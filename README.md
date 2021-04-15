@@ -14,7 +14,7 @@
  
 ### I. Login
 
-`GET` **/authentication?username=''&password=''**
+`POST` **/authentication?username=''&password=''**
 - **input:** username, password
 - **procedure name:** authentication(*username, password*)
 - **output:** username *(if not found return nothing)*
