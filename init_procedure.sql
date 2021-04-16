@@ -1,4 +1,4 @@
--- ================CREATE PROCEDURE==================
+ -- ================CREATE PROCEDURE==================
 
 -- GET HW3 Procedure
 DROP PROCEDURE IF EXISTS java_app.GetHW3;
