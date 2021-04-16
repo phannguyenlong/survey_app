@@ -13,8 +13,8 @@ function init() {
 	getQuestion()
 
 	// load html component
-	$("#header").load("/webserver/header.html")
-	$("#footer").load("/webserver/footer.html")
+	$("#header").load("/webserver/component/header.html")
+	$("#footer").load("/webserver/component/footer.html")
 
 	$("#submit_bnt").click(function(){
 		submitQuestion(questions)

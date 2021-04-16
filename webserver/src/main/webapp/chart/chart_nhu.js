@@ -3,8 +3,8 @@ teaching_id = []
 
 $(document).ready(function () {
     init()
-    $("#header").load("/webserver/header.html");
-    $("#footer").load("/webserver/footer.html");
+    $("#header").load("/webserver/component/header.html");
+    $("#footer").load("/webserver/component/footer.html");
     filterChart();
     //visualize();
 })
