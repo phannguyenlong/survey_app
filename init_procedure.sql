@@ -460,6 +460,7 @@ END //
 DELIMITER ;
 
 -- Authentication
+DROP PROCEDURE IF EXISTS java_app.authentication;
 DELIMITER  //
 CREATE PROCEDURE authentication(user VARCHAR(20), password VARCHAR(20))
 BEGIN
@@ -482,4 +483,3 @@ BEGIN
     WHERE (username = user AND pass = password) AND (username = @a1 OR username = @a2 OR username = @a3);
 END //
 DELIMITER ;
-
