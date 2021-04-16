@@ -458,3 +458,28 @@ BEGIN
     CALL validateAccessControl(@faculty_arr,@program_arr,@lecturer_arr);
 END //
 DELIMITER ;
+
+-- Authentication
+DELIMITER  //
+CREATE PROCEDURE authentication(user VARCHAR(20), password VARCHAR(20))
+BEGIN
+	set @a1 = (select username
+				from login 
+				where username = user and username in (select l.username from login l
+				join deans d on (d.username = l.username)
+				where now() < d.end_date and now() > d.start_date));
+    set @a2 = (select username
+				from login 
+				where username = user and username in (select l.username from login l
+				join program_coordinator pc on (pc.username = l.username)
+				where now() < pc.end_date and now() > pc.start_date));
+    set @a3 = (select le.username 
+				from login lo
+				join lecturer le on (lo.username = le.username)
+				where le.username = user);
+	SELECT username 
+    FROM login l
+    WHERE (username = user AND pass = password) AND (username = @a1 OR username = @a2 OR username = @a3);
+END //
+DELIMITER ;
+
