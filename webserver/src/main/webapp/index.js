@@ -1,5 +1,6 @@
 $(document).ready(function () {
-	console.log("helo")
+	if (Cookies.get("session_key") == null)
+		window.location.replace("/webserver/pages/login/login.html");
 	$("#header").load("/webserver/component/header.html")
 	$("#footer").load("/webserver/component/footer.html")
 })

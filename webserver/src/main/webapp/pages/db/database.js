@@ -1,7 +1,7 @@
-$(document).ready(function() {
+$(document).ready(function () {
+	if (Cookies.get("session_key") == null)
+		window.location.replace("/webserver/pages/login/login.html");
 	init()	
-	
-	
 });
 
 var primaryKey = {aca_year:"aca_code",faculty:"fa_code",program:"pro_code",module:"mo_code",

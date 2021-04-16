@@ -2,7 +2,9 @@ let questions;
 let class_code;
 let lecturer_code;
 
-$(document).ready(function() {
+$(document).ready(function () {
+	if (Cookies.get("session_key") == null)
+		window.location.replace("/webserver/pages/login/login.html");
 	init()	
 });
 
