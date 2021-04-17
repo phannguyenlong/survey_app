@@ -210,7 +210,7 @@ BEGIN
 		WHEN action="update" THEN 
 			UPDATE teaching
 			SET class_code = IFNULL(c_code,class_code),lecturer_code = IFNULL(lec_code,lecturer_code)
-			WHERE id= old_key;
+			WHERE id = old_key;
 		WHEN action="create" THEN
 			INSERT INTO teaching(class_code,lecturer_code) VALUES (c_code,lec_code);
 	END CASE;
