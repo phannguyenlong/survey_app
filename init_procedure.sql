@@ -136,15 +136,21 @@ END //
 DELIMITER ;
 
 -- ================================== 11 PROCEDURE for Database page====================================
-
 -- Interact with year_faculty
 DROP PROCEDURE IF EXISTS java_app.year_facultyInteract;
 DELIMITER  //
-CREATE PROCEDURE year_facultyInteract(action VARCHAR(10),old_key VARCHAR(20),a_code VARCHAR(10),f_code VARCHAR(10))
+CREATE PROCEDURE year_facultyInteract(action VARCHAR(10),old_key VARCHAR(20),a_code VARCHAR(10),f_code VARCHAR(10) ,key_array VARCHAR(500))
 BEGIN
 	CASE
 		WHEN action="dump" THEN 
-			SELECT * FROM year_faculty ORDER BY id_1;
+            BEGIN
+				SET @arr_key = key_array;
+				SET @a = CONCAT('SELECT * FROM year_faculty WHERE (id_1 IN (',@arr_key,')) ORDER BY id_1;');
+                SELECT @a;
+                PREPARE stmt1 FROM @a;
+				EXECUTE stmt1;
+				DEALLOCATE PREPARE stmt1;
+			END;
         WHEN action="delete" THEN 
 			DELETE FROM year_faculty WHERE id_1 = old_key;
 		WHEN action="update" THEN 
@@ -160,11 +166,18 @@ DELIMITER ;
 -- Interact with year_fac_pro
 DROP PROCEDURE IF EXISTS java_app.year_fac_proInteract;
 DELIMITER  //
-CREATE PROCEDURE year_fac_proInteract(action VARCHAR(10),old_key INT,id VARCHAR(20),code VARCHAR(10))
+CREATE PROCEDURE year_fac_proInteract(action VARCHAR(10),old_key INT,id VARCHAR(20),code VARCHAR(10), key_array VARCHAR(500))
 BEGIN
 	CASE
 		WHEN action="dump" THEN 
-			SELECT * FROM year_fac_pro ORDER BY id_2;
+            BEGIN
+				SET @arr_key = key_array;
+				SET @a = CONCAT('SELECT * FROM year_fac_pro WHERE (id_2 IN (',@arr_key,')) ORDER BY id_2;');
+                SELECT @a;
+                PREPARE stmt1 FROM @a;
+				EXECUTE stmt1;
+				DEALLOCATE PREPARE stmt1;
+			END;
         WHEN action="delete" THEN 
 			DELETE FROM year_fac_pro WHERE id_2 = old_key;
 		WHEN action="update" THEN 
@@ -180,11 +193,18 @@ DELIMITER ;
 -- Interact with year_fac_pro_mo
 DROP PROCEDURE IF EXISTS java_app.year_fac_pro_moInteract;
 DELIMITER  //
-CREATE PROCEDURE year_fac_pro_moInteract(action VARCHAR(10),old_key INT,id INT,code VARCHAR(10))
+CREATE PROCEDURE year_fac_pro_moInteract(action VARCHAR(10),old_key INT,id INT,code VARCHAR(10), key_array VARCHAR(500))
 BEGIN
 	CASE
 		WHEN action="dump" THEN 
-			SELECT * FROM year_fac_pro_mo ORDER BY id_3;
+            BEGIN
+				SET @arr_key = key_array;
+				SET @a = CONCAT('SELECT * FROM year_fac_pro_mo WHERE (id_3 IN (',@arr_key,')) ORDER BY id_3;');
+                SELECT @a;
+                PREPARE stmt1 FROM @a;
+				EXECUTE stmt1;
+				DEALLOCATE PREPARE stmt1;
+			END;
         WHEN action="delete" THEN 
 			DELETE FROM year_fac_pro_mo WHERE id_3 = old_key;
 		WHEN action="update" THEN 
@@ -200,11 +220,18 @@ DELIMITER ;
 -- Interact with teaching
 DROP PROCEDURE IF EXISTS java_app.teachingInteract;
 DELIMITER  //
-CREATE PROCEDURE teachingInteract(action VARCHAR(10),old_key INT,c_code INT,lec_code INT)
+CREATE PROCEDURE teachingInteract(action VARCHAR(10),old_key INT,c_code INT,lec_code INT, key_array VARCHAR(500))
 BEGIN
 	CASE
 		WHEN action="dump" THEN 
-			SELECT * FROM teaching ORDER BY id;
+            BEGIN
+				SET @arr_key = key_array;
+				SET @a = CONCAT('SELECT * FROM teaching WHERE (id IN (',@arr_key,')) ORDER BY id;');
+                SELECT @a;
+                PREPARE stmt1 FROM @a;
+				EXECUTE stmt1;
+				DEALLOCATE PREPARE stmt1;
+			END;
         WHEN action="delete" THEN 
 			DELETE FROM teaching WHERE id = old_key;
 		WHEN action="update" THEN 
@@ -220,11 +247,18 @@ DELIMITER ;
 -- Interact with faculty
 DROP PROCEDURE IF EXISTS java_app.facultyInteract;
 DELIMITER //
-CREATE PROCEDURE facultyInteract(action VARCHAR(10),old_key VARCHAR(10),fname VARCHAR(50))
+CREATE PROCEDURE facultyInteract(action VARCHAR(10),old_key VARCHAR(10),fname VARCHAR(50), key_array VARCHAR(500))
 BEGIN
 	CASE
 		WHEN action = "dump" THEN
-			SELECT * FROM faculty ORDER BY fa_code;
+            BEGIN
+				SET @arr_key = key_array;
+				SET @a = CONCAT('SELECT * FROM faculty WHERE (fa_code IN (',@arr_key,')) ORDER BY fa_code;');
+                SELECT @a;
+                PREPARE stmt1 FROM @a;
+				EXECUTE stmt1;
+				DEALLOCATE PREPARE stmt1;
+			END;
 		WHEN action = "delete" THEN
 			DELETE FROM faculty  WHERE fa_code = old_key;
 		WHEN action = "update" THEN
@@ -240,11 +274,18 @@ DELIMITER ;
 -- Interact with program
 DROP PROCEDURE IF EXISTS java_app.programInteract;
 DELIMITER //
-CREATE PROCEDURE programInteract(action VARCHAR(10),old_key VARCHAR(10),pname VARCHAR(50))
+CREATE PROCEDURE programInteract(action VARCHAR(10),old_key VARCHAR(10),pname VARCHAR(50),key_array VARCHAR(500))
 BEGIN
 	CASE
 		WHEN action = "dump" THEN
-			SELECT * FROM program ORDER BY pro_code;
+            BEGIN
+				SET @arr_key = key_array;
+				SET @a = CONCAT('SELECT * FROM program WHERE (pro_code IN (',@arr_key,')) ORDER BY pro_code;');
+                SELECT @a;
+                PREPARE stmt1 FROM @a;
+				EXECUTE stmt1;
+				DEALLOCATE PREPARE stmt1;
+			END;
 		WHEN action = "delete" THEN
 			DELETE FROM program  WHERE pro_code = old_key;
 		WHEN action = "update" THEN
@@ -260,11 +301,18 @@ DELIMITER ;
 -- Interact with module
 DROP PROCEDURE IF EXISTS java_app.moduleInteract;
 DELIMITER //
-CREATE PROCEDURE moduleInteract(action VARCHAR(10),old_key VARCHAR(10),mname VARCHAR(50))
+CREATE PROCEDURE moduleInteract(action VARCHAR(10),old_key VARCHAR(10),mname VARCHAR(50),key_array VARCHAR(500))
 BEGIN
 	CASE
 		WHEN action = "dump" THEN
-			SELECT * FROM module ORDER BY mo_code;
+            BEGIN
+				SET @arr_key = key_array;
+				SET @a = CONCAT('SELECT * FROM module WHERE (mo_code IN (',@arr_key,')) ORDER BY mo_code;');
+                SELECT @a;
+                PREPARE stmt1 FROM @a;
+				EXECUTE stmt1;
+				DEALLOCATE PREPARE stmt1;
+			END;
 		WHEN action = "delete" THEN
 			DELETE FROM module  WHERE mo_code = old_key;
 		WHEN action = "update" THEN
@@ -280,13 +328,17 @@ DELIMITER ;
 -- Interact with academic_year
 DROP PROCEDURE IF EXISTS java_app.aca_yearInteract;
 DELIMITER //
-CREATE PROCEDURE aca_yearInteract(action VARCHAR(10),old_key VARCHAR(10))
+CREATE PROCEDURE aca_yearInteract(action VARCHAR(10),old_key VARCHAR(10), yname VARCHAR(10))
 BEGIN
 	CASE
 		WHEN action = "dump" THEN
 			SELECT * FROM academic_year ORDER BY aca_code;
 		WHEN action = "delete" THEN
 			DELETE FROM academic_year  WHERE aca_code = old_key;
+		WHEN action = "update" THEN
+			UPDATE module 
+				SET aca_name = IFNULL(yname, aca_name) 
+                WHERE aca_code = old_key;
 		WHEN action = "create" THEN 
 			INSERT INTO academic_year(aca_code) VALUES (old_key);
 	END CASE;
@@ -316,11 +368,18 @@ DELIMITER ;
 -- Interact with lecturer
 DROP PROCEDURE IF EXISTS java_app.lecturerInteract;
 DELIMITER //
-CREATE PROCEDURE lecturerInteract(action VARCHAR(10),old_key INT,lname VARCHAR(30))
+CREATE PROCEDURE lecturerInteract(action VARCHAR(10),old_key INT,lname VARCHAR(30), key_array VARCHAR(500))
 BEGIN
 	CASE
 		WHEN action = "dump" THEN
-			SELECT * FROM lecturer ORDER BY lec_code;
+			BEGIN
+				SET @arr_key = key_array;
+				SET @a = CONCAT('SELECT * FROM lecturer WHERE (lec_code IN (',@arr_key,')) ORDER BY lec_code;');
+                SELECT @a;
+                PREPARE stmt1 FROM @a;
+				EXECUTE stmt1;
+				DEALLOCATE PREPARE stmt1;
+            END;
 		WHEN action = "delete" THEN
 			DELETE FROM lecturer WHERE lec_code = old_key;
 		WHEN action = "update" THEN
@@ -336,11 +395,18 @@ DELIMITER ;
 -- Interact with class
 DROP PROCEDURE IF EXISTS java_app.classInteract;
 DELIMITER //
-CREATE PROCEDURE classInteract(action VARCHAR(10),old_key INT,csize INT,code VARCHAR(10),id INT)
+CREATE PROCEDURE classInteract(action VARCHAR(10),old_key INT,csize INT,code VARCHAR(10),id INT, key_array VARCHAR(500))
 BEGIN
 	CASE
 		WHEN action = "dump" THEN
-			SELECT * FROM class ORDER BY class_code;
+			BEGIN
+				SET @arr_key = key_array;
+				SET @a = CONCAT('SELECT * FROM class WHERE (class_code IN (',@arr_key,')) ORDER BY class_code;');
+                SELECT @a;
+                PREPARE stmt1 FROM @a;
+				EXECUTE stmt1;
+				DEALLOCATE PREPARE stmt1;
+			END;
 		WHEN action = "delete" THEN
 			DELETE FROM class WHERE class_code = old_key;
 		WHEN action = "update" THEN
@@ -352,7 +418,6 @@ BEGIN
 	END CASE;
 END //
 DELIMITER ;
-
 -- ==================================  END of 11 PROCEDURE for Database page ====================================
 -- getNumberOfAnswer Procedure
 DROP PROCEDURE IF EXISTS java_app.getNumberOfAnswer;
