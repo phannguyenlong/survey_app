@@ -1,7 +1,9 @@
-$(document).ready(function () {
+$(document).ready(function() {
 	if (Cookies.get("session_key") == null)
 		window.location.replace("/webserver/pages/login/login.html");
 	init()	
+	
+	
 });
 
 var primaryKey = {aca_year:"aca_code",faculty:"fa_code",program:"pro_code",module:"mo_code",
@@ -9,13 +11,19 @@ var primaryKey = {aca_year:"aca_code",faculty:"fa_code",program:"pro_code",modul
 				  teaching:"id",year_faculty:"id_1",
 				  year_fac_pro:"id_2",year_fac_pro_mo:"id_3"}
 
-var modifyKey = {faculty:["new_key","name"],module:["new_key","name"],program:["new_key","name"],aca_year:["new_key"],lecturer:["new_key"],
-semester:["new_key","code"],teaching:["new_key","c_code","lec_code"],class:["new_key","size","code","id"],year_fac_pro_mo: ["new_key","id","code"],
-year_fac_pro:["new_key","id","code"],year_faculty:["new_key","a_code","f_code"]}
-
-var addKey = {faculty:["old_key","name"],module:["old_key","name"],program:["old_key","name"],aca_year:["old_key"],lecturer:["old_key"],
+var modifyKey = {faculty:["old_key","name"],module:["old_key","name"],program:["old_key","name"],aca_year:["old_key","name"],lecturer:["old_key","name"],
 semester:["old_key","code"],teaching:["old_key","c_code","lec_code"],class:["old_key","size","code","id"],year_fac_pro_mo: ["old_key","id","code"],
 year_fac_pro:["old_key","id","code"],year_faculty:["old_key","a_code","f_code"]}
+
+var addKey = {faculty:["old_key","name"],module:["old_key","name"],program:["old_key","name"],aca_year:["old_key","name"],lecturer:["old_key","name"],
+semester:["old_key","code"],teaching:["old_key","c_code","lec_code"],class:["old_key","size","code","id"],year_fac_pro_mo: ["old_key","id","code"],
+year_fac_pro:["old_key","id","code"],year_faculty:["old_key","a_code","f_code"]}
+
+var dropdownKey = {year_fac_pro:"id_1",year_fac_pro_mo:"id_2",class:"id_3"}
+
+var sortedColumns = {year_fac_pro_mo : ["id_3","id_2","module_code"], aca_year : ["aca_code","aca_name"], class : ["class_code","size","semester_code","id_3"], 
+faculty :["fa_code","name"], lecturer : ["lec_code","name","username"], module : ["mo_code","name"], program : ["pro_code","name"],semester: ["sem_code","academic_code"], year_fac_pro:["id_2","id_1","program_code"]
+,year_faculty : ["id_1","academic_code","faculty_code"], teaching : ["id","class_code","lecturer_code"]  }
 
 // ID: value = div, value1 = table, value2 = getbnt, value3=bnt_show, value4=bnt_hide, value5=div(table,bnt_add,form)
 function init() {
@@ -27,8 +35,8 @@ function init() {
 	] 
 
 	 //load html component
-	$("#header").load("/webserver/component/header.html")
-	$("#footer").load("/webserver/component/footer.html")
+	$("#header").load("/webserver/header.html")
+	$("#footer").load("/webserver/footer.html")
 
 	
 	
@@ -45,7 +53,7 @@ function init() {
 	
 	$(".bnt_table").click(function(){
 		console.log(this)
-		getTable(this.value)
+		createTable(this.value)
 	})
 	
 	// SHOW AND HIDE BUTTONS.
@@ -58,7 +66,39 @@ function init() {
 	
 
 }
-function getTable(option) {
+
+function dropDownList(id_type, sem_code){
+	var select = $(`<select></select>`)
+	$.ajax({
+		type: 'GET',
+		url: "http://localhost:8080/webserver/database/idDropdown?id_type="+id_type+"&sem_code="+sem_code,
+		success: function(data, textStatus, jqXHR) {
+			     const json = JSON.parse(JSON.stringify(data))
+			     columns_2 = Object.keys(json[0]) 
+			     
+			     let arr=[];
+			     
+			     for(let i=0;i<json.length;i++){
+			     	let output="-";
+			     	for(let j=0;j<columns_2.length;j++){
+				     	if(columns_2[j]!=id_type){
+				     		output+=json[i][columns_2[j]]+"-"
+				     		}
+				     	}
+				    arr.push(output)
+				    option = $(`<option name="${json[i][id_type]}"></option>`).text(output)
+				    select.append(option)
+			     }
+			     
+			     console.log(arr)
+			}
+			})
+			return select[0];
+		
+}
+test1 = ["id_3","id_2","mo_code"]
+
+function createTable(option) {
 	var count=0
 	$.ajax({
 		type: 'GET',
@@ -66,8 +106,9 @@ function getTable(option) {
 		success: function(data, textStatus, jqXHR) {
 			$(`.${option+5}`).remove()
 			
-            let json = JSON.parse(JSON.stringify(data))
-            columns = Object.keys(json[0])  // get All keys of object json.
+            const json = JSON.parse(JSON.stringify(data))
+            columns = sortedColumns[option]  // get All keys of object json.
+           
             var divElement = $(`<div class="${option+5}"></div>`)
             // create Table:
             tr = $(`<tr style="background-color: #FD800D" ></tr>`)
@@ -141,18 +182,54 @@ function getTable(option) {
 				keys = modifyKey[option]
 				tr = $(`<tr id="input_row"></tr>`)
 				for (let i = 0; i < keys.length; i++) {
-					th = $(`<th><div class="modify_form_${option}"><input type="text" placeholder="${keys[i]}" class="${'input_' + keys[i]}" name="${keys[i]}"/></th></div>`)
+					console.log(columns[i])
+					if(columns[i] === key) { // columns save all key of table.
+						th = $(`<th><div class="modify_form_${option}"><input type="text" readonly value="${result_key}" class="${'input_' + keys[i]}" name="${keys[i]}"/></div></th>`)
+					}
+					else{
+						if(columns[i] === dropdownKey[option]){
+							flag = 0;
+							
+							for(let j=0;j<columns.length;j++){
+								if(columns[j] ==="semester_code"){
+									flag = 1;
+									let semester = $(this).siblings(".content_tr_"+columns[j])[0]
+									div = $(`<div class="modify_form_${option}" ></div>`).append(dropDownList(columns[i],$(semester).text()))
+								}
+							}
+							
+							if(flag==0){
+								div = $(`<div class="modify_form_${option}" ></div>`).append(dropDownList(columns[i],null))
+								
+							}
+							th = $(`<th></th>`).append(div)
+						}
+						
+						else{
+							th = $(`<th><div class="modify_form_${option}"><input type="text" class="${'input_' + keys[i]}" name="${keys[i]}"/></div></th>`)
+						}
+						
+						
+					}
 					tr.append(th)
 				}
 				submitBtn = $(`<button class="action_btn">Submit</button>`)
 				submitBtn.click(() => {
-					let arr = $(`.modify_form_${option} input`)
+					let arr = $(`.modify_form_${option}`)
+					console.log(arr)
 					let params = '';
 					for (let i = 0; i < keys.length; i++) {
-						params += `&${keys[i]}=${arr[i].value}`
+						console.log(($(arr[i]).children('input')[0]))
+						if(($(arr[i]).children('input')[0]) === undefined){
+							console.log(($(arr[i]).children("select").children("option:selected")).attr("name"))
+							params += `&${keys[i]}=${($(arr[i]).children("select").children("option:selected")).attr("name")}`
+						}
+						else{
+							params += `&${keys[i]}=${($(arr[i]).children('input')[0]).value}`
+						}
 					}
 					console.log(result_key)
-					modifyRow(option, result_key,params)
+					modifyRow(option,params)
 					getTable(option)
 				})
 				tr.append($(`<th></th>`).append(submitBtn))
@@ -187,11 +264,11 @@ function deleteRow(table, key){
 	})
 }
 
-function modifyRow(table,key,param){
+function modifyRow(table,param){
 	$.ajax({
 		type: 'PUT',
 		async: false,
-		url: "http://localhost:8080/webserver/database/interactTable?table_name="+table+"&old_key="+key+param,
+		url: "http://localhost:8080/webserver/database/interactTable?table_name="+table+param,
 		success:data => alertMessage("success",'Success',`Modify row successfully`),
 		error: () => alertMessage('error', 'Error', `Cannot modify to table ${table} cause error. Please check any duplicate key`)
 		
