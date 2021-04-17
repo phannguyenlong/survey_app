@@ -45,7 +45,7 @@
 
 `POST` **/questionaire/submit**
 - **input:** input JSON string of questionarie *(put json into request body)*
-- **procedure name:** insertIntoQuestionaire(class_code, lectecturer, question1, question2, question3, question4, question5, question6, question7,  question8, question9, question10, question11, question12, question13, question14, question15, question16, question17, question18)
+- **procedure name:** insertIntoQuestionaire(class_code, lectecturer, question1, question2, question3, question4, question5, question6, question7,  question8, question9, question10, question11, question12, question13, question14, question15, question16, question17, question18, question19, question20)
 - **output:** return status code of request
 
 ### III. Chart
@@ -73,7 +73,7 @@
 - **procedure name:** getNumberOfAnswer(*array_teaching_id, answer_id*)
 - **output:**
 
-| **Option1** | **Option2** | **Option3** | **Option4** | **Option5** | **Option6** | **class_sizee** |
+| **Option1** | **Option2** | **Option3** | **Option4** | **Option5** | **Option6** | **class_size** |
 |-------------|-------------|-------------|-------------|-------------|-------------|-----------------|
 | 20          | 30          | 40          | 20          | 10          | 10          | 120             |
 
@@ -85,6 +85,13 @@
   - table_name with option `{aca_year, faculty, program, module, semester, class, lecturer, teaching, year_faculty, year_fac_pro, year_fac_pro_mo}`
 - **procedure name:** table_name + "Interact" (*"dump"*)
 - **output:** content of that table
+
+`GET` **/database/idDropdown?id_type=''&sem_code=''**
+- **input:** 
+  - id_type: type of need to get (has 3 value `id1, id2, id3`)
+  - sem_code: semester_code for filter in option "id3" 
+- **procedure name:** idDropdown(id_type, sem_code)
+- **output:** information related to that id
 
 `DELETE` **/database/interactTable?table_name=''&old_key**
 - **input:**
@@ -112,7 +119,7 @@
     - table_name = "semester": old_key, code
     - table_name = "lecturer": old_key, name 
     - table_name = "aca_year": old_key, name
-    - table_name = "module" or "program" or "faculty": old_key, new_key, name
+    - table_name = "module" or "program" or "faculty": old_key, name
 - **procedure name:** table_name + "Interact" (*"update"*, *other param that is not null in order `old_key, new_key, name, code, code2, id, size`*)
   - The database has to generate the procedure name
   - Then need to check and add param that is not null **in order like above**
@@ -129,7 +136,6 @@
     - table_name = "lecturer": old_key, name 
     - table_name = "aca_year": old_key, name
     - table_name = "module" or "program" or "faculty": old_key, name
-    - *(set null for new_key)*
 - **procedure name:** table_name + "Interact" (*"create"*, *other param that is not null in order `key, name, code, code2, id, size`*)
   - The database has to generate the procedure name
   - Then need to check and add param that is not null **in order like above**

@@ -479,3 +479,40 @@ BEGIN
     WHERE (username = user AND pass = password) AND (username = @a1 OR username = @a2 OR username = @a3);
 END //
 DELIMITER ;
+
+-- procedure idDropdown
+DROP PROCEDURE IF EXISTS java_app.idDropdown;
+DELIMITER //
+CREATE PROCEDURE idDropdown(id_type VARCHAR(10),semester_code VARCHAR(10))
+BEGIN
+	CASE
+		WHEN id_type = "id1" THEN
+			SELECT yf.id_1, f.fa_code, f.name AS fa_name, a.aca_code, a.aca_name
+			FROM year_faculty yf 
+			JOIN faculty f ON yf.faculty_code = f.fa_code
+			JOIN academic_year a ON yf.academic_code = a.aca_code;
+		WHEN id_type = "id2" THEN
+			SELECT yfp.id_2, yf.id_1, f.fa_code, f.name AS fa_name, a.aca_code, a.aca_name, p.pro_code, p.name AS pro_name
+			FROM year_fac_pro yfp
+			JOIN year_faculty yf ON yfp.id_1 = yf.id_1
+			JOIN faculty f ON yf.faculty_code = f.fa_code
+			JOIN academic_year a ON yf.academic_code = a.aca_code
+			JOIN program p ON yfp.program_code = p.pro_code;
+		WHEN id_type = "id3" THEN
+			SELECT yfpm.id_3, yfp.id_2, yf.id_1, f.fa_code, f.name AS fa_name, a.aca_code, a.aca_name, p.pro_code, p.name AS pro_name, m.mo_code, m.name AS mo_name
+			FROM year_fac_pro_mo yfpm
+			JOIN year_fac_pro yfp ON yfpm.id_2 = yfp.id_2
+			JOIN year_faculty yf ON yfp.id_1 = yf.id_1
+			JOIN faculty f ON yf.faculty_code = f.fa_code
+			JOIN academic_year a ON yf.academic_code = a.aca_code
+			JOIN program p ON yfp.program_code = p.pro_code
+			JOIN module m ON yfpm.module_code = m.mo_code
+            JOIN semester s ON s.academic_code = a.aca_code
+            WHERE semester_code IS NULL  OR s.sem_code = semester_code;
+	END CASE;
+END //
+DELIMITER ;
+
+
+
+
