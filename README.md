@@ -73,7 +73,7 @@
 - **procedure name:** getNumberOfAnswer(*array_teaching_id, answer_id*)
 - **output:**
 
-| **Option1** | **Option2** | **Option3** | **Option4** | **Option5** | **Option6** | **class_sizee** |
+| **Option1** | **Option2** | **Option3** | **Option4** | **Option5** | **Option6** | **class_size** |
 |-------------|-------------|-------------|-------------|-------------|-------------|-----------------|
 | 20          | 30          | 40          | 20          | 10          | 10          | 120             |
 
@@ -136,7 +136,6 @@
     - table_name = "lecturer": old_key, name 
     - table_name = "aca_year": old_key, name
     - table_name = "module" or "program" or "faculty": old_key, name
-    - *(set null for new_key)*
 - **procedure name:** table_name + "Interact" (*"create"*, *other param that is not null in order `key, name, code, code2, id, size`*)
   - The database has to generate the procedure name
   - Then need to check and add param that is not null **in order like above**
