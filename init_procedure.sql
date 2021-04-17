@@ -146,7 +146,6 @@ BEGIN
             BEGIN
 				SET @arr_key = key_array;
 				SET @a = CONCAT('SELECT * FROM year_faculty WHERE (id_1 IN (',@arr_key,')) ORDER BY id_1;');
-                SELECT @a;
                 PREPARE stmt1 FROM @a;
 				EXECUTE stmt1;
 				DEALLOCATE PREPARE stmt1;
@@ -173,7 +172,6 @@ BEGIN
             BEGIN
 				SET @arr_key = key_array;
 				SET @a = CONCAT('SELECT * FROM year_fac_pro WHERE (id_2 IN (',@arr_key,')) ORDER BY id_2;');
-                SELECT @a;
                 PREPARE stmt1 FROM @a;
 				EXECUTE stmt1;
 				DEALLOCATE PREPARE stmt1;
@@ -200,7 +198,6 @@ BEGIN
             BEGIN
 				SET @arr_key = key_array;
 				SET @a = CONCAT('SELECT * FROM year_fac_pro_mo WHERE (id_3 IN (',@arr_key,')) ORDER BY id_3;');
-                SELECT @a;
                 PREPARE stmt1 FROM @a;
 				EXECUTE stmt1;
 				DEALLOCATE PREPARE stmt1;
@@ -227,7 +224,6 @@ BEGIN
             BEGIN
 				SET @arr_key = key_array;
 				SET @a = CONCAT('SELECT * FROM teaching WHERE (id IN (',@arr_key,')) ORDER BY id;');
-                SELECT @a;
                 PREPARE stmt1 FROM @a;
 				EXECUTE stmt1;
 				DEALLOCATE PREPARE stmt1;
@@ -254,7 +250,6 @@ BEGIN
             BEGIN
 				SET @arr_key = key_array;
 				SET @a = CONCAT('SELECT * FROM faculty WHERE (fa_code IN (',@arr_key,')) ORDER BY fa_code;');
-                SELECT @a;
                 PREPARE stmt1 FROM @a;
 				EXECUTE stmt1;
 				DEALLOCATE PREPARE stmt1;
@@ -281,7 +276,6 @@ BEGIN
             BEGIN
 				SET @arr_key = key_array;
 				SET @a = CONCAT('SELECT * FROM program WHERE (pro_code IN (',@arr_key,')) ORDER BY pro_code;');
-                SELECT @a;
                 PREPARE stmt1 FROM @a;
 				EXECUTE stmt1;
 				DEALLOCATE PREPARE stmt1;
@@ -308,7 +302,6 @@ BEGIN
             BEGIN
 				SET @arr_key = key_array;
 				SET @a = CONCAT('SELECT * FROM module WHERE (mo_code IN (',@arr_key,')) ORDER BY mo_code;');
-                SELECT @a;
                 PREPARE stmt1 FROM @a;
 				EXECUTE stmt1;
 				DEALLOCATE PREPARE stmt1;
@@ -375,7 +368,6 @@ BEGIN
 			BEGIN
 				SET @arr_key = key_array;
 				SET @a = CONCAT('SELECT * FROM lecturer WHERE (lec_code IN (',@arr_key,')) ORDER BY lec_code;');
-                SELECT @a;
                 PREPARE stmt1 FROM @a;
 				EXECUTE stmt1;
 				DEALLOCATE PREPARE stmt1;
@@ -402,7 +394,6 @@ BEGIN
 			BEGIN
 				SET @arr_key = key_array;
 				SET @a = CONCAT('SELECT * FROM class WHERE (class_code IN (',@arr_key,')) ORDER BY class_code;');
-                SELECT @a;
                 PREPARE stmt1 FROM @a;
 				EXECUTE stmt1;
 				DEALLOCATE PREPARE stmt1;
