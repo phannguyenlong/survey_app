@@ -39,8 +39,8 @@ public class interactTableServlet extends HttpServlet {
             throw new Exception("Invalid Table Name");
 
         if (tableName.equals("year_faculty")) {
-            query = "{CALL " + tableName + "Interact(\"" + action + "\", ?, ?, ?, ?)}";
-            params = new String[] { "old_key", "new_key", "a_code", "f_code" };
+            query = "{CALL " + tableName + "Interact(\"" + action + "\", ?, ?, ?)}";
+            params = new String[] { "old_key", "a_code", "f_code" };
         } else if (tableName.equals("year_fac_pro")) {
             query = "CALL " + tableName + "Interact(\"" + action + "\", ?, ?, ?);";
             params = new String[] { "old_key", "id", "code" };
@@ -54,17 +54,17 @@ public class interactTableServlet extends HttpServlet {
             query = "CALL " + tableName + "Interact(\"" + action + "\", ?, ?, ?);";
             params = new String[] { "old_key", "c_code", "lec_code" };
         } else if (tableName.equals("semester")) {
-            query = "CALL " + tableName + "Interact(\"" + action + "\", ?, ?, ?);";
-            params = new String[] { "old_key", "new_key", "code" };
-        } else if (tableName.equals("aca_year")) {
             query = "CALL " + tableName + "Interact(\"" + action + "\", ?, ?);";
-            params = new String[] { "old_key", "new_key" };
+            params = new String[] { "old_key", "code" };
+        } else if (tableName.equals("aca_year")) {
+            query = "CALL " + tableName + "Interact(\"" + action + "\", ?);";
+            params = new String[] { "old_key" };
         } else if (tableName.equals("lecturer")) {
             query = "CALL " + tableName + "Interact(\"" + action + "\", ?, ?);";
             params = new String[] { "old_key", "name" };
         } else if (tableName.equals("module") || tableName.equals("program") || tableName.equals("faculty")) {
-            query = "CALL " + tableName + "Interact(\"" + action + "\", ?, ?, ?);";
-            params = new String[] { "old_key", "new_key", "name" };
+            query = "CALL " + tableName + "Interact(\"" + action + "\", ?, ?);";
+            params = new String[] { "old_key", "name" };
         }
 
         PreparedStatement st = conn.prepareStatement(query);
