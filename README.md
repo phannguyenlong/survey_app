@@ -86,6 +86,13 @@
 - **procedure name:** table_name + "Interact" (*"dump"*)
 - **output:** content of that table
 
+`GET` **/database/idDropdown?id_type=''&sem_code=''**
+- **input:** 
+  - id_type: type of need to get (has 3 value `id1, id2, id3`)
+  - sem_code: semester_code for filter in option "id3" 
+- **procedure name:** idDropdown(id_type, sem_code)
+- **output:** information related to that id
+
 `DELETE` **/database/interactTable?table_name=''&old_key**
 - **input:**
   - table_name with option `{aca_year, faculty, program, module, semester, class, lecturer, teaching, year_faculty, year_fac_pro, year_fac_pro_mo}` 
