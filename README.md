@@ -45,7 +45,7 @@
 
 `POST` **/questionaire/submit**
 - **input:** input JSON string of questionarie *(put json into request body)*
-- **procedure name:** insertIntoQuestionaire(class_code, lectecturer, question1, question2, question3, question4, question5, question6, question7,  question8, question9, question10, question11, question12, question13, question14, question15, question16, question17, question18)
+- **procedure name:** insertIntoQuestionaire(class_code, lectecturer, question1, question2, question3, question4, question5, question6, question7,  question8, question9, question10, question11, question12, question13, question14, question15, question16, question17, question18, question19, question20)
 - **output:** return status code of request
 
 ### III. Chart
@@ -119,7 +119,7 @@
     - table_name = "semester": old_key, code
     - table_name = "lecturer": old_key, name 
     - table_name = "aca_year": old_key, name
-    - table_name = "module" or "program" or "faculty": old_key, new_key, name
+    - table_name = "module" or "program" or "faculty": old_key, name
 - **procedure name:** table_name + "Interact" (*"update"*, *other param that is not null in order `old_key, new_key, name, code, code2, id, size`*)
   - The database has to generate the procedure name
   - Then need to check and add param that is not null **in order like above**
