@@ -140,7 +140,7 @@ DELIMITER ;
 -- Interact with year_faculty
 DROP PROCEDURE IF EXISTS java_app.year_facultyInteract;
 DELIMITER  //
-CREATE PROCEDURE year_facultyInteract(action VARCHAR(10),old_key VARCHAR(20),new_key VARCHAR(20),a_code VARCHAR(10),f_code VARCHAR(10))
+CREATE PROCEDURE year_facultyInteract(action VARCHAR(10),old_key VARCHAR(20),a_code VARCHAR(10),f_code VARCHAR(10))
 BEGIN
 	CASE
 		WHEN action="dump" THEN 
@@ -149,7 +149,7 @@ BEGIN
 			DELETE FROM year_faculty WHERE id_1 = old_key;
 		WHEN action="update" THEN 
 			UPDATE year_faculty
-			SET id_1 = IFNULL(new_key,old_key), academic_code = IFNULL(a_code,academic_code),faculty_code = IFNULL(f_code,faculty_code)
+			SET academic_code = IFNULL(a_code,academic_code),faculty_code = IFNULL(f_code,faculty_code)
 			WHERE id_1 = old_key;
 		WHEN action="create" THEN
 			INSERT INTO year_faculty(id_1,academic_code,faculty_code) VALUES (old_key,a_code,f_code);
@@ -220,7 +220,7 @@ DELIMITER ;
 -- Interact with faculty
 DROP PROCEDURE IF EXISTS java_app.facultyInteract;
 DELIMITER //
-CREATE PROCEDURE facultyInteract(action VARCHAR(10),old_key VARCHAR(10),new_key VARCHAR(10),fname VARCHAR(50))
+CREATE PROCEDURE facultyInteract(action VARCHAR(10),old_key VARCHAR(10),fname VARCHAR(50))
 BEGIN
 	CASE
 		WHEN action = "dump" THEN
@@ -229,7 +229,7 @@ BEGIN
 			DELETE FROM faculty  WHERE fa_code = old_key;
 		WHEN action = "update" THEN
 			UPDATE faculty 
-				SET fa_code = IFNULL(new_key, old_key), name = IFNULL(fname, name) 
+				SET name = IFNULL(fname, name) 
                 WHERE fa_code = old_key;
 		WHEN action = "create" THEN 
 			INSERT INTO faculty(fa_code, name) VALUES (old_key, fname);
@@ -240,7 +240,7 @@ DELIMITER ;
 -- Interact with program
 DROP PROCEDURE IF EXISTS java_app.programInteract;
 DELIMITER //
-CREATE PROCEDURE programInteract(action VARCHAR(10),old_key VARCHAR(10),new_key VARCHAR(10),pname VARCHAR(50))
+CREATE PROCEDURE programInteract(action VARCHAR(10),old_key VARCHAR(10),pname VARCHAR(50))
 BEGIN
 	CASE
 		WHEN action = "dump" THEN
@@ -249,7 +249,7 @@ BEGIN
 			DELETE FROM program  WHERE pro_code = old_key;
 		WHEN action = "update" THEN
 			UPDATE program 
-				SET pro_code = IFNULL(new_key, old_key), name = IFNULL(pname, name) 
+				SET name = IFNULL(pname, name) 
                 WHERE pro_code = old_key;
 		WHEN action = "create" THEN 
 			INSERT INTO program(pro_code, name) VALUES (old_key, pname);
@@ -260,7 +260,7 @@ DELIMITER ;
 -- Interact with module
 DROP PROCEDURE IF EXISTS java_app.moduleInteract;
 DELIMITER //
-CREATE PROCEDURE moduleInteract(action VARCHAR(10),old_key VARCHAR(10),new_key VARCHAR(10),mname VARCHAR(50))
+CREATE PROCEDURE moduleInteract(action VARCHAR(10),old_key VARCHAR(10),mname VARCHAR(50))
 BEGIN
 	CASE
 		WHEN action = "dump" THEN
@@ -269,7 +269,7 @@ BEGIN
 			DELETE FROM module  WHERE mo_code = old_key;
 		WHEN action = "update" THEN
 			UPDATE module 
-				SET mo_code = IFNULL(new_key, old_key), name = IFNULL(mname, name) 
+				SET name = IFNULL(mname, name) 
                 WHERE mo_code = old_key;
 		WHEN action = "create" THEN 
 			INSERT INTO module(mo_code, name) VALUES (old_key, mname);
@@ -300,7 +300,7 @@ DELIMITER ;
 -- Interact with semester
 DROP PROCEDURE IF EXISTS java_app.semesterInteract;
 DELIMITER //
-CREATE PROCEDURE semesterInteract(action VARCHAR(10),old_key VARCHAR(10),new_key VARCHAR(10),code VARCHAR(10))
+CREATE PROCEDURE semesterInteract(action VARCHAR(10),old_key VARCHAR(10), code VARCHAR(10))
 BEGIN
 	CASE
 		WHEN action = "dump" THEN
@@ -309,7 +309,7 @@ BEGIN
 			DELETE FROM semester WHERE sem_code = old_key;
 		WHEN action = "update" THEN
 			UPDATE semester 
-				SET sem_code = IFNULL(new_key, old_key), academic_code = IFNULL(code, academic_code) 
+				SET academic_code = IFNULL(code, academic_code) 
                 WHERE sem_code = old_key;
 		WHEN action = "create" THEN 
 			INSERT INTO semester(sem_code, academic_code) VALUES (old_key, code);
