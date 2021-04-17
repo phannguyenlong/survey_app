@@ -17,8 +17,7 @@ input {
   height: 300px;
   border: 20px blue;
   padding: 80px;
-  margin-top: 140px;
-  margin-left: 550px;
+  margin: auto;
 }
 
 button {
