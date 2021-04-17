@@ -280,17 +280,13 @@ DELIMITER ;
 -- Interact with academic_year
 DROP PROCEDURE IF EXISTS java_app.aca_yearInteract;
 DELIMITER //
-CREATE PROCEDURE aca_yearInteract(action VARCHAR(10),old_key VARCHAR(10),new_key VARCHAR(10))
+CREATE PROCEDURE aca_yearInteract(action VARCHAR(10),old_key VARCHAR(10))
 BEGIN
 	CASE
 		WHEN action = "dump" THEN
 			SELECT * FROM academic_year ORDER BY aca_code;
 		WHEN action = "delete" THEN
 			DELETE FROM academic_year  WHERE aca_code = old_key;
-		WHEN action = "update" THEN
-			UPDATE academic_year 
-				SET aca_code = IFNULL(new_key, old_key) 
-                WHERE aca_code = old_key;
 		WHEN action = "create" THEN 
 			INSERT INTO academic_year(aca_code) VALUES (old_key);
 	END CASE;
