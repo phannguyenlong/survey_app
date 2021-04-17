@@ -2,9 +2,11 @@ chartArr = []  // array for chart
 teaching_id = []
 
 $(document).ready(function () {
+    if (Cookies.get("session_key") == null)
+		window.location.replace("/webserver/pages/login/login.html");
     init()
-    $("#header").load("/webserver/header.html");
-    $("#footer").load("/webserver/footer.html");
+    $("#header").load("/webserver/component/header.html");
+    $("#footer").load("/webserver/component/footer.html");
     filterChart();
     //visualize();
 })

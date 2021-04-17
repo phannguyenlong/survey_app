@@ -1,4 +1,4 @@
--- ================CREATE PROCEDURE==================
+ -- ================CREATE PROCEDURE==================
 
 -- GET HW3 Procedure
 DROP PROCEDURE IF EXISTS java_app.GetHW3;
@@ -140,7 +140,7 @@ DELIMITER ;
 -- Interact with year_faculty
 DROP PROCEDURE IF EXISTS java_app.year_facultyInteract;
 DELIMITER  //
-CREATE PROCEDURE year_facultyInteract(action VARCHAR(10),old_key VARCHAR(20),new_key VARCHAR(20),a_code VARCHAR(10),f_code VARCHAR(10))
+CREATE PROCEDURE year_facultyInteract(action VARCHAR(10),old_key VARCHAR(20),a_code VARCHAR(10),f_code VARCHAR(10))
 BEGIN
 	CASE
 		WHEN action="dump" THEN 
@@ -149,7 +149,7 @@ BEGIN
 			DELETE FROM year_faculty WHERE id_1 = old_key;
 		WHEN action="update" THEN 
 			UPDATE year_faculty
-			SET id_1 = IFNULL(new_key,old_key), academic_code = IFNULL(a_code,academic_code),faculty_code = IFNULL(f_code,faculty_code)
+			SET academic_code = IFNULL(a_code,academic_code),faculty_code = IFNULL(f_code,faculty_code)
 			WHERE id_1 = old_key;
 		WHEN action="create" THEN
 			INSERT INTO year_faculty(id_1,academic_code,faculty_code) VALUES (old_key,a_code,f_code);
@@ -210,7 +210,7 @@ BEGIN
 		WHEN action="update" THEN 
 			UPDATE teaching
 			SET class_code = IFNULL(c_code,class_code),lecturer_code = IFNULL(lec_code,lecturer_code)
-			WHERE id= old_key;
+			WHERE id = old_key;
 		WHEN action="create" THEN
 			INSERT INTO teaching(class_code,lecturer_code) VALUES (c_code,lec_code);
 	END CASE;
@@ -220,7 +220,7 @@ DELIMITER ;
 -- Interact with faculty
 DROP PROCEDURE IF EXISTS java_app.facultyInteract;
 DELIMITER //
-CREATE PROCEDURE facultyInteract(action VARCHAR(10),old_key VARCHAR(10),new_key VARCHAR(10),fname VARCHAR(50))
+CREATE PROCEDURE facultyInteract(action VARCHAR(10),old_key VARCHAR(10),fname VARCHAR(50))
 BEGIN
 	CASE
 		WHEN action = "dump" THEN
@@ -229,7 +229,7 @@ BEGIN
 			DELETE FROM faculty  WHERE fa_code = old_key;
 		WHEN action = "update" THEN
 			UPDATE faculty 
-				SET fa_code = IFNULL(new_key, old_key), name = IFNULL(fname, name) 
+				SET name = IFNULL(fname, name) 
                 WHERE fa_code = old_key;
 		WHEN action = "create" THEN 
 			INSERT INTO faculty(fa_code, name) VALUES (old_key, fname);
@@ -240,7 +240,7 @@ DELIMITER ;
 -- Interact with program
 DROP PROCEDURE IF EXISTS java_app.programInteract;
 DELIMITER //
-CREATE PROCEDURE programInteract(action VARCHAR(10),old_key VARCHAR(10),new_key VARCHAR(10),pname VARCHAR(50))
+CREATE PROCEDURE programInteract(action VARCHAR(10),old_key VARCHAR(10),pname VARCHAR(50))
 BEGIN
 	CASE
 		WHEN action = "dump" THEN
@@ -249,7 +249,7 @@ BEGIN
 			DELETE FROM program  WHERE pro_code = old_key;
 		WHEN action = "update" THEN
 			UPDATE program 
-				SET pro_code = IFNULL(new_key, old_key), name = IFNULL(pname, name) 
+				SET name = IFNULL(pname, name) 
                 WHERE pro_code = old_key;
 		WHEN action = "create" THEN 
 			INSERT INTO program(pro_code, name) VALUES (old_key, pname);
@@ -260,7 +260,7 @@ DELIMITER ;
 -- Interact with module
 DROP PROCEDURE IF EXISTS java_app.moduleInteract;
 DELIMITER //
-CREATE PROCEDURE moduleInteract(action VARCHAR(10),old_key VARCHAR(10),new_key VARCHAR(10),mname VARCHAR(50))
+CREATE PROCEDURE moduleInteract(action VARCHAR(10),old_key VARCHAR(10),mname VARCHAR(50))
 BEGIN
 	CASE
 		WHEN action = "dump" THEN
@@ -269,7 +269,7 @@ BEGIN
 			DELETE FROM module  WHERE mo_code = old_key;
 		WHEN action = "update" THEN
 			UPDATE module 
-				SET mo_code = IFNULL(new_key, old_key), name = IFNULL(mname, name) 
+				SET name = IFNULL(mname, name) 
                 WHERE mo_code = old_key;
 		WHEN action = "create" THEN 
 			INSERT INTO module(mo_code, name) VALUES (old_key, mname);
@@ -280,17 +280,13 @@ DELIMITER ;
 -- Interact with academic_year
 DROP PROCEDURE IF EXISTS java_app.aca_yearInteract;
 DELIMITER //
-CREATE PROCEDURE aca_yearInteract(action VARCHAR(10),old_key VARCHAR(10),new_key VARCHAR(10))
+CREATE PROCEDURE aca_yearInteract(action VARCHAR(10),old_key VARCHAR(10))
 BEGIN
 	CASE
 		WHEN action = "dump" THEN
 			SELECT * FROM academic_year ORDER BY aca_code;
 		WHEN action = "delete" THEN
 			DELETE FROM academic_year  WHERE aca_code = old_key;
-		WHEN action = "update" THEN
-			UPDATE academic_year 
-				SET aca_code = IFNULL(new_key, old_key) 
-                WHERE aca_code = old_key;
 		WHEN action = "create" THEN 
 			INSERT INTO academic_year(aca_code) VALUES (old_key);
 	END CASE;
@@ -300,7 +296,7 @@ DELIMITER ;
 -- Interact with semester
 DROP PROCEDURE IF EXISTS java_app.semesterInteract;
 DELIMITER //
-CREATE PROCEDURE semesterInteract(action VARCHAR(10),old_key VARCHAR(10),new_key VARCHAR(10),code VARCHAR(10))
+CREATE PROCEDURE semesterInteract(action VARCHAR(10),old_key VARCHAR(10), code VARCHAR(10))
 BEGIN
 	CASE
 		WHEN action = "dump" THEN
@@ -309,7 +305,7 @@ BEGIN
 			DELETE FROM semester WHERE sem_code = old_key;
 		WHEN action = "update" THEN
 			UPDATE semester 
-				SET sem_code = IFNULL(new_key, old_key), academic_code = IFNULL(code, academic_code) 
+				SET academic_code = IFNULL(code, academic_code) 
                 WHERE sem_code = old_key;
 		WHEN action = "create" THEN 
 			INSERT INTO semester(sem_code, academic_code) VALUES (old_key, code);
@@ -458,3 +454,65 @@ BEGIN
     CALL validateAccessControl(@faculty_arr,@program_arr,@lecturer_arr);
 END //
 DELIMITER ;
+
+-- Authentication
+DROP PROCEDURE IF EXISTS java_app.authentication;
+DELIMITER  //
+CREATE PROCEDURE authentication(user VARCHAR(20), password VARCHAR(20))
+BEGIN
+	set @a1 = (select username
+				from login 
+				where username = user and username in (select l.username from login l
+				join deans d on (d.username = l.username)
+				where now() < d.end_date and now() > d.start_date));
+    set @a2 = (select username
+				from login 
+				where username = user and username in (select l.username from login l
+				join program_coordinator pc on (pc.username = l.username)
+				where now() < pc.end_date and now() > pc.start_date));
+    set @a3 = (select le.username 
+				from login lo
+				join lecturer le on (lo.username = le.username)
+				where le.username = user);
+	SELECT username 
+    FROM login l
+    WHERE (username = user AND pass = password) AND (username = @a1 OR username = @a2 OR username = @a3);
+END //
+DELIMITER ;
+
+-- procedure idDropdown
+DROP PROCEDURE IF EXISTS java_app.idDropdown;
+DELIMITER //
+CREATE PROCEDURE idDropdown(id_type VARCHAR(10),semester_code VARCHAR(10))
+BEGIN
+	CASE
+		WHEN id_type = "id1" THEN
+			SELECT yf.id_1, f.fa_code, f.name AS fa_name, a.aca_code, a.aca_name
+			FROM year_faculty yf 
+			JOIN faculty f ON yf.faculty_code = f.fa_code
+			JOIN academic_year a ON yf.academic_code = a.aca_code;
+		WHEN id_type = "id2" THEN
+			SELECT yfp.id_2, yf.id_1, f.fa_code, f.name AS fa_name, a.aca_code, a.aca_name, p.pro_code, p.name AS pro_name
+			FROM year_fac_pro yfp
+			JOIN year_faculty yf ON yfp.id_1 = yf.id_1
+			JOIN faculty f ON yf.faculty_code = f.fa_code
+			JOIN academic_year a ON yf.academic_code = a.aca_code
+			JOIN program p ON yfp.program_code = p.pro_code;
+		WHEN id_type = "id3" THEN
+			SELECT yfpm.id_3, yfp.id_2, yf.id_1, f.fa_code, f.name AS fa_name, a.aca_code, a.aca_name, p.pro_code, p.name AS pro_name, m.mo_code, m.name AS mo_name
+			FROM year_fac_pro_mo yfpm
+			JOIN year_fac_pro yfp ON yfpm.id_2 = yfp.id_2
+			JOIN year_faculty yf ON yfp.id_1 = yf.id_1
+			JOIN faculty f ON yf.faculty_code = f.fa_code
+			JOIN academic_year a ON yf.academic_code = a.aca_code
+			JOIN program p ON yfp.program_code = p.pro_code
+			JOIN module m ON yfpm.module_code = m.mo_code
+            JOIN semester s ON s.academic_code = a.aca_code
+            WHERE semester_code IS NULL  OR s.sem_code = semester_code;
+	END CASE;
+END //
+DELIMITER ;
+
+
+
+

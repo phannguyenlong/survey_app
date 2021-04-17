@@ -2,7 +2,9 @@ let questions;
 let class_code;
 let lecturer_code;
 
-$(document).ready(function() {
+$(document).ready(function () {
+	if (Cookies.get("session_key") == null)
+		window.location.replace("/webserver/pages/login/login.html");
 	init()	
 });
 
@@ -13,8 +15,8 @@ function init() {
 	getQuestion()
 
 	// load html component
-	$("#header").load("/webserver/header.html")
-	$("#footer").load("/webserver/footer.html")
+	$("#header").load("/webserver/component/header.html")
+	$("#footer").load("/webserver/component/footer.html")
 
 	$("#submit_bnt").click(function(){
 		submitQuestion(questions)

@@ -1,6 +1,8 @@
-package api;
+package api.database;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
 import java.util.Map;
@@ -14,26 +16,32 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.annotation.WebServlet;
 
-// Others
 import util.DatabaseConnect;
 
 /**
- * Use for return database information for hw3
- * @author Long Phan
+ * Use for dropdown list when select linking table in database page
+ * @author Phan Nguyen Long
  */
-@WebServlet(urlPatterns = "/hw3")
-public class HW3Sevrlet extends HttpServlet {
+@WebServlet("/database/idDropdown")
+public class idDropdownServlet extends HttpServlet{
     private static final long serialVersionUID = 1L;
+    
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        String query = "CALL GetHW3();";
-        System.out.println(query);
-
+    	
+        String query = "CALL idDropdown(?, ?);";
+        
         try {
             DatabaseConnect DB = new DatabaseConnect();
-            DB.getConnection();
-            ResultSet res = DB.doQuery(query);
+            Connection conn = DB.getConnection();
+            PreparedStatement st = conn.prepareStatement(query);
+            
+            st.setString(1, req.getParameter("id_type"));
+            st.setString(2, req.getParameter("sem_code").equals("null") ? null : req.getParameter("sem_code"));
+            
+            System.out.println(st);
+            
+            ResultSet res = st.executeQuery();
             List<Map<String, Object>> json_resp = DB.ResultSetToJSON(res);
 
             resp.setContentType("application/json");
@@ -49,3 +57,4 @@ public class HW3Sevrlet extends HttpServlet {
         }
     }
 }
+
