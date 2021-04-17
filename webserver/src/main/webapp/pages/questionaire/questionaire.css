@@ -87,6 +87,10 @@ body {
   margin-right: 10px;
   font-weight: bold;
 }
+input[type='radio'] { 
+	 margin-left:10px;
+     transform: scale(2); 
+ }
 
 /* CSS for submit button */
 #submit_bnt {

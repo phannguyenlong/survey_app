@@ -2,7 +2,7 @@ let questions;
 let class_code;
 let lecturer_code;
 
-$(document).ready(function () {
+$(document).ready(function() {
 	if (Cookies.get("session_key") == null)
 		window.location.replace("/webserver/pages/login/login.html");
 	init()	
@@ -15,8 +15,8 @@ function init() {
 	getQuestion()
 
 	// load html component
-	$("#header").load("/webserver/component/header.html")
-	$("#footer").load("/webserver/component/footer.html")
+	$("#header").load("/webserver/header.html")
+	$("#footer").load("/webserver/footer.html")
 
 	$("#submit_bnt").click(function(){
 		submitQuestion(questions)
@@ -48,7 +48,7 @@ function getQuestion() {
 			questions = json
             for(let i=0;i<json.length;i++){
             	text = json[i].content.split("-")
-				question = $("<p class=\"question\"></p>").text(new String(text[0]))
+				question = $(`<p class=\"question\" id = "${i+1}"></p>`).text(new String(text[0]))
 				$("#form").append(question)
 				answer = text.slice(1,text.length)
 				for(let j=0;j<answer.length;j++){
@@ -121,9 +121,14 @@ function submitQuestion(json){
 				break;
             }			
         }
-		if(selectedValue===undefined)
+		if(selectedValue===undefined && i!=0 && i!=1){
 			isPost = false;
+			$(`#${i+1}`).css("color","red");}
 		else {
+			$(`#${i+1}`).css("color","black");
+			if(selectedValue === undefined){
+				selectedValue = "NULL"
+			}
 			num = i+1;
 			index = "question".concat(num)
 			answers[index] = selectedValue //ES5 from variable to key values
