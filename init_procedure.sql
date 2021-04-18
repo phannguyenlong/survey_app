@@ -496,12 +496,12 @@ BEGIN
 	SET @faculty_arr = IFNULL(CONCAT("'",(SELECT group_concat(concat_ws(",", d.faculty_code) separator "', '") AS faculty
 		FROM deans d
 		JOIN login lo ON lo.username=d.username
-		WHERE lo.username = user),"'"),"'null'");
+		WHERE (lo.username = user and now() < d.end_date and now() > d.start_date)),"'"),"'null'");
     
     SET @program_arr = IFNULL(CONCAT("'",(SELECT group_concat(concat_ws(",", pc.program_code) separator "', '") AS program
 		FROM program_coordinator pc
 		JOIN login lo ON lo.username=pc.username
-		WHERE lo.username = user),"'"),"'null'");
+		WHERE (lo.username = user and now() < pc.end_date and now() > pc.start_date)),"'"),"'null'");
     
     SET @lecturer_arr = IFNULL((SELECT group_concat(concat_ws("',", l.lec_code) separator ", ") AS lecturer
 		FROM lecturer l
@@ -511,6 +511,7 @@ BEGIN
     CALL validateAccessControl(@faculty_arr,@program_arr,@lecturer_arr);
 END //
 DELIMITER ;
+
 
 -- Authentication
 DROP PROCEDURE IF EXISTS java_app.authentication;
