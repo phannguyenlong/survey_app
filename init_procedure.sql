@@ -333,7 +333,7 @@ BEGIN
 				SET aca_name = IFNULL(yname, aca_name) 
                 WHERE aca_code = old_key;
 		WHEN action = "create" THEN 
-			INSERT INTO academic_year(aca_code) VALUES (old_key);
+			INSERT INTO academic_year(aca_code, aca_name) VALUES (old_key, yname);
 	END CASE;
 END //
 DELIMITER ;
@@ -462,9 +462,10 @@ BEGIN
     SET @program_arr = arr_program;
     SET @lecturer_arr = arr_lecturer;
     SET @a=CONCAT('SELECT
-			a.aca_code, a.aca_name, s.sem_code, f.fa_code, f.name AS fa_name, 
-			p.pro_code, p.name AS pro_name, m.mo_code, m.name AS mo_name, 
-			c.class_code, l.lec_code, l.name AS lec_name, t.id as teaching_id
+			a.aca_code AS aca_year, a.aca_name, s.sem_code AS semester, f.fa_code AS faculty, f.name AS fa_name, 
+			p.pro_code AS program, p.name AS pro_name, m.mo_code AS module, m.name AS mo_name, 
+			c.class_code AS class, l.lec_code AS lecturer, l.name AS lec_name, t.id AS teaching,
+            yf.id_1 AS year_faculty, yfp.id_2 AS year_fac_pro, yfpm.id_3 AS year_fac_pro_mo
     FROM class c
 	JOIN teaching t ON c.class_code = t.class_code
 	JOIN lecturer l ON t.lecturer_code = l.lec_code
