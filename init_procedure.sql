@@ -136,15 +136,20 @@ END //
 DELIMITER ;
 
 -- ================================== 11 PROCEDURE for Database page====================================
-
 -- Interact with year_faculty
 DROP PROCEDURE IF EXISTS java_app.year_facultyInteract;
 DELIMITER  //
-CREATE PROCEDURE year_facultyInteract(action VARCHAR(10),old_key VARCHAR(20),a_code VARCHAR(10),f_code VARCHAR(10))
+CREATE PROCEDURE year_facultyInteract(action VARCHAR(10),old_key VARCHAR(20),a_code VARCHAR(10),f_code VARCHAR(10) ,key_array VARCHAR(500))
 BEGIN
 	CASE
 		WHEN action="dump" THEN 
-			SELECT * FROM year_faculty ORDER BY id_1;
+            BEGIN
+				SET @arr_key = key_array;
+				SET @a = CONCAT('SELECT * FROM year_faculty ORDER BY id_1;');
+                PREPARE stmt1 FROM @a;
+				EXECUTE stmt1;
+				DEALLOCATE PREPARE stmt1;
+			END;
         WHEN action="delete" THEN 
 			DELETE FROM year_faculty WHERE id_1 = old_key;
 		WHEN action="update" THEN 
@@ -160,11 +165,17 @@ DELIMITER ;
 -- Interact with year_fac_pro
 DROP PROCEDURE IF EXISTS java_app.year_fac_proInteract;
 DELIMITER  //
-CREATE PROCEDURE year_fac_proInteract(action VARCHAR(10),old_key INT,id VARCHAR(20),code VARCHAR(10))
+CREATE PROCEDURE year_fac_proInteract(action VARCHAR(10),old_key INT,id VARCHAR(20),code VARCHAR(10), key_array VARCHAR(500))
 BEGIN
 	CASE
 		WHEN action="dump" THEN 
-			SELECT * FROM year_fac_pro ORDER BY id_2;
+            BEGIN
+				SET @arr_key = key_array;
+				SET @a = CONCAT('SELECT * FROM year_fac_pro ORDER BY id_2;');
+                PREPARE stmt1 FROM @a;
+				EXECUTE stmt1;
+				DEALLOCATE PREPARE stmt1;
+			END;
         WHEN action="delete" THEN 
 			DELETE FROM year_fac_pro WHERE id_2 = old_key;
 		WHEN action="update" THEN 
@@ -180,11 +191,17 @@ DELIMITER ;
 -- Interact with year_fac_pro_mo
 DROP PROCEDURE IF EXISTS java_app.year_fac_pro_moInteract;
 DELIMITER  //
-CREATE PROCEDURE year_fac_pro_moInteract(action VARCHAR(10),old_key INT,id INT,code VARCHAR(10))
+CREATE PROCEDURE year_fac_pro_moInteract(action VARCHAR(10),old_key INT,id INT,code VARCHAR(10), key_array VARCHAR(500))
 BEGIN
 	CASE
 		WHEN action="dump" THEN 
-			SELECT * FROM year_fac_pro_mo ORDER BY id_3;
+            BEGIN
+				SET @arr_key = key_array;
+				SET @a = CONCAT('SELECT * FROM year_fac_pro_mo ORDER BY id_3;');
+                PREPARE stmt1 FROM @a;
+				EXECUTE stmt1;
+				DEALLOCATE PREPARE stmt1;
+			END;
         WHEN action="delete" THEN 
 			DELETE FROM year_fac_pro_mo WHERE id_3 = old_key;
 		WHEN action="update" THEN 
@@ -200,11 +217,17 @@ DELIMITER ;
 -- Interact with teaching
 DROP PROCEDURE IF EXISTS java_app.teachingInteract;
 DELIMITER  //
-CREATE PROCEDURE teachingInteract(action VARCHAR(10),old_key INT,c_code INT,lec_code INT)
+CREATE PROCEDURE teachingInteract(action VARCHAR(10),old_key INT,c_code INT,lec_code INT, key_array VARCHAR(500))
 BEGIN
 	CASE
 		WHEN action="dump" THEN 
-			SELECT * FROM teaching ORDER BY id;
+            BEGIN
+				SET @arr_key = key_array;
+				SET @a = CONCAT('SELECT * FROM teaching ORDER BY id;');
+                PREPARE stmt1 FROM @a;
+				EXECUTE stmt1;
+				DEALLOCATE PREPARE stmt1;
+			END;
         WHEN action="delete" THEN 
 			DELETE FROM teaching WHERE id = old_key;
 		WHEN action="update" THEN 
@@ -220,11 +243,17 @@ DELIMITER ;
 -- Interact with faculty
 DROP PROCEDURE IF EXISTS java_app.facultyInteract;
 DELIMITER //
-CREATE PROCEDURE facultyInteract(action VARCHAR(10),old_key VARCHAR(10),fname VARCHAR(50))
+CREATE PROCEDURE facultyInteract(action VARCHAR(10),old_key VARCHAR(10),fname VARCHAR(50), key_array VARCHAR(500))
 BEGIN
 	CASE
 		WHEN action = "dump" THEN
-			SELECT * FROM faculty ORDER BY fa_code;
+            BEGIN
+				SET @arr_key = key_array;
+				SET @a = CONCAT('SELECT * FROM faculty ORDER BY fa_code;');
+                PREPARE stmt1 FROM @a;
+				EXECUTE stmt1;
+				DEALLOCATE PREPARE stmt1;
+			END;
 		WHEN action = "delete" THEN
 			DELETE FROM faculty  WHERE fa_code = old_key;
 		WHEN action = "update" THEN
@@ -240,11 +269,17 @@ DELIMITER ;
 -- Interact with program
 DROP PROCEDURE IF EXISTS java_app.programInteract;
 DELIMITER //
-CREATE PROCEDURE programInteract(action VARCHAR(10),old_key VARCHAR(10),pname VARCHAR(50))
+CREATE PROCEDURE programInteract(action VARCHAR(10),old_key VARCHAR(10),pname VARCHAR(50),key_array VARCHAR(500))
 BEGIN
 	CASE
 		WHEN action = "dump" THEN
-			SELECT * FROM program ORDER BY pro_code;
+            BEGIN
+				SET @arr_key = key_array;
+				SET @a = CONCAT('SELECT * FROM program ORDER BY pro_code;');
+                PREPARE stmt1 FROM @a;
+				EXECUTE stmt1;
+				DEALLOCATE PREPARE stmt1;
+			END;
 		WHEN action = "delete" THEN
 			DELETE FROM program  WHERE pro_code = old_key;
 		WHEN action = "update" THEN
@@ -260,11 +295,17 @@ DELIMITER ;
 -- Interact with module
 DROP PROCEDURE IF EXISTS java_app.moduleInteract;
 DELIMITER //
-CREATE PROCEDURE moduleInteract(action VARCHAR(10),old_key VARCHAR(10),mname VARCHAR(50))
+CREATE PROCEDURE moduleInteract(action VARCHAR(10),old_key VARCHAR(10),mname VARCHAR(50),key_array VARCHAR(500))
 BEGIN
 	CASE
 		WHEN action = "dump" THEN
-			SELECT * FROM module ORDER BY mo_code;
+            BEGIN
+				SET @arr_key = key_array;
+				SET @a = CONCAT('SELECT * FROM module ORDER BY mo_code;');
+                PREPARE stmt1 FROM @a;
+				EXECUTE stmt1;
+				DEALLOCATE PREPARE stmt1;
+			END;
 		WHEN action = "delete" THEN
 			DELETE FROM module  WHERE mo_code = old_key;
 		WHEN action = "update" THEN
@@ -280,15 +321,19 @@ DELIMITER ;
 -- Interact with academic_year
 DROP PROCEDURE IF EXISTS java_app.aca_yearInteract;
 DELIMITER //
-CREATE PROCEDURE aca_yearInteract(action VARCHAR(10),old_key VARCHAR(10))
+CREATE PROCEDURE aca_yearInteract(action VARCHAR(10),old_key VARCHAR(10), yname VARCHAR(10))
 BEGIN
 	CASE
 		WHEN action = "dump" THEN
 			SELECT * FROM academic_year ORDER BY aca_code;
 		WHEN action = "delete" THEN
 			DELETE FROM academic_year  WHERE aca_code = old_key;
+		WHEN action = "update" THEN
+			UPDATE academic_year
+				SET aca_name = IFNULL(yname, aca_name) 
+                WHERE aca_code = old_key;
 		WHEN action = "create" THEN 
-			INSERT INTO academic_year(aca_code) VALUES (old_key);
+			INSERT INTO academic_year(aca_code, aca_name) VALUES (old_key, yname);
 	END CASE;
 END //
 DELIMITER ;
@@ -316,11 +361,17 @@ DELIMITER ;
 -- Interact with lecturer
 DROP PROCEDURE IF EXISTS java_app.lecturerInteract;
 DELIMITER //
-CREATE PROCEDURE lecturerInteract(action VARCHAR(10),old_key INT,lname VARCHAR(30))
+CREATE PROCEDURE lecturerInteract(action VARCHAR(10),old_key INT,lname VARCHAR(30), key_array VARCHAR(500))
 BEGIN
 	CASE
 		WHEN action = "dump" THEN
-			SELECT * FROM lecturer ORDER BY lec_code;
+			BEGIN
+				SET @arr_key = key_array;
+				SET @a = CONCAT('SELECT * FROM lecturer ORDER BY lec_code;');
+                PREPARE stmt1 FROM @a;
+				EXECUTE stmt1;
+				DEALLOCATE PREPARE stmt1;
+            END;
 		WHEN action = "delete" THEN
 			DELETE FROM lecturer WHERE lec_code = old_key;
 		WHEN action = "update" THEN
@@ -336,11 +387,17 @@ DELIMITER ;
 -- Interact with class
 DROP PROCEDURE IF EXISTS java_app.classInteract;
 DELIMITER //
-CREATE PROCEDURE classInteract(action VARCHAR(10),old_key INT,csize INT,code VARCHAR(10),id INT)
+CREATE PROCEDURE classInteract(action VARCHAR(10),old_key INT,csize INT,code VARCHAR(10),id INT, key_array VARCHAR(500))
 BEGIN
 	CASE
 		WHEN action = "dump" THEN
-			SELECT * FROM class ORDER BY class_code;
+			BEGIN
+				SET @arr_key = key_array;
+				SET @a = CONCAT('SELECT * FROM class ORDER BY class_code;');
+                PREPARE stmt1 FROM @a;
+				EXECUTE stmt1;
+				DEALLOCATE PREPARE stmt1;
+			END;
 		WHEN action = "delete" THEN
 			DELETE FROM class WHERE class_code = old_key;
 		WHEN action = "update" THEN
@@ -352,7 +409,6 @@ BEGIN
 	END CASE;
 END //
 DELIMITER ;
-
 -- ==================================  END of 11 PROCEDURE for Database page ====================================
 -- getNumberOfAnswer Procedure
 DROP PROCEDURE IF EXISTS java_app.getNumberOfAnswer;
@@ -406,9 +462,10 @@ BEGIN
     SET @program_arr = arr_program;
     SET @lecturer_arr = arr_lecturer;
     SET @a=CONCAT('SELECT
-			a.aca_code, a.aca_name, s.sem_code, f.fa_code, f.name AS fa_name, 
-			p.pro_code, p.name AS pro_name, m.mo_code, m.name AS mo_name, 
-			c.class_code, l.lec_code, l.name AS lec_name, t.id as teaching_id
+			a.aca_code AS aca_year, a.aca_name, s.sem_code AS semester, f.fa_code AS faculty, f.name AS fa_name, 
+			p.pro_code AS program, p.name AS pro_name, m.mo_code AS module, m.name AS mo_name, 
+			c.class_code AS class, l.lec_code AS lecturer, l.name AS lec_name, t.id AS teaching,
+            yf.id_1 AS year_faculty, yfp.id_2 AS year_fac_pro, yfpm.id_3 AS year_fac_pro_mo
     FROM class c
 	JOIN teaching t ON c.class_code = t.class_code
 	JOIN lecturer l ON t.lecturer_code = l.lec_code
@@ -439,12 +496,12 @@ BEGIN
 	SET @faculty_arr = IFNULL(CONCAT("'",(SELECT group_concat(concat_ws(",", d.faculty_code) separator "', '") AS faculty
 		FROM deans d
 		JOIN login lo ON lo.username=d.username
-		WHERE lo.username = user),"'"),"'null'");
+		WHERE (lo.username = user and now() < d.end_date and now() > d.start_date)),"'"),"'null'");
     
     SET @program_arr = IFNULL(CONCAT("'",(SELECT group_concat(concat_ws(",", pc.program_code) separator "', '") AS program
 		FROM program_coordinator pc
 		JOIN login lo ON lo.username=pc.username
-		WHERE lo.username = user),"'"),"'null'");
+		WHERE (lo.username = user and now() < pc.end_date and now() > pc.start_date)),"'"),"'null'");
     
     SET @lecturer_arr = IFNULL((SELECT group_concat(concat_ws("',", l.lec_code) separator ", ") AS lecturer
 		FROM lecturer l
@@ -454,6 +511,7 @@ BEGIN
     CALL validateAccessControl(@faculty_arr,@program_arr,@lecturer_arr);
 END //
 DELIMITER ;
+
 
 -- Authentication
 DROP PROCEDURE IF EXISTS java_app.authentication;
@@ -486,19 +544,19 @@ DELIMITER //
 CREATE PROCEDURE idDropdown(id_type VARCHAR(10),semester_code VARCHAR(10))
 BEGIN
 	CASE
-		WHEN id_type = "id1" THEN
+		WHEN id_type = "id_1" THEN
 			SELECT yf.id_1, f.fa_code, f.name AS fa_name, a.aca_code, a.aca_name
 			FROM year_faculty yf 
 			JOIN faculty f ON yf.faculty_code = f.fa_code
 			JOIN academic_year a ON yf.academic_code = a.aca_code;
-		WHEN id_type = "id2" THEN
+		WHEN id_type = "id_2" THEN
 			SELECT yfp.id_2, yf.id_1, f.fa_code, f.name AS fa_name, a.aca_code, a.aca_name, p.pro_code, p.name AS pro_name
 			FROM year_fac_pro yfp
 			JOIN year_faculty yf ON yfp.id_1 = yf.id_1
 			JOIN faculty f ON yf.faculty_code = f.fa_code
 			JOIN academic_year a ON yf.academic_code = a.aca_code
 			JOIN program p ON yfp.program_code = p.pro_code;
-		WHEN id_type = "id3" THEN
+		WHEN id_type = "id_3" THEN
 			SELECT yfpm.id_3, yfp.id_2, yf.id_1, f.fa_code, f.name AS fa_name, a.aca_code, a.aca_name, p.pro_code, p.name AS pro_name, m.mo_code, m.name AS mo_name
 			FROM year_fac_pro_mo yfpm
 			JOIN year_fac_pro yfp ON yfpm.id_2 = yfp.id_2
