@@ -103,7 +103,7 @@ public class interactTableServlet extends HttpServlet {
             String listOfPermission = "'" + String.join("','", new ArrayList<>(new HashSet<>(arr))) + "'"; // remove duplicate add joining
 
             // Get return data
-            PreparedStatement st = createStatement(req, "dump", conn, listOfPermission);
+            PreparedStatement st = createStatement(req, "dump", conn, ""); // add listOfPermission when turn on access control
             ResultSet res = st.executeQuery();
             List<Map<String, Object>> json_resp = DB.ResultSetToJSON(res);
 
