@@ -329,7 +329,7 @@ BEGIN
 		WHEN action = "delete" THEN
 			DELETE FROM academic_year  WHERE aca_code = old_key;
 		WHEN action = "update" THEN
-			UPDATE module 
+			UPDATE academic_year
 				SET aca_name = IFNULL(yname, aca_name) 
                 WHERE aca_code = old_key;
 		WHEN action = "create" THEN 
