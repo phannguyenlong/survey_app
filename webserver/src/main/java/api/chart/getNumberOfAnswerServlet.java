@@ -1,6 +1,7 @@
 package api.chart;
 
 import java.io.IOException;
+import java.sql.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -51,8 +52,14 @@ public class getNumberOfAnswerServlet extends HttpServlet {
             objectMapper.writeValue(resp.getOutputStream(), json_resp);
 
             DB.closeConnect();
+        } catch (SQLSyntaxErrorException ex) {
+        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "The Teaching ID or Answer ID is invalid");
+            ex.printStackTrace();
+        } catch (SQLException ex) {
+        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "The Teaching ID or Answer ID cannot be NULL or contain letters");
+            ex.printStackTrace();
         } catch (Exception ex) {
-            resp.setStatus(500);
+        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "The Request is invalid");
             ex.printStackTrace();
         }
     }

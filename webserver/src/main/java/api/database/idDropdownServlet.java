@@ -1,6 +1,7 @@
 package api.database;
 
 import java.io.IOException;
+import java.sql.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -51,8 +52,11 @@ public class idDropdownServlet extends HttpServlet{
             objectMapper.writeValue(resp.getOutputStream(), json_resp);
 
             DB.closeConnect();
+        } catch (SQLException ex) {
+        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "The ID Type or Semester Code is invalid");
+            ex.printStackTrace();
         } catch (Exception ex) {
-            resp.setStatus(500);
+        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "The Request is invalid");
             ex.printStackTrace();
         }
     }

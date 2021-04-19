@@ -44,7 +44,8 @@ public class getQuestionServlet extends HttpServlet {
 
             DB.closeConnect();
         } catch (Exception ex) {
-            resp.setStatus(500);
+        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "The Request is invalid");
+//            resp.setStatus(500);
             ex.printStackTrace();
         }
     }
