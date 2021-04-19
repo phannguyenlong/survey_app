@@ -224,6 +224,46 @@ FOR EACH ROW BEGIN
 END//
 DELIMITER ;
 
+-- unique program on update
+DROP TRIGGER IF EXISTS unique_program_on_update;
+DELIMITER //
+CREATE TRIGGER unique_program_on_update BEFORE UPDATE ON year_fac_pro
+FOR EACH ROW BEGIN
+    IF
+		(SELECT academic_code 
+			FROM year_faculty 
+            WHERE NEW.id_1=id_1) IN
+		(SELECT yf.academic_code 
+			FROM year_fac_pro yfp 
+			JOIN year_faculty yf ON yf.id_1=yfp.id_1 
+            WHERE program_code = NEW.program_code)
+	THEN
+		SET NEW.program_code = NULL;
+	END IF;
+END//
+DELIMITER ;
+
+-- unique module on update
+DROP TRIGGER IF EXISTS unique_module_on_update;
+DELIMITER //
+CREATE TRIGGER unique_module_on_update BEFORE UPDATE ON year_fac_pro_mo
+FOR EACH ROW BEGIN
+	IF
+		(SELECT academic_code 
+			FROM year_faculty yf 
+			JOIN year_fac_pro yfp ON yfp.id_1=yf.id_1 
+			WHERE NEW.id_2=id_2) IN
+		(SELECT yf.academic_code 
+			FROM year_fac_pro yfp 
+			JOIN year_faculty yf ON yf.id_1=yfp.id_1 
+			JOIN year_fac_pro_mo yfpm ON yfpm.id_2=yfp.id_2 
+			WHERE module_code = NEW.module_code)
+	THEN
+		SET NEW.module_code = NULL;
+	END IF;
+END//
+DELIMITER ;
+
 
 -- ======================Insert Data======================
 
