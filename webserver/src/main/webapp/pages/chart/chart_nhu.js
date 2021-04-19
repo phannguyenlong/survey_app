@@ -168,7 +168,7 @@ function optionRemove(start) {
 function init() {
     let chartName = ["Class Attendance", "Gender","Clearance of the Module Objectives", "Useful & Sufficient Learning Materials",
         "Relevance of the Module Content","Interesting Lessons","Time Spent on Module Workload Outside Classroom",
-        "Module Workload","Difficulty of the Module","Understandable Presentation of the Module Contents",
+        "Overall Module Workload","Difficulty of the Module","Understandable Presentation of the Module Contents",
         "Variety of Learning Activities","Supportive learning activities","Appropriate Assessment Method",
         "Lecturer's Encouragement in Critical Thinking and Logic","Helpful Feedback from Lecturer",
         "Language Skill (English/German)","Appreciation of Students' Ideas and Contributions","Lecturer's In-class Encouragement in Discussion and Questions",
@@ -183,6 +183,10 @@ function init() {
         else if (i == 1) {
             labelArr = ["Male", "Female", "Other"]
             xMax = 3.5
+        }
+        else if (i == 6) {
+            labelArr = ["< 1 hour", "1-2", "2-3", "3-4", "> 5 hours"]
+            xMax = 5.5
         }
         else {
             labelArr = ["Strongly disagree = 1", "2", "3", "4", "Strongly agree = 5", "Not applicable"]
@@ -275,6 +279,7 @@ function init() {
         $(".chartContainer").append(`<p id="numResp_${i}"> Number of Response =  </p>`)
         $(".chartContainer").append(`<p id="respRate_${i}"> Response rate =  </p>`)
         $(".chartContainer").append(`<p id="meanVal_${i}"> Mean = </p>`)
+        $(".chartContainer").append(`<p id="medianVal_${i}"> Median = </p>`)
         $(".chartContainer").append(`<p id="stDev_${i}"> Standard Deviation =  </p>`)
     }
 }
@@ -314,6 +319,7 @@ function visualize() {
 
                 let arrValues = addValue(orderedData)
                 meanVal = jStat.mean(arrValues)
+                medianVal = jStat.median(arrValues)
                 stDev = jStat.stdev(arrValues)
 
                 // update chart
@@ -350,7 +356,7 @@ function addValue(test) {
         arrVal.push(5)
     }
     for (j = 0 ; j < test['Option6']; j ++){
-        arrVal.push(6)
+        arrVal.push(0)
     }
     return arrVal
 }
