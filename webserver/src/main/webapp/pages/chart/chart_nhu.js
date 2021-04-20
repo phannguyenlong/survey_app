@@ -17,15 +17,75 @@ $(document).ready(function () {
 
 function filterChart() {
     //console.log(teaching_id.length)
-    getAcademicYear();
-    $("#aca_code").change(() => getSemester())
-    $("#sem").change(() => getFaculty())
-    $("#fal").change(() => getProgram())
-    $("#prog").change(() => getModule())
-    $("#mod").change(() => getClass())
-    $("#class_code").change(() => getLecturer())
-    $("#lect").change(() => {
-        teaching_id = [$("#lect option:selected").val()]
+    // getAcademicYear();
+    getAllSelect()
+    // $("#aca_code").change(() => getSemester())
+    // $("#sem").change(() => getFaculty())
+    // $("#fal").change(() => getProgram())
+    // $("#prog").change(() => getModule())
+    // $("#mod").change(() => getClass())
+    // $("#class_code").change(() => getLecturer())
+    // $("#lect").change(() => {
+    //     teaching_id = [$("#lect option:selected").val()]
+    // })
+}
+
+function getAllSelect(select_id) {
+    console.log(select_id)
+    teaching_id = []
+    let selectArr = ["aca", "sem", "fa", "pro", "mo", "class", "lec"]
+    // Generate the paramter (if no input ==> null)
+    let params = "";
+    for (let i = 0; i < selectArr.length; i++) {
+        if ($(`#${selectArr[i]} option:selected`).val() == '')
+            params += selectArr[i] + "_code=null"
+        else if (selectArr[i] == "fa" || selectArr[i] == "lec" || selectArr[i] == "pro")
+            params += selectArr[i] + "_code='" + $(`#${selectArr[i]} option:selected`).val() + "'"
+        else
+            params += selectArr[i] + "_code=" + $(`#${selectArr[i]} option:selected`).val()
+        params += i == selectArr.length - 1 ? "" : "&"
+    }
+
+    console.log(params)
+    // optionRemoveNew(select_id)
+    $.ajax({
+        type: 'GET',
+        url: "http://localhost:8080/webserver/chart/validate?" + params,
+        success: function (data) {
+            let arr = [[], [], [], [], [], [], []] // array for filter duplicate
+            let cacheArr = [[], [], [], [], [], [], []]
+            if (cacheArr[0] != null)
+                for (let i = 0; i < selectArr.length; i++) {
+                    $(`#${selectArr[i]} option`).not(":first").each(function() {
+                        cacheArr[i].push(String($(this).val()))
+                    })
+                }
+            // Add data to select
+            for (let x = 0; x < data.length; x++) {
+                for (let i = 0; i < selectArr.length; i++) {
+                    if (!arr[i].includes(String(data[x][`${selectArr[i]}_code`]))) {
+                        arr[i].push(String(data[x][`${selectArr[i]}_code`]))
+                        if (!cacheArr[i].includes(String(data[x][`${selectArr[i]}_code`]))) {
+                            if (selectArr[i] == "class" || selectArr[i] == "sem")
+                                $(`#${selectArr[i]}`).append(`<option value = "${String(data[x][`${selectArr[i]}_code`])}"> ${data[x][`${selectArr[i]}_code`]}</option>`)
+                            else
+                                $(`#${selectArr[i]}`).append(`<option value = "${String(data[x][`${selectArr[i]}_code`])}"> ${data[x][`${selectArr[i]}_code`]} - ${data[x][`${selectArr[i]}_name`]} </option>`)
+                        }
+                    }
+                }
+                teaching_id.push(data[x].teaching_id)
+            }
+            console.log(arr)
+            console.log(cacheArr)
+            // filter redundant
+            for (let i = 0; i < selectArr.length; i++) {
+                $(`#${selectArr[i]} option`).not(":first").each(function () {
+                    if (!arr[i].includes($(this).val())) {
+                        $(`#${selectArr[i]} option[value='${$(this).val()}']`).remove()
+                    }
+                })
+            }
+        }
     })
 }
 
@@ -89,11 +149,11 @@ function getProgram() {
         url: `http://localhost:8080/webserver/chart/validate?aca_code=${String($("#aca_code option:selected").val())}&sem_code=${String($("#sem option:selected").val())}&fa_code='${String($("#fal option:selected").val())}'&pro_code=null&mo_code=null&class_code=null&lec_code=null`,
         success: function (data) {
             optionRemove(3)
-            $("#prog").append(`<option value = "${data[0].pro_code}"> ${data[0].pro_code} - ${data[0].pro_name} </option>`)
+            $("#pro").append(`<option value = "${data[0].pro_code}"> ${data[0].pro_code} - ${data[0].pro_name} </option>`)
             teaching_id.push(data[0].teaching_id)
             for (let i = 1; i < data.length; i++) {
                 if (data[i].pro_code != data[i - 1].pro_code)
-                    $("#prog").append(`<option value = "${data[i].pro_code}"> ${data[i].pro_code} - ${data[i].pro_name} </option>`)
+                    $("#pro").append(`<option value = "${data[i].pro_code}"> ${data[i].pro_code} - ${data[i].pro_name} </option>`)
                 teaching_id.push(data[i].teaching_id)
             }
         }
@@ -104,7 +164,7 @@ function getModule() {
     teaching_id = []
     $.ajax({
         type: 'GET',
-        url: `http://localhost:8080/webserver/chart/validate?aca_code=${String($("#aca_code option:selected").val())}&sem_code=${String($("#sem option:selected").val())}&fa_code='${String($("#fal option:selected").val())}'&pro_code='${String($("#prog option:selected").val())}'&mo_code=null&class_code=null&lec_code=null`,
+        url: `http://localhost:8080/webserver/chart/validate?aca_code=${String($("#aca_code option:selected").val())}&sem_code=${String($("#sem option:selected").val())}&fa_code='${String($("#fal option:selected").val())}'&pro_code='${String($("#pro option:selected").val())}'&mo_code=null&class_code=null&lec_code=null`,
         success: function (data) {
             optionRemove(4)
             $("#mod").append(`<option value = "${data[0].mo_code}"> ${data[0].mo_code} - ${data[0].mo_name} </option>`)
@@ -122,7 +182,7 @@ function getClass() {
     teaching_id = []
     $.ajax({
         type: 'GET',
-        url: `http://localhost:8080/webserver/chart/validate?aca_code=${String($("#aca_code option:selected").val())}&sem_code=${String($("#sem option:selected").val())}&fa_code='${String($("#fal option:selected").val())}'&pro_code='${String($("#prog option:selected").val())}'&mo_code=${String($("#mod option:selected").val())}&class_code=null&lec_code=null`,
+        url: `http://localhost:8080/webserver/chart/validate?aca_code=${String($("#aca_code option:selected").val())}&sem_code=${String($("#sem option:selected").val())}&fa_code='${String($("#fal option:selected").val())}'&pro_code='${String($("#pro option:selected").val())}'&mo_code=${String($("#mod option:selected").val())}&class_code=null&lec_code=null`,
         success: function (data) {
             optionRemove(5)
             $("#class_code").append(`<option value = "${data[0].class_code}"> ${data[0].class_code} </option>`)
@@ -140,7 +200,7 @@ function getLecturer() {
     teaching_id = []
     $.ajax({
         type: 'GET',
-        url: `http://localhost:8080/webserver/chart/validate?aca_code=${String($("#aca_code option:selected").val())}&sem_code=${String($("#sem option:selected").val())}&fa_code='${String($("#fal option:selected").val())}'&pro_code='${String($("#prog option:selected").val())}'&mo_code=${String($("#mod option:selected").val())}&class_code=${String($("#class_code option:selected").val())}&lec_code=null`,
+        url: `http://localhost:8080/webserver/chart/validate?aca_code=${String($("#aca_code option:selected").val())}&sem_code=${String($("#sem option:selected").val())}&fa_code='${String($("#fal option:selected").val())}'&pro_code='${String($("#pro option:selected").val())}'&mo_code=${String($("#mod option:selected").val())}&class_code=${String($("#class_code option:selected").val())}&lec_code=null`,
         success: function (data) {
             $("#lect option").not(":first").remove()
             $("#lect").append(`<option value = "${data[0].lec_code}"> ${data[0].lec_code} - ${data[0].lec_name} </option>`)
@@ -156,9 +216,18 @@ function getLecturer() {
 
 // Use for remove option in each select
 function optionRemove(start) {
-    optionField = ["sem", "fal", "prog", "mod", "class_code", "lect"]
+    optionField = ["sem", "fal", "pro", "mod", "class_code", "lect"]
     for (let i = start - 1; i < optionField.length; i++)
         $(`#${optionField[i]} option`).not(":first").remove()
+}
+
+// Use for remove option in each select
+function optionRemoveNew(skip) {
+    optionField = ["aca","sem", "fa", "pro", "mo", "class", "lec"]
+    for (let i = 0; i < optionField.length; i++) {
+        if (optionField[i] == skip) continue
+        $(`#${optionField[i]} option`).not(":first").remove()
+    }
 }
 
 
