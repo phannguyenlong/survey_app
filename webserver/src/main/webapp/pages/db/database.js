@@ -35,8 +35,8 @@ function init() {
 	] 
 
 	 //load html component
-	$("#header").load("/webserver/component/header.html")
-	$("#footer").load("/webserver/component/footer.html")
+	 $("#header").load("/webserver/component/header.html");
+    $("#footer").load("/webserver/component/footer.html");
 
 	
 	
@@ -96,7 +96,6 @@ function dropDownList(id_type, sem_code){
 			return select[0];
 		
 }
-test1 = ["id_3","id_2","mo_code"]
 
 function createTable(option) {
 	var count=0
@@ -144,16 +143,30 @@ function createTable(option) {
 					keys = addKey[option]
 					tr = $(`<tr id="input_row"></tr>`)
 					for (let i = 0; i < keys.length; i++) {
-						th = $(`<th><div class="add_form_${option}"><input type="text" placeholder="${keys[i]}" class="${'input_' + keys[i]}" name="${keys[i]}"/></th></div>`)
+						if(columns[i] === dropdownKey[option]){							
+							div = $(`<div class="add_form_${option}" ></div>`).append(dropDownList(columns[i],null))
+							th = $(`<th></th>`).append(div)
+						
+						}
+						else{
+							th = $(`<th><div class="add_form_${option}"><input type="text" class="${'input_' + keys[i]}" name="${keys[i]}"/></div></th>`)
+						}
 						tr.append(th)
 					}
 					submitBtn = $(`<button class="action_btn">Submit</button>`)
 					submitBtn.click(() => {
-						let arr = $(`.add_form_${option} input`)
+						let arr = $(`.add_form_${option}`)
 						let params = '';
 						for (let i = 0; i < keys.length; i++) {
-							params += `&${keys[i]}=${arr[i].value}`
+						console.log(($(arr[i]).children('input')[0]))
+						if(($(arr[i]).children('input')[0]) === undefined){
+							console.log(($(arr[i]).children("select").children("option:selected")).attr("name"))
+							params += `&${keys[i]}=${($(arr[i]).children("select").children("option:selected")).attr("name")}`
 						}
+						else{
+							params += `&${keys[i]}=${($(arr[i]).children('input')[0]).value}`
+						}
+					}
 						addRow(option, params)
 						getTable(option)
 					})
@@ -182,7 +195,6 @@ function createTable(option) {
 				keys = modifyKey[option]
 				tr = $(`<tr id="input_row"></tr>`)
 				for (let i = 0; i < keys.length; i++) {
-					console.log(columns[i])
 					if(columns[i] === key) { // columns save all key of table.
 						th = $(`<th><div class="modify_form_${option}"><input type="text" readonly value="${result_key}" class="${'input_' + keys[i]}" name="${keys[i]}"/></div></th>`)
 					}
