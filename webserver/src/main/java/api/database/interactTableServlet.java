@@ -174,13 +174,19 @@ public class interactTableServlet extends HttpServlet {
             DB.closeConnect();
         }
         catch (SQLIntegrityConstraintViolationException ex) {
-        	resp.sendError(500, "Can't delete foreign key of another data");
+        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Can't delete foreign key of another data");
             ex.printStackTrace();
         }
+        
+        catch(SQLException ex)
+        {
+        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Can't leave blank");
+        	ex.printStackTrace();
+        }
+        
         catch (Exception ex) {
-        	resp.sendError(500, "Error");
+        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Wrong table name");
             ex.printStackTrace();
         }
     }
-
 }
