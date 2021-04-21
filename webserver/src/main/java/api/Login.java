@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -43,8 +44,8 @@ public class Login extends HttpServlet {
             ResultSet res = st.executeQuery();
             
             if (!res.next()) {
-                System.out.println("ResultSet is empty");
-                throw new Exception("Invalid Credentials");
+                System.out.println("Error! ResultSet is empty!!!");
+                throw new Exception("Invalid Credentials or Blank!");
             } 
             else {
                 do {
@@ -58,11 +59,14 @@ public class Login extends HttpServlet {
             DB.closeConnect();
         } catch (Exception e) {
             if (e.getMessage().equals("Invalid Credentials"))
-                resp.setStatus(401);
-            else {
-                resp.setStatus(500);
-                e.printStackTrace();
+            {
+            	resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid account");
+            }   	
+            else 
+            {
+            	resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Reload page and do it again");            
             }
+            e.printStackTrace();
         }
     }
 }

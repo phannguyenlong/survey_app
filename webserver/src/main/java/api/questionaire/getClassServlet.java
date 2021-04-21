@@ -1,6 +1,7 @@
 package api.questionaire;
 
 import java.io.IOException;
+import java.sql.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -51,9 +52,15 @@ public class getClassServlet extends HttpServlet {
             objectMapper.writeValue(resp.getOutputStream(), json_resp);
 
             DB.closeConnect();
-        } catch (Exception ex) {
-            resp.setStatus(500);
+        	}
+            catch (SQLSyntaxErrorException ex) {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "The Class Code is invalid");
+                ex.printStackTrace();
+            }
+            catch (Exception ex) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "The Request is invalid");
             ex.printStackTrace();
+            
         }
     }
 }

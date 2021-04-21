@@ -89,7 +89,7 @@ body {
 }
 input[type='radio'] { 
 	 margin-left:10px;
-     transform: scale(2); 
+     transform: scale(1.6); 
  }
 
 /* CSS for submit button */

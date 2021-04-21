@@ -145,7 +145,7 @@ BEGIN
 		WHEN action="dump" THEN 
             BEGIN
 				SET @arr_key = key_array;
-				SET @a = CONCAT('SELECT * FROM year_faculty WHERE (id_1 IN (',@arr_key,')) ORDER BY id_1;');
+				SET @a = CONCAT('SELECT * FROM year_faculty ORDER BY id_1;');
                 PREPARE stmt1 FROM @a;
 				EXECUTE stmt1;
 				DEALLOCATE PREPARE stmt1;
@@ -171,7 +171,7 @@ BEGIN
 		WHEN action="dump" THEN 
             BEGIN
 				SET @arr_key = key_array;
-				SET @a = CONCAT('SELECT * FROM year_fac_pro WHERE (id_2 IN (',@arr_key,')) ORDER BY id_2;');
+				SET @a = CONCAT('SELECT * FROM year_fac_pro ORDER BY id_2;');
                 PREPARE stmt1 FROM @a;
 				EXECUTE stmt1;
 				DEALLOCATE PREPARE stmt1;
@@ -197,7 +197,7 @@ BEGIN
 		WHEN action="dump" THEN 
             BEGIN
 				SET @arr_key = key_array;
-				SET @a = CONCAT('SELECT * FROM year_fac_pro_mo WHERE (id_3 IN (',@arr_key,')) ORDER BY id_3;');
+				SET @a = CONCAT('SELECT * FROM year_fac_pro_mo ORDER BY id_3;');
                 PREPARE stmt1 FROM @a;
 				EXECUTE stmt1;
 				DEALLOCATE PREPARE stmt1;
@@ -223,7 +223,7 @@ BEGIN
 		WHEN action="dump" THEN 
             BEGIN
 				SET @arr_key = key_array;
-				SET @a = CONCAT('SELECT * FROM teaching WHERE (id IN (',@arr_key,')) ORDER BY id;');
+				SET @a = CONCAT('SELECT * FROM teaching ORDER BY id;');
                 PREPARE stmt1 FROM @a;
 				EXECUTE stmt1;
 				DEALLOCATE PREPARE stmt1;
@@ -249,7 +249,7 @@ BEGIN
 		WHEN action = "dump" THEN
             BEGIN
 				SET @arr_key = key_array;
-				SET @a = CONCAT('SELECT * FROM faculty WHERE (fa_code IN (',@arr_key,')) ORDER BY fa_code;');
+				SET @a = CONCAT('SELECT * FROM faculty ORDER BY fa_code;');
                 PREPARE stmt1 FROM @a;
 				EXECUTE stmt1;
 				DEALLOCATE PREPARE stmt1;
@@ -275,7 +275,7 @@ BEGIN
 		WHEN action = "dump" THEN
             BEGIN
 				SET @arr_key = key_array;
-				SET @a = CONCAT('SELECT * FROM program WHERE (pro_code IN (',@arr_key,')) ORDER BY pro_code;');
+				SET @a = CONCAT('SELECT * FROM program ORDER BY pro_code;');
                 PREPARE stmt1 FROM @a;
 				EXECUTE stmt1;
 				DEALLOCATE PREPARE stmt1;
@@ -301,7 +301,7 @@ BEGIN
 		WHEN action = "dump" THEN
             BEGIN
 				SET @arr_key = key_array;
-				SET @a = CONCAT('SELECT * FROM module WHERE (mo_code IN (',@arr_key,')) ORDER BY mo_code;');
+				SET @a = CONCAT('SELECT * FROM module ORDER BY mo_code;');
                 PREPARE stmt1 FROM @a;
 				EXECUTE stmt1;
 				DEALLOCATE PREPARE stmt1;
@@ -329,7 +329,7 @@ BEGIN
 		WHEN action = "delete" THEN
 			DELETE FROM academic_year  WHERE aca_code = old_key;
 		WHEN action = "update" THEN
-			UPDATE module 
+			UPDATE academic_year
 				SET aca_name = IFNULL(yname, aca_name) 
                 WHERE aca_code = old_key;
 		WHEN action = "create" THEN 
@@ -367,7 +367,7 @@ BEGIN
 		WHEN action = "dump" THEN
 			BEGIN
 				SET @arr_key = key_array;
-				SET @a = CONCAT('SELECT * FROM lecturer WHERE (lec_code IN (',@arr_key,')) ORDER BY lec_code;');
+				SET @a = CONCAT('SELECT * FROM lecturer ORDER BY lec_code;');
                 PREPARE stmt1 FROM @a;
 				EXECUTE stmt1;
 				DEALLOCATE PREPARE stmt1;
@@ -393,7 +393,7 @@ BEGIN
 		WHEN action = "dump" THEN
 			BEGIN
 				SET @arr_key = key_array;
-				SET @a = CONCAT('SELECT * FROM class WHERE (class_code IN (',@arr_key,')) ORDER BY class_code;');
+				SET @a = CONCAT('SELECT * FROM class ORDER BY class_code;');
                 PREPARE stmt1 FROM @a;
 				EXECUTE stmt1;
 				DEALLOCATE PREPARE stmt1;
@@ -496,12 +496,12 @@ BEGIN
 	SET @faculty_arr = IFNULL(CONCAT("'",(SELECT group_concat(concat_ws(",", d.faculty_code) separator "', '") AS faculty
 		FROM deans d
 		JOIN login lo ON lo.username=d.username
-		WHERE lo.username = user),"'"),"'null'");
+		WHERE (lo.username = user and now() < d.end_date and now() > d.start_date)),"'"),"'null'");
     
     SET @program_arr = IFNULL(CONCAT("'",(SELECT group_concat(concat_ws(",", pc.program_code) separator "', '") AS program
 		FROM program_coordinator pc
 		JOIN login lo ON lo.username=pc.username
-		WHERE lo.username = user),"'"),"'null'");
+		WHERE (lo.username = user and now() < pc.end_date and now() > pc.start_date)),"'"),"'null'");
     
     SET @lecturer_arr = IFNULL((SELECT group_concat(concat_ws("',", l.lec_code) separator ", ") AS lecturer
 		FROM lecturer l
@@ -540,7 +540,7 @@ DELIMITER ;
 -- procedure idDropdown
 DROP PROCEDURE IF EXISTS java_app.idDropdown;
 DELIMITER //
-CREATE PROCEDURE idDropdown(id_type VARCHAR(10),semester_code VARCHAR(10))
+CREATE PROCEDURE idDropdown(id_type VARCHAR(10))
 BEGIN
 	CASE
 		WHEN id_type = "id_1" THEN
@@ -556,7 +556,7 @@ BEGIN
 			JOIN academic_year a ON yf.academic_code = a.aca_code
 			JOIN program p ON yfp.program_code = p.pro_code;
 		WHEN id_type = "id_3" THEN
-			SELECT yfpm.id_3, yfp.id_2, yf.id_1, f.fa_code, f.name AS fa_name, a.aca_code, a.aca_name, p.pro_code, p.name AS pro_name, m.mo_code, m.name AS mo_name
+			SELECT yfpm.id_3, yfp.id_2, yf.id_1, f.fa_code, f.name AS fa_name, a.aca_code, a.aca_name, p.pro_code, p.name AS pro_name, m.mo_code, m.name AS mo_name, s.sem_code
 			FROM year_fac_pro_mo yfpm
 			JOIN year_fac_pro yfp ON yfpm.id_2 = yfp.id_2
 			JOIN year_faculty yf ON yfp.id_1 = yf.id_1
@@ -564,12 +564,19 @@ BEGIN
 			JOIN academic_year a ON yf.academic_code = a.aca_code
 			JOIN program p ON yfp.program_code = p.pro_code
 			JOIN module m ON yfpm.module_code = m.mo_code
-            JOIN semester s ON s.academic_code = a.aca_code
-            WHERE semester_code IS NULL  OR s.sem_code = semester_code;
+            JOIN semester s ON s.academic_code = a.aca_code;
 	END CASE;
 END //
 DELIMITER ;
 
-
+-- Get Answer 20
+DROP PROCEDURE IF EXISTS java_app.getAnswer20;
+DELIMITER //
+CREATE PROCEDURE getAnswer20(t_id VARCHAR(10))
+BEGIN
+	SELECT answer_20 FROM questionaire
+	WHERE teaching_id = t_id;
+END //
+DELIMITER ;
 
 

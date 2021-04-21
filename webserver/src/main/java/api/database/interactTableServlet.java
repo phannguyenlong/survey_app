@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -86,24 +88,24 @@ public class interactTableServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Cookie cookie = req.getCookies()[0];         
-        String username = (new JwtGenerate()).parseJWT(cookie.getValue());
-        System.out.println(username);
+        // Cookie cookie = req.getCookies()[0];         
+        // String username = (new JwtGenerate()).parseJWT(cookie.getValue());
+        // System.out.println(username);
 
-        String query = "CALL controllAccess('" + username + "')";
+        // String query = "CALL controllAccess('" + username + "')";
         try {
             // Get list of permission from cookie
             DatabaseConnect DB = new DatabaseConnect();
             Connection conn = DB.getConnection();
-            ResultSet resAccessCotrol = DB.doQuery(query);
+            // ResultSet resAccessCotrol = DB.doQuery(query);
 
-            List<String> arr = new ArrayList<>();
-            while (resAccessCotrol.next()) 
-                arr.add(resAccessCotrol.getString(req.getParameter("table_name")));
-            String listOfPermission = "'" + String.join("','", new ArrayList<>(new HashSet<>(arr))) + "'"; // remove duplicate add joining
+            // List<String> arr = new ArrayList<>();
+            // while (resAccessCotrol.next()) 
+            //     arr.add(resAccessCotrol.getString(req.getParameter("table_name")));
+            // String listOfPermission = "'" + String.join("','", new ArrayList<>(new HashSet<>(arr))) + "'"; // remove duplicate add joining
 
             // Get return data
-            PreparedStatement st = createStatement(req, "dump", conn, listOfPermission);
+            PreparedStatement st = createStatement(req, "dump", conn, ""); // add listOfPermission when turn on access control
             ResultSet res = st.executeQuery();
             List<Map<String, Object>> json_resp = DB.ResultSetToJSON(res);
 
@@ -114,10 +116,11 @@ public class interactTableServlet extends HttpServlet {
             objectMapper.writeValue(resp.getOutputStream(), json_resp);
 
             DB.closeConnect();
-        } catch (Exception ex) {
-            resp.setStatus(500);
-            ex.printStackTrace();
+        } catch (Exception e) {
+        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "The Table Name is invalid");
+            e.printStackTrace();
         }
+
     }
 
     @Override
@@ -130,14 +133,15 @@ public class interactTableServlet extends HttpServlet {
             st.executeUpdate();
             DB.closeConnect();
 
-        } catch (Exception ex) {
-            resp.setStatus(500);
-            ex.printStackTrace();
+        } catch (Exception e) {
+        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "The Table Name is invalid");
+            e.printStackTrace();
         }
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
+        	System.out.println("doPost");
             DatabaseConnect DB = new DatabaseConnect();
             Connection conn = DB.getConnection();
             PreparedStatement st = createStatement(req, "create", conn, "");
@@ -145,8 +149,14 @@ public class interactTableServlet extends HttpServlet {
 
             st.executeUpdate();
             DB.closeConnect();
+        } catch (SQLIntegrityConstraintViolationException e) {
+        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "The Key must be unique");
+            e.printStackTrace();
+        } catch (SQLException e) {
+        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "The Key is unexisting");
+            e.printStackTrace();
         } catch (Exception e) {
-            resp.setStatus(500);
+        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "The Table Name is invalid or The Input cannot be NULL");
             e.printStackTrace();
         }
 
@@ -162,10 +172,21 @@ public class interactTableServlet extends HttpServlet {
 
             st.executeUpdate();
             DB.closeConnect();
-        } catch (Exception ex) {
-            resp.setStatus(500);
+        }
+        catch (SQLIntegrityConstraintViolationException ex) {
+        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Can't delete foreign key of another data");
+            ex.printStackTrace();
+        }
+        
+        catch(SQLException ex)
+        {
+        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Can't leave blank");
+        	ex.printStackTrace();
+        }
+        
+        catch (Exception ex) {
+        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Wrong table name");
             ex.printStackTrace();
         }
     }
-
 }

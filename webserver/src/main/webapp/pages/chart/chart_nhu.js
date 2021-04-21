@@ -8,159 +8,81 @@ $(document).ready(function () {
     $("#header").load("/webserver/component/header.html");
     $("#footer").load("/webserver/component/footer.html");
     filterChart();
-    //visualize();
 })
 
 /**
  * Filter to visualize Chart
  */
-
 function filterChart() {
-    //console.log(teaching_id.length)
-    getAcademicYear();
-    $("#aca_code").change(() => getSemester())
-    $("#sem").change(() => getFaculty())
-    $("#fal").change(() => getProgram())
-    $("#prog").change(() => getModule())
-    $("#mod").change(() => getClass())
-    $("#class_code").change(() => getLecturer())
-    $("#lect").change(() => {
-        teaching_id = [$("#lect option:selected").val()]
-    })
+    getAllSelect()
 }
 
-function getAcademicYear() {
+function getAllSelect(select_id) {
+    console.log(select_id)
     teaching_id = []
+    let selectArr = ["aca", "sem", "fa", "pro", "mo", "class", "lec"]
+    // Generate the parameter (if no input ==> null)
+    let params = "";
+    for (let i = 0; i < selectArr.length; i++) {
+        if ($(`#${selectArr[i]} option:selected`).val() == '')
+            params += selectArr[i] + "_code=null"
+        else if (selectArr[i] == "fa" || selectArr[i] == "lec" || selectArr[i] == "pro")
+            params += selectArr[i] + "_code='" + $(`#${selectArr[i]} option:selected`).val() + "'"
+        else
+            params += selectArr[i] + "_code=" + $(`#${selectArr[i]} option:selected`).val()
+        params += i == selectArr.length - 1 ? "" : "&"
+    }
+    
+    console.log(params)
+    // optionRemoveNew(select_id)
     $.ajax({
         type: 'GET',
-        url: "http://localhost:8080/webserver/chart/validate?aca_code=null&sem_code=null&fa_code=null&pro_code=null&mo_code=null&class_code=null&lec_code=null",
+        url: "http://localhost:8080/webserver/chart/validate?" + params,
         success: function (data) {
-            $("#aca_code").append(`<option value = "${data[0].aca_code}"> ${data[0].aca_code} - ${data[0].aca_name} </option>`)
-            teaching_id.push(data[0].teaching_id)
-            for (let i = 1; i < data.length; i++) {
-                if (data[i].aca_code != data[i-1].aca_code)
-                    $("#aca_code").append(`<option value = "${data[i].aca_code}"> ${data[i].aca_code} - ${data[i].aca_name} </option>`)
-                teaching_id.push(data[i].teaching_id)
+            let arr = [[], [], [], [], [], [], []] // array for filter duplicate
+            let cacheArr = [[], [], [], [], [], [], []]
+            if (cacheArr[0] != null)
+                for (let i = 0; i < selectArr.length; i++) {
+                    $(`#${selectArr[i]} option`).not(":first").each(function() {
+                        cacheArr[i].push(String($(this).val()))
+                    })
+                }
+            // Add data to select
+            for (let x = 0; x < data.length; x++) {
+                for (let i = 0; i < selectArr.length; i++) {
+                    if (!arr[i].includes(String(data[x][`${selectArr[i]}_code`]))) {
+                        arr[i].push(String(data[x][`${selectArr[i]}_code`]))
+                        if (!cacheArr[i].includes(String(data[x][`${selectArr[i]}_code`]))) {
+                            if (selectArr[i] == "class" || selectArr[i] == "sem")
+                                $(`#${selectArr[i]}`).append(`<option value = "${String(data[x][`${selectArr[i]}_code`])}"> ${data[x][`${selectArr[i]}_code`]}</option>`)
+                            else
+                                $(`#${selectArr[i]}`).append(`<option value = "${String(data[x][`${selectArr[i]}_code`])}"> ${data[x][`${selectArr[i]}_code`]} - ${data[x][`${selectArr[i]}_name`]} </option>`)
+                        }
+                    }
+                }
+                teaching_id.push(data[x].teaching_id)
+            }
+            console.log(arr)
+            console.log(cacheArr)
+
+            // filter redundant
+            for (let i = 0; i < selectArr.length; i++) {
+                $(`#${selectArr[i]} option`).not(":first").each(function () {
+                    if (!arr[i].includes($(this).val())) {
+                        $(`#${selectArr[i]} option[value='${$(this).val()}']`).remove()
+                    }
+                })
             }
         }
     })
 }
 
-function getSemester() {
-    teaching_id = []
-    $.ajax({
-        type: 'GET',
-        url: `http://localhost:8080/webserver/chart/validate?aca_code=${String($("#aca_code option:selected").val())}&sem_code=null&fa_code=null&pro_code=null&mo_code=null&class_code=null&lec_code=null`,
-        success: function (data) {
-            optionRemove(1)
-            $("#sem").append(`<option value = "${data[0].sem_code}"> ${data[0].sem_code} </option>`)
-            teaching_id.push(data[0].teaching_id)
-            for (let i = 1; i < data.length; i++) {
-                if (data[i].sem_code != data[i - 1].sem_code)
-                    $("#sem").append(`<option value = "${data[i].sem_code}"> ${data[i].sem_code} </option>`)
-                teaching_id.push(data[i].teaching_id)
-            }
-        }
-    })
-}
-
-function getFaculty() {
-    teaching_id = []
-    $.ajax({
-        type: 'GET',
-        url: `http://localhost:8080/webserver/chart/validate?aca_code=${String($("#aca_code option:selected").val())}&sem_code=${String($("#sem option:selected").val())}&fa_code=null&pro_code=null&mo_code=null&class_code=null&lec_code=null`,
-        success: function (data) {
-            optionRemove(2)
-            $("#fal").append(`<option value = "${data[0].fa_code}"> ${data[0].fa_code} - ${data[0].fa_name}</option>`)
-            teaching_id.push(data[0].teaching_id)
-            for (let i = 1; i < data.length; i++) {
-                if (data[i].fa_code != data[i - 1].fa_code)
-                    $("#fal").append(`<option value = "${data[i].fa_code}"> ${data[i].fa_code} - ${data[i].fa_name} </option>`)
-                teaching_id.push(data[i].teaching_id)
-            }
-        }
-    })
-}
-
-function getProgram() {
-    teaching_id = []
-    $.ajax({
-        type: 'GET',
-        url: `http://localhost:8080/webserver/chart/validate?aca_code=${String($("#aca_code option:selected").val())}&sem_code=${String($("#sem option:selected").val())}&fa_code='${String($("#fal option:selected").val())}'&pro_code=null&mo_code=null&class_code=null&lec_code=null`,
-        success: function (data) {
-            optionRemove(3)
-            $("#prog").append(`<option value = "${data[0].pro_code}"> ${data[0].pro_code} - ${data[0].pro_name} </option>`)
-            teaching_id.push(data[0].teaching_id)
-            for (let i = 1; i < data.length; i++) {
-                if (data[i].pro_code != data[i - 1].pro_code)
-                    $("#prog").append(`<option value = "${data[i].pro_code}"> ${data[i].pro_code} - ${data[i].pro_name} </option>`)
-                teaching_id.push(data[i].teaching_id)
-            }
-        }
-    })
-}
-
-function getModule() {
-    teaching_id = []
-    $.ajax({
-        type: 'GET',
-        url: `http://localhost:8080/webserver/chart/validate?aca_code=${String($("#aca_code option:selected").val())}&sem_code=${String($("#sem option:selected").val())}&fa_code='${String($("#fal option:selected").val())}'&pro_code='${String($("#prog option:selected").val())}'&mo_code=null&class_code=null&lec_code=null`,
-        success: function (data) {
-            optionRemove(4)
-            $("#mod").append(`<option value = "${data[0].mo_code}"> ${data[0].mo_code} - ${data[0].mo_name} </option>`)
-            teaching_id.push(data[0].teaching_id)
-            for (let i = 1; i < data.length; i++) {
-                if (data[i].mo_code != data[i - 1].mo_code)
-                    $("#mod").append(`<option value = "${data[i].mo_code}"> ${data[i].mo_code} - ${data[i].mo_name} </option>`)
-                teaching_id.push(data[i].teaching_id)
-            }
-        }
-    })
-}
-
-function getClass() {
-    teaching_id = []
-    $.ajax({
-        type: 'GET',
-        url: `http://localhost:8080/webserver/chart/validate?aca_code=${String($("#aca_code option:selected").val())}&sem_code=${String($("#sem option:selected").val())}&fa_code='${String($("#fal option:selected").val())}'&pro_code='${String($("#prog option:selected").val())}'&mo_code=${String($("#mod option:selected").val())}&class_code=null&lec_code=null`,
-        success: function (data) {
-            optionRemove(5)
-            $("#class_code").append(`<option value = "${data[0].class_code}"> ${data[0].class_code} </option>`)
-            teaching_id.push(data[0].teaching_id)
-            for (let i = 1; i < data.length; i++) {
-                if (data[i].class_code != data[i - 1].class_code)
-                    $("#class_code").append(`<option value = "${data[i].class_code}"> ${data[i].class_code} </option>`)
-                teaching_id.push(data[i].teaching_id)
-            }
-        }
-    })
-}
-
-function getLecturer() {
-    teaching_id = []
-    $.ajax({
-        type: 'GET',
-        url: `http://localhost:8080/webserver/chart/validate?aca_code=${String($("#aca_code option:selected").val())}&sem_code=${String($("#sem option:selected").val())}&fa_code='${String($("#fal option:selected").val())}'&pro_code='${String($("#prog option:selected").val())}'&mo_code=${String($("#mod option:selected").val())}&class_code=${String($("#class_code option:selected").val())}&lec_code=null`,
-        success: function (data) {
-            $("#lect option").not(":first").remove()
-            $("#lect").append(`<option value = "${data[0].lec_code}"> ${data[0].lec_code} - ${data[0].lec_name} </option>`)
-            teaching_id.push(data[0].teaching_id)
-            for (let i = 1; i < data.length; i++) {
-                if (data[i].lec_code != data[i - 1].lec_code)
-                    $("#lect").append(`<option value = "${data[i].lec_code}"> ${data[i].lec_code} - ${data[i].lec_name} </option>`)
-                teaching_id.push(data[i].teaching_id)
-            }
-        }
-    })
-}
-
-// Use for remove option in each select
-function optionRemove(start) {
-    optionField = ["sem", "fal", "prog", "mod", "class_code", "lect"]
-    for (let i = start - 1; i < optionField.length; i++)
-        $(`#${optionField[i]} option`).not(":first").remove()
-}
-
+$('#resetButton').click(function() {
+    optionField = ["aca", "sem", "fa", "pro", "mo", "class", "lec"]
+    for (let i = 0; i < optionField.length; i++)
+        $(`#${optionField[i]}`).val("")
+    getAllSelect();
+});
 
 /**
  *  Visualize Chart and its Properties
@@ -168,7 +90,7 @@ function optionRemove(start) {
 function init() {
     let chartName = ["Class Attendance", "Gender","Clearance of the Module Objectives", "Useful & Sufficient Learning Materials",
         "Relevance of the Module Content","Interesting Lessons","Time Spent on Module Workload Outside Classroom",
-        "Module Workload","Difficulty of the Module","Understandable Presentation of the Module Contents",
+        "Overall Module Workload","Difficulty of the Module","Understandable Presentation of the Module Contents",
         "Variety of Learning Activities","Supportive learning activities","Appropriate Assessment Method",
         "Lecturer's Encouragement in Critical Thinking and Logic","Helpful Feedback from Lecturer",
         "Language Skill (English/German)","Appreciation of Students' Ideas and Contributions","Lecturer's In-class Encouragement in Discussion and Questions",
@@ -266,7 +188,7 @@ function init() {
                         color: '#000',
                         anchor: 'end',
                         align: 'top',
-                        offset: 10
+                        offset: 6
                     }
                 }
             }
@@ -275,6 +197,7 @@ function init() {
         $(".chartContainer").append(`<p id="numResp_${i}"> Number of Response =  </p>`)
         $(".chartContainer").append(`<p id="respRate_${i}"> Response rate =  </p>`)
         $(".chartContainer").append(`<p id="meanVal_${i}"> Mean = </p>`)
+        $(".chartContainer").append(`<p id="medianVal_${i}"> Median = </p>`)
         $(".chartContainer").append(`<p id="stDev_${i}"> Standard Deviation =  </p>`)
     }
 }
@@ -314,6 +237,7 @@ function visualize() {
 
                 let arrValues = addValue(orderedData)
                 meanVal = jStat.mean(arrValues)
+                medianVal = jStat.median(arrValues)
                 stDev = jStat.stdev(arrValues)
 
                 // update chart
@@ -326,6 +250,7 @@ function visualize() {
                 $(`#numResp_${i-1}`).empty().append(`Number of Response =  ${numResp}`)
                 $(`#respRate_${i-1}`).empty().append(`Response rate = ${respRate.toFixed(2) + '%'}`)
                 $(`#meanVal_${i-1}`).empty().append(`Mean = ${meanVal.toFixed(2)}`)
+                $(`#medianVal_${i-1}`).empty().append(`Median = ${medianVal}`)
                 $(`#stDev_${i-1}`).empty().append(`Standard Deviation =  ${stDev.toFixed(2)}`)
             }
         })
@@ -350,7 +275,7 @@ function addValue(test) {
         arrVal.push(5)
     }
     for (j = 0 ; j < test['Option6']; j ++){
-        arrVal.push(6)
+        arrVal.push(0)
     }
     return arrVal
 }

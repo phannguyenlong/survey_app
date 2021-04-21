@@ -20,25 +20,24 @@ import javax.servlet.annotation.WebServlet;
 import util.DatabaseConnect;
 
 /**
- * Get number of answers filled
+ * Get answer of question 20
  * @author Hai Yen Le
  */
-@WebServlet(urlPatterns = "/chart/numberOfAnswer")
-public class getNumberOfAnswerServlet extends HttpServlet {
+@WebServlet(urlPatterns = "/chart/getAnswer20")
+public class getAnswer20Servlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        String query = "CALL getNumberOfAnswer(?, ?);";
+        String query = "CALL getAnswer20(?);";
 
         try {
             DatabaseConnect DB = new DatabaseConnect();
             Connection conn = DB.getConnection();
             PreparedStatement st = conn.prepareStatement(query);
 
-            st.setString(1, req.getParameter("teaching_id_arr"));
-            st.setString(2, req.getParameter("answer_id"));
+            st.setString(1, req.getParameter("teaching_id"));
             
             System.out.println(st);
 
@@ -47,16 +46,16 @@ public class getNumberOfAnswerServlet extends HttpServlet {
             List<Map<String, Object>> json_resp = DB.ResultSetToJSON(res);
             resp.setContentType("application/json");
             resp.setCharacterEncoding("UTF-8");
-            resp.addHeader("Access-Control-Allow-Origin", "*"); // remove CORS policy
+            resp.addHeader("Access-Control-Allow-Origin", "*");
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.writeValue(resp.getOutputStream(), json_resp);
 
             DB.closeConnect();
         } catch (SQLSyntaxErrorException ex) {
-        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "The Teaching ID or Answer ID is invalid");
+        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "The Teaching ID is invalid");
             ex.printStackTrace();
         } catch (SQLException ex) {
-        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "The Teaching ID or Answer ID cannot be NULL or contain letters");
+        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "The Teaching ID cannot be NULL or contain letters");
             ex.printStackTrace();
         } catch (Exception ex) {
         	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "The Request is invalid");

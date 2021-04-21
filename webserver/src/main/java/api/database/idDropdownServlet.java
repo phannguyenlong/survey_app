@@ -1,6 +1,7 @@
 package api.database;
 
 import java.io.IOException;
+import java.sql.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,7 +30,7 @@ public class idDropdownServlet extends HttpServlet{
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     	
-        String query = "CALL idDropdown(?, ?);";
+        String query = "CALL idDropdown(?);";
         
         try {
             DatabaseConnect DB = new DatabaseConnect();
@@ -37,7 +38,6 @@ public class idDropdownServlet extends HttpServlet{
             PreparedStatement st = conn.prepareStatement(query);
             
             st.setString(1, req.getParameter("id_type"));
-            st.setString(2, req.getParameter("sem_code").equals("null") ? null : req.getParameter("sem_code"));
             
             System.out.println(st);
             
@@ -51,8 +51,11 @@ public class idDropdownServlet extends HttpServlet{
             objectMapper.writeValue(resp.getOutputStream(), json_resp);
 
             DB.closeConnect();
+        } catch (SQLException ex) {
+        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "The ID Type or Semester Code is invalid");
+            ex.printStackTrace();
         } catch (Exception ex) {
-            resp.setStatus(500);
+        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "The Request is invalid");
             ex.printStackTrace();
         }
     }

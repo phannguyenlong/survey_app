@@ -20,52 +20,51 @@
 
         <div class="dropdownList">
             <div class="selectBox">
-                <select class="selectInput" id="aca_code">
-                    <option name="aca_code" value=""> Academic Year </option>
+                <select class="selectInput" onchange="getAllSelect(this.id)" id="aca">
+                    <option name="aca" value=""> Academic Year </option>
                 </select>
             </div>
             <div class="selectBox">
-                <select class="selectInput" id="sem">
+                <select class="selectInput" onchange="getAllSelect(this.id)" id="sem">
                     <option name="sem" value=""> Semester </option>
                 </select>
             </div>
             <div class="selectBox">
-                <select class="selectInput" id="fal">
-                    <option name="fal" value=""> Faculty </option>
+                <select class="selectInput" onchange="getAllSelect(this.id)" id="fa">
+                    <option name="fa" value=""> Faculty </option>
                 </select>
             </div>
             <div class="selectBox">
-                <select class="selectInput" id="prog">
-                    <option name="prog" value=""> Program </option>
+                <select class="selectInput" onchange="getAllSelect(this.id)" id="pro">
+                    <option name="pro" value=""> Program </option>
                 </select>
             </div>
         </div>
 
         <div class="dropdownList">
             <div class="selectBox">
-                <select class="selectInput" id="mod">
+                <select class="selectInput" onchange="getAllSelect(this.id)" id="mo">
                     <option name="mod" value=""> Module </option>
                 </select>
             </div>
             <div class="selectBox">
-                <select class="selectInput" id="class_code">
-                    <option name="class_code" value=""> Class </option>
+                <select class="selectInput" onchange="getAllSelect(this.id)" id="class">
+                    <option name="class" value=""> Class </option>
                 </select>
             </div>
             <div class="selectBox">
-                <select class="selectInput" id="lect">
-                    <option name="lect" value=""> Lecturer </option>
+                <select class="selectInput" onchange="getAllSelect(this.id)" id="lec">
+                    <option name="lec" value=""> Lecturer </option>
                 </select>
             </div>
         </div>
 
-        <div>
+        <div id="button">
             <button onclick="visualize()">Visualize</button>
+            <button id="resetButton"> Reset </button>
         </div>
 
-        <div class="chartContainer" style >
-            <!-- <canvas id="questionnaireChart" style="width: 80%; height:300px;";></canvas> -->
-        </div>
+        <div class="chartContainer" style></div>
 
     </div>
 
