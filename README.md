@@ -91,7 +91,7 @@
 - **procedure name:** table_name + "Interact" (*"dump"*)
 - **output:** content of that table
 
-`GET` **/database/idDropdown?id_type=''&sem_code=''**
+`GET` **/database/idDropdown?id_type=''**
 - **input:** 
   - id_type: type of need to get (has 3 value `id1, id2, id3`)
   - sem_code: semester_code for filter in option "id3" 
