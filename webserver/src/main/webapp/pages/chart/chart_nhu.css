@@ -57,12 +57,13 @@ button:hover {background-color: #FD800D;}
     margin-top: 35px;
     margin-bottom: 50px;
     width: 700px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    box-shadow: 5px 5px 3px #bfbfbf;
 }
 .answerTable thead tr {
     background-color: #F5821F;
     color: #ffffff;
     text-align: center;
+    font-size: 22px;
 }
 .answerTable th,
 .answerTable td {
@@ -71,4 +72,8 @@ button:hover {background-color: #FD800D;}
     text-align: center;
 }
 
-tr:hover {background-color:#FFA552;}
+tr:hover {
+    background-color:#FFA552;
+    box-shadow: 5px 5px 3px #bfbfbf;
+    color: #ffffff;
+}
