@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
 
 import javax.servlet.annotation.WebServlet;
 
@@ -53,14 +54,19 @@ public class getClassServlet extends HttpServlet {
 
             DB.closeConnect();
         	}
+	        catch (MysqlDataTruncation ex) {
+	        	resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+	        	resp.getWriter().println("Data is too long");
+	        }
             catch (SQLSyntaxErrorException ex) {
-                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "The Class Code is invalid");
+            	resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            	resp.getWriter().println("The Class Code is invalid");
                 ex.printStackTrace();
             }
             catch (Exception ex) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "The Request is invalid");
-            ex.printStackTrace();
-            
+            	resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            	resp.getWriter().println("The Request is invalid");
+            	ex.printStackTrace();
         }
     }
 }

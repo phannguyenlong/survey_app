@@ -44,7 +44,7 @@ public class Login extends HttpServlet {
             ResultSet res = st.executeQuery();
             
             if (!res.next()) {
-                System.out.println("Error! ResultSet is empty!!!");
+//                System.out.println("ResultSet is empty!");
                 throw new Exception("Invalid Credentials or Blank!");
             } 
             else {
@@ -58,13 +58,15 @@ public class Login extends HttpServlet {
             
             DB.closeConnect();
         } catch (Exception e) {
-            if (e.getMessage().equals("Invalid Credentials"))
+            if (e.getMessage().equals("Invalid Credentials or Blank!"))
             {
-            	resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid account");
+            	resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            	resp.getWriter().println("Invalid Account");
             }   	
             else 
             {
-            	resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Reload page and do it again");            
+            	resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            	resp.getWriter().println("Please reload page and do it again");
             }
             e.printStackTrace();
         }

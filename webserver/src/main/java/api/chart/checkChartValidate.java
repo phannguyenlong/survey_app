@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping;
+import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
 
 import javax.servlet.annotation.WebServlet;
 
@@ -55,21 +55,22 @@ public class checkChartValidate extends HttpServlet {
 
             DB.closeConnect();
         } catch (SQLSyntaxErrorException ex) {
-        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Syntax is incorrect");
-//            resp.setStatus(500);
+        	resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        	resp.getWriter().println("Syntax is incorrect");
             ex.printStackTrace();
         }
-//        catch (SQLExceptionsMapping ex) {
-//        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Data too long");
-//            resp.setStatus(500);
-//        }
+        catch (MysqlDataTruncation ex) {
+        	resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        	resp.getWriter().println("Data is too long");
+        }
         catch (SQLException ex) {
-        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "No blank allowed");
+        	resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        	resp.getWriter().println("No blank allowed");
             ex.printStackTrace();
         }
         catch (Exception ex) {
-        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "The Request is invalid");
-//            resp.setStatus(500);
+        	resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        	resp.getWriter().println("The Request is invalid");
             ex.printStackTrace();
         }
     }

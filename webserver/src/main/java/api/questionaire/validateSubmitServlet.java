@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
 
 import javax.servlet.annotation.WebServlet;
 
@@ -59,10 +60,13 @@ public class validateSubmitServlet extends HttpServlet {
             System.out.println(st);
             
             st.executeUpdate();
-            // DB.doQuery(query);
             DB.closeConnect();
+        } catch (MysqlDataTruncation ex) {
+        	resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        	resp.getWriter().println("Data is too long");
         } catch (Exception e) {
-            resp.setStatus(500);
+        	resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        	resp.getWriter().println("The Request is invalid");
             e.printStackTrace();
         }
         
