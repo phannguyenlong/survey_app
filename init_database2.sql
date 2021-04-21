@@ -181,23 +181,22 @@ CREATE TABLE program_coordinator(
     FOREIGN KEY (program_code) REFERENCES program(pro_code),
     CHECK (start_date < end_date)
 );
-
 -- ======================Insert Trigger===================
-
 -- unique program
 DROP TRIGGER IF EXISTS unique_program;
 DELIMITER //
 CREATE TRIGGER unique_program BEFORE INSERT ON year_fac_pro
 FOR EACH ROW BEGIN
-    IF
+	DECLARE t INT;
+    SELECT count(*) INTO t FROM year_faculty WHERE
 		(SELECT academic_code 
 			FROM year_faculty 
             WHERE NEW.id_1=id_1) IN
 		(SELECT yf.academic_code 
 			FROM year_fac_pro yfp 
 			JOIN year_faculty yf ON yf.id_1=yfp.id_1 
-            WHERE program_code = NEW.program_code)
-	THEN
+            WHERE program_code = NEW.program_code);
+	IF (t>0) THEN
 		SET NEW.program_code = NULL;
 	END IF;
 END//
@@ -208,7 +207,8 @@ DROP TRIGGER IF EXISTS unique_module;
 DELIMITER //
 CREATE TRIGGER unique_module BEFORE INSERT ON year_fac_pro_mo
 FOR EACH ROW BEGIN
-	IF
+	DECLARE t INT;
+    SELECT count(*) INTO t FROM year_faculty WHERE
 		(SELECT academic_code 
 			FROM year_faculty yf 
 			JOIN year_fac_pro yfp ON yfp.id_1=yf.id_1 
@@ -217,92 +217,13 @@ FOR EACH ROW BEGIN
 			FROM year_fac_pro yfp 
 			JOIN year_faculty yf ON yf.id_1=yfp.id_1 
 			JOIN year_fac_pro_mo yfpm ON yfpm.id_2=yfp.id_2 
-			WHERE module_code = NEW.module_code)
-	THEN
+			WHERE module_code = NEW.module_code);
+	IF (t>0) THEN
 		SET NEW.module_code = NULL;
 	END IF;
 END//
 DELIMITER ;
 
--- unique program on update
-DROP TRIGGER IF EXISTS unique_program_on_update;
-DELIMITER //
-CREATE TRIGGER unique_program_on_update BEFORE UPDATE ON year_fac_pro
-FOR EACH ROW BEGIN
-    IF
-		(SELECT academic_code 
-			FROM year_faculty 
-            WHERE NEW.id_1=id_1) IN
-		(SELECT yf.academic_code 
-			FROM year_fac_pro yfp 
-			JOIN year_faculty yf ON yf.id_1=yfp.id_1 
-            WHERE program_code = NEW.program_code)
-	THEN
-		SET NEW.program_code = NULL;
-	END IF;
-END//
-DELIMITER ;
-
--- unique module on update
-DROP TRIGGER IF EXISTS unique_module_on_update;
-DELIMITER //
-CREATE TRIGGER unique_module_on_update BEFORE UPDATE ON year_fac_pro_mo
-FOR EACH ROW BEGIN
-	IF
-		(SELECT academic_code 
-			FROM year_faculty yf 
-			JOIN year_fac_pro yfp ON yfp.id_1=yf.id_1 
-			WHERE NEW.id_2=id_2) IN
-		(SELECT yf.academic_code 
-			FROM year_fac_pro yfp 
-			JOIN year_faculty yf ON yf.id_1=yfp.id_1 
-			JOIN year_fac_pro_mo yfpm ON yfpm.id_2=yfp.id_2 
-			WHERE module_code = NEW.module_code)
-	THEN
-		SET NEW.module_code = NULL;
-	END IF;
-END//
-DELIMITER ;
-
--- unique class
-DROP TRIGGER IF EXISTS unique_class;
-DELIMITER //
-CREATE TRIGGER unique_class BEFORE INSERT ON class
-FOR EACH ROW BEGIN
-    IF NOT  
-		(SELECT yf.academic_code 
-			FROM year_faculty yf
-            JOIN year_fac_pro yfp ON yfp.id_1 = yf.id_1
-            JOIN year_fac_pro_mo yfpm ON yfpm.id_2 = yfp.id_2
-            WHERE yfpm.id_3=NEW.id_3) =
-		(SELECT s.academic_code 
-			FROM semester s 
-            WHERE s.sem_code = NEW.semester_code) 
-	THEN
-		SET NEW.size = NULL;
-	END IF;
-END//
-DELIMITER ;
-
--- unique class on update
-DROP TRIGGER IF EXISTS unique_class_on_update;
-DELIMITER //
-CREATE TRIGGER unique_class_on_update BEFORE UPDATE ON class
-FOR EACH ROW BEGIN
-    IF NOT
-		(SELECT yf.academic_code 
-			FROM year_faculty yf
-            JOIN year_fac_pro yfp ON yfp.id_1 = yf.id_1
-            JOIN year_fac_pro_mo yfpm ON yfpm.id_2 = yfp.id_2
-            WHERE yfpm.id_3=NEW.id_3) =
-		(SELECT s.academic_code 
-			FROM semester s 
-            WHERE s.sem_code = NEW.semester_code) 
-	THEN
-		SET NEW.size = NULL;
-	END IF;
-END//
-DELIMITER ;
 
 -- ======================Insert Data======================
 
