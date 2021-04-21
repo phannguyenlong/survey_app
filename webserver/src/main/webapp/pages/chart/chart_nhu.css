@@ -45,11 +45,30 @@ button{
     box-shadow: 5px 5px 3px #bfbfbf;
 }
 
-button:hover {
-    background-color: #FD800D;
-}
+button:hover {background-color: #FD800D;}
 
 #button{
     display: flex;
     flex-direction: row;
 }
+
+.answerTable{
+    border-collapse: collapse;
+    margin-top: 35px;
+    margin-bottom: 50px;
+    width: 700px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+.answerTable thead tr {
+    background-color: #F5821F;
+    color: #ffffff;
+    text-align: center;
+}
+.answerTable th,
+.answerTable td {
+    border: 1px solid #FFA552;
+    padding: 7px 8px;
+    text-align: center;
+}
+
+tr:hover {background-color:#FFA552;}
