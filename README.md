@@ -41,11 +41,11 @@
 `GET` **/question**
 - **input:** no input
 - **procedure name:** getAllQuestion()
-- **output:** return (question_id, content) of that class
+- **output:** return (question_id, content)
 
 `POST` **/questionaire/submit**
 - **input:** input JSON string of questionarie *(put json into request body)*
-- **procedure name:** insertIntoQuestionaire(class_code, lectecturer, question1, question2, question3, question4, question5, question6, question7,  question8, question9, question10, question11, question12, question13, question14, question15, question16, question17, question18, question19, question20)
+- **procedure name:** insertIntoQuestionaire(class_code, lecturer_code, question1, question2, question3, question4, question5, question6, question7,  question8, question9, question10, question11, question12, question13, question14, question15, question16, question17, question18, question19, question20)
 - **output:** return status code of request
 
 ### III. Chart
@@ -77,6 +77,11 @@
 |-------------|-------------|-------------|-------------|-------------|-------------|-----------------|
 | 20          | 30          | 40          | 20          | 10          | 10          | 120             |
 
+`GET` **/chart/getAnswer20?teaching_id=**
+- **input:** teaching_id
+- **procedure name:** getAnswer20(*teaching_id*)
+- **output:** answer of question 20
+
 
 ### IV. Database
 
@@ -86,7 +91,7 @@
 - **procedure name:** table_name + "Interact" (*"dump"*)
 - **output:** content of that table
 
-`GET` **/database/idDropdown?id_type=''&sem_code=''**
+`GET` **/database/idDropdown?id_type=''**
 - **input:** 
   - id_type: type of need to get (has 3 value `id1, id2, id3`)
   - sem_code: semester_code for filter in option "id3" 

@@ -274,7 +274,27 @@ FOR EACH ROW BEGIN
 			FROM year_faculty yf
             JOIN year_fac_pro yfp ON yfp.id_1 = yf.id_1
             JOIN year_fac_pro_mo yfpm ON yfpm.id_2 = yfp.id_2
-            WHERE NEW.id_3=yfpm.id_3) =
+            WHERE yfpm.id_3=NEW.id_3) =
+		(SELECT s.academic_code 
+			FROM semester s 
+            WHERE s.sem_code = NEW.semester_code) 
+	THEN
+		SET NEW.size = NULL;
+	END IF;
+END//
+DELIMITER ;
+
+-- unique class on update
+DROP TRIGGER IF EXISTS unique_class_on_update;
+DELIMITER //
+CREATE TRIGGER unique_class_on_update BEFORE UPDATE ON class
+FOR EACH ROW BEGIN
+    IF NOT
+		(SELECT yf.academic_code 
+			FROM year_faculty yf
+            JOIN year_fac_pro yfp ON yfp.id_1 = yf.id_1
+            JOIN year_fac_pro_mo yfpm ON yfpm.id_2 = yfp.id_2
+            WHERE yfpm.id_3=NEW.id_3) =
 		(SELECT s.academic_code 
 			FROM semester s 
             WHERE s.sem_code = NEW.semester_code) 

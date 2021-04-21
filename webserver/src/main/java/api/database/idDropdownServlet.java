@@ -31,7 +31,7 @@ public class idDropdownServlet extends HttpServlet{
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     	
-        String query = "CALL idDropdown(?, ?);";
+        String query = "CALL idDropdown(?);";
         
         try {
             DatabaseConnect DB = new DatabaseConnect();
@@ -39,7 +39,6 @@ public class idDropdownServlet extends HttpServlet{
             PreparedStatement st = conn.prepareStatement(query);
             
             st.setString(1, req.getParameter("id_type"));
-            st.setString(2, req.getParameter("sem_code").equals("null") ? null : req.getParameter("sem_code"));
             
             System.out.println(st);
             

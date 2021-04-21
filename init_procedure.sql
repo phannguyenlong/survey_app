@@ -512,7 +512,6 @@ BEGIN
 END //
 DELIMITER ;
 
-
 -- Authentication
 DROP PROCEDURE IF EXISTS java_app.authentication;
 DELIMITER  //
@@ -541,7 +540,7 @@ DELIMITER ;
 -- procedure idDropdown
 DROP PROCEDURE IF EXISTS java_app.idDropdown;
 DELIMITER //
-CREATE PROCEDURE idDropdown(id_type VARCHAR(10),semester_code VARCHAR(10))
+CREATE PROCEDURE idDropdown(id_type VARCHAR(10))
 BEGIN
 	CASE
 		WHEN id_type = "id_1" THEN
@@ -557,7 +556,7 @@ BEGIN
 			JOIN academic_year a ON yf.academic_code = a.aca_code
 			JOIN program p ON yfp.program_code = p.pro_code;
 		WHEN id_type = "id_3" THEN
-			SELECT yfpm.id_3, yfp.id_2, yf.id_1, f.fa_code, f.name AS fa_name, a.aca_code, a.aca_name, p.pro_code, p.name AS pro_name, m.mo_code, m.name AS mo_name
+			SELECT yfpm.id_3, yfp.id_2, yf.id_1, f.fa_code, f.name AS fa_name, a.aca_code, a.aca_name, p.pro_code, p.name AS pro_name, m.mo_code, m.name AS mo_name, s.sem_code
 			FROM year_fac_pro_mo yfpm
 			JOIN year_fac_pro yfp ON yfpm.id_2 = yfp.id_2
 			JOIN year_faculty yf ON yfp.id_1 = yf.id_1
@@ -565,12 +564,19 @@ BEGIN
 			JOIN academic_year a ON yf.academic_code = a.aca_code
 			JOIN program p ON yfp.program_code = p.pro_code
 			JOIN module m ON yfpm.module_code = m.mo_code
-            JOIN semester s ON s.academic_code = a.aca_code
-            WHERE semester_code IS NULL  OR s.sem_code = semester_code;
+            JOIN semester s ON s.academic_code = a.aca_code;
 	END CASE;
 END //
 DELIMITER ;
 
-
+-- Get Answer 20
+DROP PROCEDURE IF EXISTS java_app.getAnswer20;
+DELIMITER //
+CREATE PROCEDURE getAnswer20(t_id VARCHAR(10))
+BEGIN
+	SELECT answer_20 FROM questionaire
+	WHERE teaching_id = t_id;
+END //
+DELIMITER ;
 
 

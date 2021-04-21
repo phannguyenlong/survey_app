@@ -17,7 +17,7 @@ h1{
     height: 42px;
     border-radius: 15px;
     border-color: #FFA552;
-    width: 285px;
+    width: 295px;
     color: #ffffff;
     font-weight: bold;
     box-shadow: 5px 5px 3px #bfbfbf;
@@ -34,14 +34,46 @@ h1{
 }
 
 button{
-    margin-bottom: 50px;
-    margin-top: 20px;
-    background-color: #fd800d;
+    margin: 20px 12px 50px 12px;
+    background-color: #FFA552;
     height: 42px;
     border-radius: 15px;
-    border-color: #FFA552;
+    border: 1px solid #FD800D;
     width: 127px;
     color: #ffffff;
     font-weight: bolder;
     box-shadow: 5px 5px 3px #bfbfbf;
+}
+
+button:hover {background-color: #FD800D;}
+
+#button{
+    display: flex;
+    flex-direction: row;
+}
+
+.answerTable{
+    border-collapse: collapse;
+    margin-top: 35px;
+    margin-bottom: 50px;
+    width: 700px;
+    box-shadow: 5px 5px 3px #bfbfbf;
+}
+.answerTable thead tr {
+    background-color: #F5821F;
+    color: #ffffff;
+    text-align: center;
+    font-size: 22px;
+}
+.answerTable th,
+.answerTable td {
+    border: 1px solid #FFA552;
+    padding: 7px 8px;
+    text-align: center;
+}
+
+tr:hover {
+    background-color:#FFA552;
+    box-shadow: 5px 5px 3px #bfbfbf;
+    color: #ffffff;
 }
