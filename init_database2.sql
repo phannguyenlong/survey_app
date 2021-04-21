@@ -274,9 +274,6 @@ FOR EACH ROW BEGIN
 			FROM year_faculty yf
             JOIN year_fac_pro yfp ON yfp.id_1 = yf.id_1
             JOIN year_fac_pro_mo yfpm ON yfpm.id_2 = yfp.id_2
-<<<<<<< main
-            WHERE NEW.id_3=yfpm.id_3) =
-=======
             WHERE yfpm.id_3=NEW.id_3) =
 		(SELECT s.academic_code 
 			FROM semester s 
@@ -298,7 +295,6 @@ FOR EACH ROW BEGIN
             JOIN year_fac_pro yfp ON yfp.id_1 = yf.id_1
             JOIN year_fac_pro_mo yfpm ON yfpm.id_2 = yfp.id_2
             WHERE yfpm.id_3=NEW.id_3) =
->>>>>>> fa9181b database: the last trigger update
 		(SELECT s.academic_code 
 			FROM semester s 
             WHERE s.sem_code = NEW.semester_code) 
