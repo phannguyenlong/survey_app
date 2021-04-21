@@ -192,10 +192,10 @@ function createTable(option) {
 						console.log(($(arr[i]).children('input')[0]))
 						if(($(arr[i]).children('input')[0]) === undefined){
 							console.log(($(arr[i]).children("select").children("option:selected")).attr("name"))
-							params += `&${keys[i]}=${($(arr[i]).children("select").children("option:selected")).attr("name")}`
+							params += `&${keys[i]}=${encodeURIComponent(($(arr[i]).children("select").children("option:selected")).attr("name"))}`
 						}
-						else{
-							params += `&${keys[i]}=${($(arr[i]).children('input')[0]).value}`
+						else {
+							params += `&${keys[i]}=${encodeURIComponent(($(arr[i]).children('input')[0]).value)}`
 						}
 					}
 						addRow(option, params)
@@ -274,10 +274,10 @@ function createTable(option) {
 							console.log(($(arr[i]).children('input')[0]))
 							if(($(arr[i]).children('input')[0]) === undefined){
 								console.log(($(arr[i]).children("select").children("option:selected")).attr("name"))
-								params += `&${keys[i]}=${($(arr[i]).children("select").children("option:selected")).attr("name")}`
+								params += `&${keys[i]}=${encodeURIComponent(($(arr[i]).children("select").children("option:selected")).attr("name"))}`
 							}
 							else{
-								params += `&${keys[i]}=${($(arr[i]).children('input')[0]).value}`
+								params += `&${keys[i]}=${encodeURIComponent(($(arr[i]).children('input')[0]).value)}`
 							}
 						}
 						console.log(result_key)
@@ -307,7 +307,7 @@ function addRow(table, param) {
 		async: false, // turn of async for reload table properly
 		url: "http://localhost:8080/webserver/database/interactTable?table_name=" + table + param,
 		success: data => alertMessage("success", 'Success', `Add row to table ${table} successfully. Please reload to see change`),
-		error: () => alertMessage('error', 'Error', `Cannot add to table ${table} cause error. Please check any duplicate key`)
+		error: (xhr, ajaxOptions, thrownError) => alertMessage('error', 'Error', xhr.responseText)
 	})
 }
 
@@ -318,7 +318,7 @@ function deleteRow(table, key){
 		async: false, // turn of async for reload table properly
 		url: "http://localhost:8080/webserver/database/interactTable?table_name=" + table + "&old_key=" + key,
 		success: data => alertMessage("success", 'Success', `Delete row in table ${table} successfully. Please reload to see change`),
-		error: () => alertMessage('error', 'Error', `Cannot deleete data from table ${table} cause error. Please check delete all foreign key contraint before delete`)
+		error: (xhr, ajaxOptions, thrownError) => alertMessage('error', 'Error', xhr.responseText)
 	})
 }
 
@@ -328,8 +328,7 @@ function modifyRow(table,param){
 		async: false,
 		url: "http://localhost:8080/webserver/database/interactTable?table_name="+table+param,
 		success:data => alertMessage("success",'Success',`Modify row successfully`),
-		error: () => alertMessage('error', 'Error', `Cannot modify to table ${table} cause error. Please check any duplicate key`)
-		
+		error: (xhr, ajaxOptions, thrownError) => alertMessage('error', 'Error', xhr.responseText)
 	})
 }
 
