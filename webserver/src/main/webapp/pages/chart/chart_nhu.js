@@ -73,7 +73,8 @@ function getAllSelect(select_id) {
                     }
                 })
             }
-        }
+        },
+        error: (xhr, ajaxOptions, thrownError) => alertMessage('error', 'Error', xhr.responseText)
     })
 }
 
@@ -318,7 +319,19 @@ function visualizeAnswer20() {
 
             }
 
-        }
+        },
+        error: (xhr, ajaxOptions, thrownError) => alertMessage('error', 'Error', xhr.responseText)
     })
 
+}
+
+/**
+ * Alert Function
+ **/
+function alertMessage(type, title, content) {
+    Swal.fire({
+        icon: type,
+        title: title,
+        text: content,
+    })
 }
