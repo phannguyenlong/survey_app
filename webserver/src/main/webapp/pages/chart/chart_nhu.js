@@ -77,6 +77,9 @@ function getAllSelect(select_id) {
     })
 }
 
+/**
+ * Reset Button Function
+ */
 $('#resetButton').click(function() {
     optionField = ["aca", "sem", "fa", "pro", "mo", "class", "lec"]
     for (let i = 0; i < optionField.length; i++)
@@ -85,7 +88,15 @@ $('#resetButton').click(function() {
 });
 
 /**
- *  Visualize Chart and its Properties
+ * Visualize Chart and Answer 20
+ */
+$('#visualizeButton').click(function() {
+    visualizeChart();
+    visualizeAnswer20();
+});
+
+/**
+ *  Create Chart and its Properties
  */
 function init() {
     let chartName = ["Class Attendance", "Gender","Clearance of the Module Objectives", "Useful & Sufficient Learning Materials",
@@ -130,7 +141,9 @@ function init() {
                     xAxisID: 'mean_id',
                     // yAxisID: 'invoice-amount',
                     data: [{ x: 0.5, y: 0, xMin: 0, xMax: 0 }],
-                    backgroundColor: 'rgb(255, 99, 132)'
+                    backgroundColor: '#e05297',
+                        borderColor: '#cc0e74',
+                        borderWidth: 1,
                 }
                 ],
                 labels: labelArr,
@@ -202,19 +215,12 @@ function init() {
     }
 }
 
-function percentageCalculate(test) {
-    let percentageValue = []
-    let arr = Object.values(test).slice(0, -1)
-    for (x of arr){
-        pData = x/(jStat.sum(arr))*100
-        percentageValue.push(pData.toFixed(1))
-    }
-    return percentageValue
-}
-
+/**
+ * Visualize chart and its properties
+ */
 let test;
-// Visualize chart
-function visualize() {
+
+function visualizeChart() {
     teaching_id = [...new Set(teaching_id)] // using of set remove duplicate
     for (let i = 1; i < 20; i++) {
         $.ajax({
@@ -257,6 +263,19 @@ function visualize() {
     }
 }
 
+/**
+ * Calculate statistic values
+ */
+function percentageCalculate(test) {
+    let percentageValue = []
+    let arr = Object.values(test).slice(0, -1)
+    for (x of arr){
+        pData = x/(jStat.sum(arr))*100
+        percentageValue.push(pData.toFixed(1))
+    }
+    return percentageValue
+}
+
 function addValue(test) {
     let arrVal = []
     for (j = 0 ; j < test['Option1']; j ++){
@@ -278,4 +297,28 @@ function addValue(test) {
         arrVal.push(0)
     }
     return arrVal
+}
+
+function visualizeAnswer20() {
+    $.ajax({
+        type: 'GET',
+        url: `http://localhost:8080/webserver/chart/getAnswer20?teaching_id=${teaching_id}`,
+        success: function (data) {
+            if (teaching_id.length == 1) {
+                data.map(val => {
+                    if (val.answer_20 != null){
+                        contentAns = $("<td></td>").text(val.answer_20)
+                        $(".answerTable").append($("<tr></tr>").append(contentAns))
+                    }
+                    else{
+                        contentAns = $("<td></td>").text("N/A")
+                        $(".answerTable").append($("<tr></tr>").append(contentAns))
+                    }
+                })
+
+            }
+
+        }
+    })
+
 }
