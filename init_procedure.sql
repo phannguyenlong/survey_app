@@ -512,7 +512,6 @@ BEGIN
 END //
 DELIMITER ;
 
-
 -- Authentication
 DROP PROCEDURE IF EXISTS java_app.authentication;
 DELIMITER  //
@@ -570,6 +569,14 @@ BEGIN
 END //
 DELIMITER ;
 
-
+-- Get Answer 20
+DROP PROCEDURE IF EXISTS java_app.getAnswer20;
+DELIMITER //
+CREATE PROCEDURE getAnswer20(t_id VARCHAR(10))
+BEGIN
+	SELECT answer_20 FROM questionaire
+	WHERE teaching_id = t_id;
+END //
+DELIMITER ;
 
 
