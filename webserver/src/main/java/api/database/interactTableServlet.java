@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
 
 import util.DatabaseConnect;
 import util.JwtGenerate;
@@ -116,8 +117,12 @@ public class interactTableServlet extends HttpServlet {
             objectMapper.writeValue(resp.getOutputStream(), json_resp);
 
             DB.closeConnect();
+        } catch (MysqlDataTruncation ex) {
+        	resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        	resp.getWriter().println("Data is too long");
         } catch (Exception e) {
-        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "The Table Name is invalid");
+        	resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        	resp.getWriter().println("The Table Name is invalid");
             e.printStackTrace();
         }
 
@@ -133,8 +138,12 @@ public class interactTableServlet extends HttpServlet {
             st.executeUpdate();
             DB.closeConnect();
 
+        } catch (MysqlDataTruncation ex) {
+        	resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        	resp.getWriter().println("Data is too long");
         } catch (Exception e) {
-        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "The Table Name is invalid");
+        	resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        	resp.getWriter().println("The Table Name is invalid");
             e.printStackTrace();
         }
     }
@@ -149,17 +158,22 @@ public class interactTableServlet extends HttpServlet {
 
             st.executeUpdate();
             DB.closeConnect();
+        } catch (MysqlDataTruncation ex) {
+        	resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        	resp.getWriter().println("Data is too long");
         } catch (SQLIntegrityConstraintViolationException e) {
-        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "The Key must be unique");
+        	resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        	resp.getWriter().println("The Key must be unique");
             e.printStackTrace();
         } catch (SQLException e) {
-        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "The Key is unexisting");
+        	resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        	resp.getWriter().println("The Key is unexisting");
             e.printStackTrace();
         } catch (Exception e) {
-        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "The Table Name is invalid or The Input cannot be NULL");
+        	resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        	resp.getWriter().println("The Table Name is invalid or The Input cannot be NULL");
             e.printStackTrace();
         }
-
     }
 
     @Override
@@ -173,19 +187,24 @@ public class interactTableServlet extends HttpServlet {
             st.executeUpdate();
             DB.closeConnect();
         }
+        catch (MysqlDataTruncation ex) {
+        	resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        	resp.getWriter().println("Data is too long");
+        }
         catch (SQLIntegrityConstraintViolationException ex) {
-        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Can't delete foreign key of another data");
+        	resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        	resp.getWriter().println("Can't delete foreign key of another data");
             ex.printStackTrace();
         }
-        
         catch(SQLException ex)
         {
-        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Can't leave blank");
+        	resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        	resp.getWriter().println("Can't leave blank");
         	ex.printStackTrace();
         }
-        
         catch (Exception ex) {
-        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Wrong table name");
+        	resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        	resp.getWriter().println("Wrong table name");
             ex.printStackTrace();
         }
     }

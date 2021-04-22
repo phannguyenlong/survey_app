@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
 
 import javax.servlet.annotation.WebServlet;
 
@@ -51,11 +52,16 @@ public class idDropdownServlet extends HttpServlet{
             objectMapper.writeValue(resp.getOutputStream(), json_resp);
 
             DB.closeConnect();
+        } catch (MysqlDataTruncation ex) {
+        	resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        	resp.getWriter().println("Data is too long");
         } catch (SQLException ex) {
-        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "The ID Type or Semester Code is invalid");
+        	resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        	resp.getWriter().println("The ID Type or Semester Code is invalid");
             ex.printStackTrace();
         } catch (Exception ex) {
-        	resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "The Request is invalid");
+        	resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        	resp.getWriter().println("The Request is invalid");
             ex.printStackTrace();
         }
     }
