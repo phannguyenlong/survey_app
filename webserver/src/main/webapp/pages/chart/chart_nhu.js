@@ -316,9 +316,7 @@ function visualizeAnswer20() {
                         $(".answerTable").append($("<tr></tr>").append(contentAns))
                     }
                 })
-
             }
-
         },
         error: (xhr, ajaxOptions, thrownError) => alertMessage('error', 'Error', xhr.responseText)
     })
