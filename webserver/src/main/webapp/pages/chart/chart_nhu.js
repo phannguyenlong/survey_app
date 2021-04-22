@@ -93,7 +93,7 @@ $('#resetButton').click(function() {
  */
 $('#visualizeButton').click(function() {
     visualizeChart();
-    visualizeAnswer20();
+    visualizeFeedback();
 });
 
 /**
@@ -300,7 +300,7 @@ function addValue(test) {
     return arrVal
 }
 
-function visualizeAnswer20() {
+function visualizeFeedback() {
     $.ajax({
         type: 'GET',
         url: `http://localhost:8080/webserver/chart/getAnswer20?teaching_id=${teaching_id}`,
@@ -309,10 +309,6 @@ function visualizeAnswer20() {
                 data.map(val => {
                     if (val.answer_20 != null){
                         contentAns = $("<td></td>").text(val.answer_20)
-                        $(".answerTable").append($("<tr></tr>").append(contentAns))
-                    }
-                    else{
-                        contentAns = $("<td></td>").text("N/A")
                         $(".answerTable").append($("<tr></tr>").append(contentAns))
                     }
                 })
