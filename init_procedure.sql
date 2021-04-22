@@ -171,7 +171,12 @@ BEGIN
 		WHEN action="dump" THEN 
             BEGIN
 				SET @arr_key = key_array;
-				SET @a = CONCAT('SELECT * FROM year_fac_pro ORDER BY id_2;');
+				SET @a = CONCAT('SELECT id_2,CONCAT(a.aca_code , " - " , a.aca_name, " - " , f.fa_code , " - " , f.name) AS id_1, yfp.program_code
+								FROM year_fac_pro yfp
+								JOIN year_faculty yf ON (yf.id_1 = yfp.id_1)
+								JOIN faculty f ON (f.fa_code = yf.faculty_code)
+                                JOIN academic_year a ON (a.aca_code = yf.academic_code)
+								ORDER BY id_2;');
                 PREPARE stmt1 FROM @a;
 				EXECUTE stmt1;
 				DEALLOCATE PREPARE stmt1;
@@ -197,7 +202,15 @@ BEGIN
 		WHEN action="dump" THEN 
             BEGIN
 				SET @arr_key = key_array;
-				SET @a = CONCAT('SELECT * FROM year_fac_pro_mo ORDER BY id_3;');
+				SET @a = CONCAT('SELECT id_3,CONCAT(a.aca_code , " - " , a.aca_name, " - " , f.fa_code , " - " , f.name , " - " , 
+								p.pro_code , " - " , p.name) AS id_2, yfpm.module_code 
+								FROM year_fac_pro_mo yfpm
+								JOIN year_fac_pro yfp ON (yfp.id_2 = yfpm.id_2 )
+								JOIN program p ON (p.pro_code = yfp.program_code)
+								JOIN year_faculty yf ON (yf.id_1 = yfp.id_1)
+								JOIN faculty f ON (f.fa_code = yf.faculty_code)
+                                JOIN academic_year a ON (a.aca_code = yf.academic_code)
+                                ORDER BY id_3;');
                 PREPARE stmt1 FROM @a;
 				EXECUTE stmt1;
 				DEALLOCATE PREPARE stmt1;
@@ -393,7 +406,18 @@ BEGIN
 		WHEN action = "dump" THEN
 			BEGIN
 				SET @arr_key = key_array;
-				SET @a = CONCAT('SELECT * FROM class ORDER BY class_code;');
+				SET @a = CONCAT('SELECT class_code,size,semester_code,CONCAT(a.aca_code , " - " , a.aca_name, " - " , 
+								f.fa_code , " - " , f.name , " - " , 
+								p.pro_code , " - " , p.name, " - " , m.mo_code, " - " , m.name) AS id_3
+								FROM class c
+                                JOIN year_fac_pro_mo yfpm ON (c.id_3 = yfpm.id_3 )
+                                JOIN module m ON (m.mo_code = yfpm.module_code)
+								JOIN year_fac_pro yfp ON (yfp.id_2 = yfpm.id_2 )
+								JOIN program p ON (p.pro_code = yfp.program_code)
+								JOIN year_faculty yf ON (yf.id_1 = yfp.id_1)
+								JOIN faculty f ON (f.fa_code = yf.faculty_code)
+                                JOIN academic_year a ON (a.aca_code = yf.academic_code)
+                                ORDER BY class_code;');
                 PREPARE stmt1 FROM @a;
 				EXECUTE stmt1;
 				DEALLOCATE PREPARE stmt1;
