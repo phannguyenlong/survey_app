@@ -53,10 +53,20 @@ function getAllSelect(select_id) {
                     if (!arr[i].includes(String(data[x][`${selectArr[i]}_code`]))) {
                         arr[i].push(String(data[x][`${selectArr[i]}_code`]))
                         if (!cacheArr[i].includes(String(data[x][`${selectArr[i]}_code`]))) {
-                            if (selectArr[i] == "class" || selectArr[i] == "sem")
-                                $(`#${selectArr[i]}`).append(`<option value = "${String(data[x][`${selectArr[i]}_code`])}"> ${data[x][`${selectArr[i]}_code`]}</option>`)
-                            else
-                                $(`#${selectArr[i]}`).append(`<option value = "${String(data[x][`${selectArr[i]}_code`])}"> ${data[x][`${selectArr[i]}_code`]} - ${data[x][`${selectArr[i]}_name`]} </option>`)
+                            let optionTag = selectArr[i] == "class" || selectArr[i] == "sem"
+                                ? `<option value = "${String(data[x][`${selectArr[i]}_code`])}"> ${data[x][`${selectArr[i]}_code`]}</option>`
+                                : `<option value = "${String(data[x][`${selectArr[i]}_code`])}"> ${data[x][`${selectArr[i]}_code`]} - ${data[x][`${selectArr[i]}_name`]} </option>`
+                            // code for input the right position
+                            let isBefore = false;
+                            for (let z = 0; z < cacheArr[i].length; z++) {
+                                if (String(data[x][`${selectArr[i]}_code`]) < cacheArr[i][z]) {
+                                    $(`#${selectArr[i]} option[value="${cacheArr[i][z]}"]`).before(optionTag)
+                                    isBefore = true;
+                                    break;
+                                }
+                            }
+                            if (!isBefore) 
+                                $(`#${selectArr[i]}`).append(optionTag)
                         }
                     }
                 }
@@ -316,7 +326,7 @@ function visualizeFeedback() {
                 })
             }
         },
-        error: (xhr, ajaxOptions, thrownError) => alertMessage('error', 'Error', xhr.responseText)
+        // error: (xhr, ajaxOptions, thrownError) => alertMessage('error', 'Error', xhr.responseText)
     })
 
 }
