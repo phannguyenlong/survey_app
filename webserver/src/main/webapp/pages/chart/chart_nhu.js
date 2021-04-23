@@ -81,6 +81,7 @@ function getAllSelect(select_id) {
 /**
  * Reset Button Function
  */
+
 $('#resetButton').click(function() {
     optionField = ["aca", "sem", "fa", "pro", "mo", "class", "lec"]
     for (let i = 0; i < optionField.length; i++)
@@ -118,9 +119,13 @@ function init() {
             labelArr = ["Male", "Female", "Other"]
             xMax = 3.5
         }
+        else if (i == 6) {
+            labelArr = ["< 1 hours", "1-2", "2-3", "3-4", "> 5 hours"]
+            xMax = 5.5
+        }
         else {
-            labelArr = ["Strongly disagree = 1", "2", "3", "4", "Strongly agree = 5", "Not applicable"]
-            xMax = 6.5
+            labelArr = ["Strongly disagree = 1", "2", "3", "4", "Strongly agree = 5"]
+            xMax = 5.5
         }
         $(".chartContainer").append(`<h2 style="text-align: center; margin-top: 50px">Percentage of Respondents by ${chartName[i]}</h2><canvas id="questionnaireChart${i}" style="width: 800px; height:500px; "></canvas>`)
         let myChart = document.getElementById(`questionnaireChart${i}`).getContext('2d');
@@ -293,9 +298,6 @@ function addValue(test) {
     }
     for (j = 0 ; j < test['Option5']; j ++){
         arrVal.push(5)
-    }
-    for (j = 0 ; j < test['Option6']; j ++){
-        arrVal.push(0)
     }
     return arrVal
 }
