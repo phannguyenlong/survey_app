@@ -140,7 +140,11 @@ public class interactTableServlet extends HttpServlet {
 
         } catch (MysqlDataTruncation ex) {
         	resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        	resp.getWriter().println("Data is too long");
+            resp.getWriter().println("Data is too long");
+        } catch (SQLIntegrityConstraintViolationException e) {
+        	resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        	resp.getWriter().println("The Key and Input data must be unique or there is no refference data");
+            e.printStackTrace();
         } catch (Exception e) {
         	resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         	resp.getWriter().println("The Table Name is invalid");
@@ -163,7 +167,7 @@ public class interactTableServlet extends HttpServlet {
         	resp.getWriter().println("Data is too long");
         } catch (SQLIntegrityConstraintViolationException e) {
         	resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        	resp.getWriter().println("The Key must be unique");
+        	resp.getWriter().println("The Key and Input data must be unique or there is no refference data");
             e.printStackTrace();
         } catch (SQLException e) {
         	resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
