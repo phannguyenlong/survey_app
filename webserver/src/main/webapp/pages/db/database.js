@@ -103,7 +103,7 @@ function dropDownList(id_type){
 				     		}
 				     	}
 				    arr.push(output)
-				    option = $(`<option name="${json[i][id_type]}" ></option>`).text(output).attr("sem_code",`${json[i]["sem_code"]}`)
+				    option = $(`<option name="${json[i][id_type]}" ></option>`).text(json[i]["id_name"]).attr("sem_code",`${json[i]["sem_code"]}`)
 				    select.append(option)
 			     }
 			     

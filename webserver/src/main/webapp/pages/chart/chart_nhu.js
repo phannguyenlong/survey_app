@@ -53,10 +53,20 @@ function getAllSelect(select_id) {
                     if (!arr[i].includes(String(data[x][`${selectArr[i]}_code`]))) {
                         arr[i].push(String(data[x][`${selectArr[i]}_code`]))
                         if (!cacheArr[i].includes(String(data[x][`${selectArr[i]}_code`]))) {
-                            if (selectArr[i] == "class" || selectArr[i] == "sem")
-                                $(`#${selectArr[i]}`).append(`<option value = "${String(data[x][`${selectArr[i]}_code`])}"> ${data[x][`${selectArr[i]}_code`]}</option>`)
-                            else
-                                $(`#${selectArr[i]}`).append(`<option value = "${String(data[x][`${selectArr[i]}_code`])}"> ${data[x][`${selectArr[i]}_code`]} - ${data[x][`${selectArr[i]}_name`]} </option>`)
+                            let optionTag = selectArr[i] == "class" || selectArr[i] == "sem"
+                                ? `<option value = "${String(data[x][`${selectArr[i]}_code`])}"> ${data[x][`${selectArr[i]}_code`]}</option>`
+                                : `<option value = "${String(data[x][`${selectArr[i]}_code`])}"> ${data[x][`${selectArr[i]}_code`]} - ${data[x][`${selectArr[i]}_name`]} </option>`
+                            // code for input the right position
+                            let isBefore = false;
+                            for (let z = 0; z < cacheArr[i].length; z++) {
+                                if (String(data[x][`${selectArr[i]}_code`]) < cacheArr[i][z]) {
+                                    $(`#${selectArr[i]} option[value="${cacheArr[i][z]}"]`).before(optionTag)
+                                    isBefore = true;
+                                    break;
+                                }
+                            }
+                            if (!isBefore) 
+                                $(`#${selectArr[i]}`).append(optionTag)
                         }
                     }
                 }
@@ -81,6 +91,7 @@ function getAllSelect(select_id) {
 /**
  * Reset Button Function
  */
+
 $('#resetButton').click(function() {
     optionField = ["aca", "sem", "fa", "pro", "mo", "class", "lec"]
     for (let i = 0; i < optionField.length; i++)
@@ -93,7 +104,7 @@ $('#resetButton').click(function() {
  */
 $('#visualizeButton').click(function() {
     visualizeChart();
-    visualizeAnswer20();
+    visualizeFeedback();
 });
 
 /**
@@ -118,9 +129,13 @@ function init() {
             labelArr = ["Male", "Female", "Other"]
             xMax = 3.5
         }
+        else if (i == 6) {
+            labelArr = ["< 1 hours", "1-2", "2-3", "3-4", "> 5 hours"]
+            xMax = 5.5
+        }
         else {
-            labelArr = ["Strongly disagree = 1", "2", "3", "4", "Strongly agree = 5", "Not applicable"]
-            xMax = 6.5
+            labelArr = ["Strongly disagree = 1", "2", "3", "4", "Strongly agree = 5"]
+            xMax = 5.5
         }
         $(".chartContainer").append(`<h2 style="text-align: center; margin-top: 50px">Percentage of Respondents by ${chartName[i]}</h2><canvas id="questionnaireChart${i}" style="width: 800px; height:500px; "></canvas>`)
         let myChart = document.getElementById(`questionnaireChart${i}`).getContext('2d');
@@ -294,13 +309,10 @@ function addValue(test) {
     for (j = 0 ; j < test['Option5']; j ++){
         arrVal.push(5)
     }
-    for (j = 0 ; j < test['Option6']; j ++){
-        arrVal.push(0)
-    }
     return arrVal
 }
 
-function visualizeAnswer20() {
+function visualizeFeedback() {
     $.ajax({
         type: 'GET',
         url: `http://localhost:8080/webserver/chart/getAnswer20?teaching_id=${teaching_id}`,
@@ -311,16 +323,10 @@ function visualizeAnswer20() {
                         contentAns = $("<td></td>").text(val.answer_20)
                         $(".answerTable").append($("<tr></tr>").append(contentAns))
                     }
-                    else{
-                        contentAns = $("<td></td>").text("N/A")
-                        $(".answerTable").append($("<tr></tr>").append(contentAns))
-                    }
                 })
-
             }
-
         },
-        error: (xhr, ajaxOptions, thrownError) => alertMessage('error', 'Error', xhr.responseText)
+        // error: (xhr, ajaxOptions, thrownError) => alertMessage('error', 'Error', xhr.responseText)
     })
 
 }

@@ -20,7 +20,7 @@ import javax.servlet.annotation.WebServlet;
 import util.DatabaseConnect;
 
 /**
- * @author VZ
+ * @author VZ, Le Hai Yen
  */
 @WebServlet(urlPatterns = "/questionaire/submit")
 public class validateSubmitServlet extends HttpServlet {
@@ -55,7 +55,10 @@ public class validateSubmitServlet extends HttpServlet {
             st.setString(2, json.get("lecturer_code").toString());
 
             for (int i = 1; i < 21; i++)
-                st.setString(i + 2, (json.get("question" + String.valueOf(i)).toString()).toString().replace("\"", ""));
+                st.setString(i + 2, 
+                		((json.get("question" + String.valueOf(i)).toString()).toString().replace("\"", "")).equals("NULL")
+                		? null
+                		: ((json.get("question" + String.valueOf(i)).toString()).toString().replace("\"", "")));
 
             System.out.println(st);
             
@@ -69,6 +72,5 @@ public class validateSubmitServlet extends HttpServlet {
         	resp.getWriter().println("The Request is invalid");
             e.printStackTrace();
         }
-        
     }
 }
