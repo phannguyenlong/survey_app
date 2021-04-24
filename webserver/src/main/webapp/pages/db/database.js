@@ -70,8 +70,9 @@ function init() {
     			flag=1;
     		}
     	}
-    	if(flag==1){
+    	if(flag!=1){
     		$(`#${this.value+1}`).show()
+    		currentShowTable.push(this.value);
     	}
 		
 	})
@@ -341,11 +342,17 @@ function alertMessage(type, title, content) {
 }
 
 function reloadShowingTables(){
+	console.log(currentShowTable)
 	for(let i=0;i<currentShowTable.length;i++){
 		createTable(currentShowTable[i])
+		console.log(currentShowTable[i])
 	}
 }
 
 function remove(array, element) {
-  return array.filter(el => el !== element);
+  for(let i=0;i<array.length;i++){
+  	if(array[i] == element){
+  		array.pop()
+  	}
+  }
 }
