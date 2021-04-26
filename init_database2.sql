@@ -44,7 +44,8 @@ CREATE TABLE module (
 
 CREATE TABLE academic_year (
 	aca_code INT AUTO_INCREMENT PRIMARY KEY,
-    aca_name VARCHAR(10) NOT NULL
+    aca_name VARCHAR(10) UNIQUE NOT NULL,
+    CHECK (aca_name LIKE "____-____" AND LEFT(aca_name,4)<RIGHT(aca_name,4))
 );
 
 
