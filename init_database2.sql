@@ -10,6 +10,7 @@
 -- Clean up old tablequestionquestion
 DROP TABLE IF EXISTS deans;
 DROP TABLE IF EXISTS program_coordinator;
+DROP TABLE IF EXISTS s_admin;
 DROP TABLE IF EXISTS questionaire;
 DROP TABLE IF EXISTS teaching;
 DROP TABLE IF EXISTS class;
@@ -182,6 +183,10 @@ CREATE TABLE program_coordinator(
     CHECK (start_date < end_date)
 );
 
+CREATE TABLE s_admin(
+	username VARCHAR(20) NOT NULL,
+    FOREIGN KEY (username) REFERENCES login(username)
+);
 -- ======================Insert Trigger===================
 
 -- unique program
@@ -304,6 +309,39 @@ FOR EACH ROW BEGIN
 END//
 DELIMITER ;
 
+-- unique deans
+DROP TRIGGER IF EXISTS unique_deans;
+DELIMITER //
+CREATE TRIGGER unique_deans BEFORE INSERT ON deans
+FOR EACH ROW BEGIN
+	IF
+		(SELECT count(*) FROM deans 
+			WHERE NEW.faculty_code=faculty_code AND 
+			(NEW.start_date >= start_date AND NEW.start_date < end_date) OR
+			(NEW.end_date > start_date AND NEW.end_date <= end_date) OR 
+			(NEW.start_date <= start_date AND NEW.end_date >= end_date)) > 0
+	THEN
+		SET NEW.faculty_code = NULL;
+	END IF;
+END//
+DELIMITER ;
+
+-- unique program coordinator
+DROP TRIGGER IF EXISTS unique_proco;
+DELIMITER //
+CREATE TRIGGER unique_proco BEFORE INSERT ON program_coordinator
+FOR EACH ROW BEGIN
+	IF
+		(SELECT count(*) FROM program_coordinator
+			WHERE NEW.program_code=program_code AND 
+			(NEW.start_date >= start_date AND NEW.start_date < end_date) OR
+			(NEW.end_date > start_date AND NEW.end_date <= end_date) OR 
+			(NEW.start_date <= start_date AND NEW.end_date >= end_date)) > 0
+	THEN
+		SET NEW.program_code = NULL;
+	END IF;
+END//
+DELIMITER ;
 -- ======================Insert Data======================
 
 -- Falcuty
@@ -619,6 +657,7 @@ insert into login (username, pass) values ('mmatussevichp', '0jwt0RHGcZbd');
 insert into login (username, pass) values ('kgrenshieldsq', 'V1N7EL');
 insert into login (username, pass) values ('yhinksenr', '4jPejEhQo');
 insert into login (username, pass) values ('ojedrzejewskys', 'WJWmXbac2sk');
+insert into login (username, pass) values ('super', 'admin');
 
 -- Lecturer
 INSERT INTO lecturer (lec_code, name, username) VALUES ('1', 'Jo Urvoy', 'nlacelett0');
@@ -1230,3 +1269,6 @@ insert into deans (username, start_date, end_date, faculty_code) values ('gfairb
 
 -- FMUS
 insert into deans (username, start_date, end_date, faculty_code) values ('mcurmank', '2020-08-19','2021-08-19', 'FMUS');
+
+-- SUPER ADMIN
+insert into s_admin(username) VALUE ("super");

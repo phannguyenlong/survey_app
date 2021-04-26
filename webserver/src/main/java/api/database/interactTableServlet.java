@@ -89,24 +89,24 @@ public class interactTableServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // Cookie cookie = req.getCookies()[0];         
-        // String username = (new JwtGenerate()).parseJWT(cookie.getValue());
-        // System.out.println(username);
+        Cookie cookie = req.getCookies()[0];         
+        String username = (new JwtGenerate()).parseJWT(cookie.getValue());
+        System.out.println(username);
 
-        // String query = "CALL controllAccess('" + username + "')";
+        String query = "CALL controllAccess('" + username + "')";
         try {
             // Get list of permission from cookie
             DatabaseConnect DB = new DatabaseConnect();
             Connection conn = DB.getConnection();
-            // ResultSet resAccessCotrol = DB.doQuery(query);
+            ResultSet resAccessCotrol = DB.doQuery(query);
 
-            // List<String> arr = new ArrayList<>();
-            // while (resAccessCotrol.next()) 
-            //     arr.add(resAccessCotrol.getString(req.getParameter("table_name")));
-            // String listOfPermission = "'" + String.join("','", new ArrayList<>(new HashSet<>(arr))) + "'"; // remove duplicate add joining
+            List<String> arr = new ArrayList<>();
+            while (resAccessCotrol.next()) 
+                arr.add(resAccessCotrol.getString(req.getParameter("table_name")));
+            String listOfPermission = "'" + String.join("','", new ArrayList<>(new HashSet<>(arr))) + "'"; // remove duplicate add joining
 
             // Get return data
-            PreparedStatement st = createStatement(req, "dump", conn, ""); // add listOfPermission when turn on access control
+            PreparedStatement st = createStatement(req, "dump", conn, listOfPermission); // add listOfPermission when turn on access control
             ResultSet res = st.executeQuery();
             List<Map<String, Object>> json_resp = DB.ResultSetToJSON(res);
 
