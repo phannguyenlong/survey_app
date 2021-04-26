@@ -50,7 +50,8 @@ public class Login extends HttpServlet {
             else {
                 do {
                 	String username = res.getString("username");
-                	Cookie cookie = new Cookie("session_key", (new JwtGenerate()).issueToken(username));
+                    String role = res.getString("isAdmin");
+                	Cookie cookie = new Cookie("session_key", (new JwtGenerate()).issueToken(username, role));
                     resp.addCookie(cookie);
                 } 
                 while (res.next());

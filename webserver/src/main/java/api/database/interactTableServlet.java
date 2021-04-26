@@ -33,8 +33,14 @@ import javax.servlet.annotation.WebServlet;
 @WebServlet(urlPatterns = "/database/interactTable")
 public class interactTableServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
+    private String[][] permissionTableForRole = {
+            {"class", "lecturer" },                                                                                                // for lecturer
+            {"year_faculty", "year_fac_pro", "year_fac_pro_mo", "class", "teaching", "lecturer", "module", "program"},              // for program coor
+            {"year_faculty", "year_fac_pro", "year_fac_pro_mo", "class", "teaching", "lecturer", "module", "program", "faculty"}    // for deans
+    };
 
-    private PreparedStatement createStatement(HttpServletRequest req, String action, Connection conn, String permissionList) throws Exception {
+    private PreparedStatement createStatement(HttpServletRequest req, String action, Connection conn,
+            String permissionList) throws Exception {
         String[] params = null;
         String query = "";
         int i;
@@ -42,7 +48,7 @@ public class interactTableServlet extends HttpServlet {
                 "teaching", "semester", "aca_year", "lecturer", "module", "program", "faculty");
 
         String tableName = req.getParameter("table_name");
-        if (!tableNameList.contains(tableName)) 
+        if (!tableNameList.contains(tableName))
             throw new Exception("Invalid Table Name");
 
         if (tableName.equals("year_faculty")) {
@@ -86,11 +92,38 @@ public class interactTableServlet extends HttpServlet {
         System.out.println(st);
         return st;
     }
+    
+    private void checkAccessControl(HttpServletRequest req, DatabaseConnect DB) throws Exception {
+        Cookie cookie = req.getCookies()[0];         
+        String username = (new JwtGenerate()).parseJWT(cookie.getValue())[0];
+        String role = (new JwtGenerate()).parseJWT(cookie.getValue())[1];
+        String query = "CALL controllAccess('" + username + "')";
+        String permissionTable[] = null;
+        
+        if (role.equals("Lecturer"))
+            permissionTable = permissionTableForRole[0];
+        else if (role.equals("Proco"))
+            permissionTable = permissionTableForRole[1];
+        else if (role.equals("Deans"))
+            permissionTable = permissionTableForRole[2];
+        
+        if (!Arrays.asList(permissionTable).contains(req.getParameter("table_name")) && permissionTable != null)
+            throw new Exception("You dont have right to interact with this table");
+
+        ResultSet resAccessCotrol = DB.doQuery(query);
+        boolean isAllow = false;
+        while (resAccessCotrol.next())
+            // TODO: Add 4 if for PUT to check modify current to another dont have permission data (ex: deans change class to another faculty)
+            if (resAccessCotrol.getString(req.getParameter("table_name")).equals(req.getParameter("old_key")))
+                isAllow = true;
+        if (!isAllow)
+            throw new Exception("You dont have right to interact with this data");
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Cookie cookie = req.getCookies()[0];         
-        String username = (new JwtGenerate()).parseJWT(cookie.getValue());
+        String username = (new JwtGenerate()).parseJWT(cookie.getValue())[0];
         System.out.println(username);
 
         String query = "CALL controllAccess('" + username + "')";
@@ -133,6 +166,8 @@ public class interactTableServlet extends HttpServlet {
         try {
             DatabaseConnect DB = new DatabaseConnect();
             Connection conn = DB.getConnection();
+            checkAccessControl(req, DB);
+
             PreparedStatement st = createStatement(req, "update", conn, "");
 
             st.executeUpdate();
@@ -147,7 +182,7 @@ public class interactTableServlet extends HttpServlet {
             e.printStackTrace();
         } catch (Exception e) {
         	resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        	resp.getWriter().println("The Table Name is invalid");
+        	resp.getWriter().println(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -157,6 +192,8 @@ public class interactTableServlet extends HttpServlet {
         	System.out.println("doPost");
             DatabaseConnect DB = new DatabaseConnect();
             Connection conn = DB.getConnection();
+            checkAccessControl(req, DB);
+
             PreparedStatement st = createStatement(req, "create", conn, "");
             System.out.println(st);
 
@@ -185,6 +222,8 @@ public class interactTableServlet extends HttpServlet {
         try {
             DatabaseConnect DB = new DatabaseConnect();
             Connection conn = DB.getConnection();
+            checkAccessControl(req, DB);
+
             PreparedStatement st = createStatement(req, "delete", conn, "");
             System.out.println(st);
 
