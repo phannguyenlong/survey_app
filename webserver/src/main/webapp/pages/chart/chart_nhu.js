@@ -321,7 +321,7 @@ function visualizeFeedback() {
                 data.map(val => {
                     if (val.answer_20 != null){
                         contentAns = $("<td></td>").text(val.answer_20)
-                        $(".answerTable").append($("<tr></tr>").append(contentAns))
+                        $(".answerTable").empty().append($("<tr></tr>").append(contentAns))
                     }
                 })
             }
