@@ -562,7 +562,7 @@ BEGIN
 	set @a4 = (select username
 				from s_admin 
                 where username = user);
-	SELECT username , IFNULL(user = @a4,0) as isAdmin
+	SELECT username , IF(user = @a4,"Admin",IF(user = @a1,"Deans",IF(user = @a2,"Proco",IF(user = @a3,"Lecturer","None")))) as isAdmin
     FROM login l
     WHERE (username = user AND pass = password) AND (username = @a1 OR username = @a2 OR username = @a3 OR username = @a4);
 END //
