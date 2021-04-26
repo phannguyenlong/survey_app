@@ -559,9 +559,12 @@ BEGIN
 				from login lo
 				join lecturer le on (lo.username = le.username)
 				where le.username = user);
-	SELECT username 
+	set @a4 = (select username
+				from s_admin 
+                where username = user);
+	SELECT username , IFNULL(user = @a4,0) as isAdmin
     FROM login l
-    WHERE (username = user AND pass = password) AND (username = @a1 OR username = @a2 OR username = @a3);
+    WHERE (username = user AND pass = password) AND (username = @a1 OR username = @a2 OR username = @a3 OR username = @a4);
 END //
 DELIMITER ;
 
