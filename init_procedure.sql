@@ -529,7 +529,7 @@ BEGIN
     SET @program_arr = IFNULL(CONCAT("'",(SELECT group_concat(concat_ws(",", pc.program_code) separator "', '") AS program
 		FROM program_coordinator pc
 		JOIN login lo ON lo.username=pc.username
-		WHERE (lo.username = user and now() <=s pc.end_date and now() >= pc.start_date)),"'"),"'null'");
+		WHERE (lo.username = user and now() <= pc.end_date and now() >= pc.start_date)),"'"),"'null'");
     
     SET @lecturer_arr = IFNULL((SELECT group_concat(concat_ws("',", l.lec_code) separator ", ") AS lecturer
 		FROM lecturer l
