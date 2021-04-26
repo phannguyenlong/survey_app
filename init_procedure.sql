@@ -521,7 +521,7 @@ DROP PROCEDURE IF EXISTS java_app.controllAccess;
 DELIMITER  //
 CREATE PROCEDURE controllAccess(user VARCHAR(20)) 
 BEGIN
-	SET @faculty_arr = IFNULL(CONCAT("'",(SELECT group_concat(concat_ws(",", d.faculty_code) separator "', '") AS faculty
+	SET @faculty_arr1 = IFNULL(CONCAT("'",(SELECT group_concat(concat_ws(",", d.faculty_code) separator "', '") AS faculty
 		FROM deans d
 		JOIN login lo ON lo.username=d.username
 		WHERE (lo.username = user and now() <= d.end_date and now() >= d.start_date)),"'"),"'null'");
@@ -536,7 +536,11 @@ BEGIN
 		JOIN login lo ON lo.username=l.username
 		WHERE lo.username = user),"null");
     
-    CALL validateAccessControl(@faculty_arr,@program_arr,@lecturer_arr);
+    SET @faculty_arr2 = IFNULL(CONCAT("'",(SELECT group_concat(concat_ws(",", f.fa_code) separator "', '") AS faculty
+		FROM faculty f
+		WHERE ((SELECT username FROM s_admin) = user )),"'"),"'null'");
+        
+    CALL validateAccessControl(IF(@faculty_arr2 = "'NULL'",@faculty_arr1,@faculty_arr2),@program_arr,@lecturer_arr);
 END //
 DELIMITER ;
 
