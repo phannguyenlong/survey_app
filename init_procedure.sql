@@ -524,12 +524,12 @@ BEGIN
 	SET @faculty_arr = IFNULL(CONCAT("'",(SELECT group_concat(concat_ws(",", d.faculty_code) separator "', '") AS faculty
 		FROM deans d
 		JOIN login lo ON lo.username=d.username
-		WHERE (lo.username = user and now() < d.end_date and now() > d.start_date)),"'"),"'null'");
+		WHERE (lo.username = user and now() <= d.end_date and now() >= d.start_date)),"'"),"'null'");
     
     SET @program_arr = IFNULL(CONCAT("'",(SELECT group_concat(concat_ws(",", pc.program_code) separator "', '") AS program
 		FROM program_coordinator pc
 		JOIN login lo ON lo.username=pc.username
-		WHERE (lo.username = user and now() < pc.end_date and now() > pc.start_date)),"'"),"'null'");
+		WHERE (lo.username = user and now() <=s pc.end_date and now() >= pc.start_date)),"'"),"'null'");
     
     SET @lecturer_arr = IFNULL((SELECT group_concat(concat_ws("',", l.lec_code) separator ", ") AS lecturer
 		FROM lecturer l
@@ -549,12 +549,12 @@ BEGIN
 				from login 
 				where username = user and username in (select l.username from login l
 				join deans d on (d.username = l.username)
-				where now() < d.end_date and now() > d.start_date));
+				where now() <= d.end_date and now() >= d.start_date));
     set @a2 = (select username
 				from login 
 				where username = user and username in (select l.username from login l
 				join program_coordinator pc on (pc.username = l.username)
-				where now() < pc.end_date and now() > pc.start_date));
+				where now() <= pc.end_date and now() >= pc.start_date));
     set @a3 = (select le.username 
 				from login lo
 				join lecturer le on (lo.username = le.username)
