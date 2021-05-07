@@ -6,11 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -18,7 +15,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
 
 import util.DatabaseConnect;
@@ -108,13 +104,7 @@ public class interactTableServlet extends HttpServlet {
             // Get return data
             PreparedStatement st = createStatement(req, "dump", conn, ""); // add listOfPermission when turn on access control
             ResultSet res = st.executeQuery();
-            List<Map<String, Object>> json_resp = DB.ResultSetToJSON(res);
-
-            resp.setContentType("application/json");
-            resp.setCharacterEncoding("UTF-8");
-            resp.addHeader("Access-Control-Allow-Origin", "*"); // remove CORS policy
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.writeValue(resp.getOutputStream(), json_resp);
+            DB.sendData(resp, res);
 
             DB.closeConnect();
         } catch (MysqlDataTruncation ex) {

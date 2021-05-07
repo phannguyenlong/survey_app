@@ -4,23 +4,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-// import java.util.Properties;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
-// import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-// import java.sql.DriverManager;
 
 /**
  * Use from make connection to database
@@ -33,16 +31,6 @@ public class DatabaseConnect {
     DataSource ds;
 
     public DatabaseConnect() throws Exception{
-        // Properties props = new Properties();
-        // InputStream input = getClass().getResourceAsStream("../config.properties");
-        
-        // props.load(input);
-        // this.default_path = props.getProperty("server");
-        // this.dbURL = props.getProperty("dbURL");
-        // this.Db_Name = props.getProperty("Db_name");
-        // this.userName = props.getProperty("username");
-        // this.password = props.getProperty("password");
-
         Context initContext = new InitialContext();
 		Context envContext = (Context) initContext.lookup("java:comp/env"); 
 		this.ds = (DataSource) envContext.lookup("jdbc/java_app");
@@ -53,11 +41,6 @@ public class DatabaseConnect {
      * @return Connection class
      */
     public Connection getConnection() throws Exception{
-        // conn = null;
-        // dbURL = dbURL + "/" + Db_Name;
-        // Class.forName("com.mysql.cj.jdbc.Driver");
-        // conn = DriverManager.getConnection(dbURL, userName, password);
-        // System.out.println("connect successfully!");
         this.conn = ds.getConnection();
         return conn;
     }
@@ -122,14 +105,24 @@ public class DatabaseConnect {
     public ArrayList<JsonNode> JsonToJsonNode(String data) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         ArrayList<JsonNode> list = new ArrayList<>();
-        
+
         String[] jsons = new String(data.substring(1, data.length() - 1)).split("},");
         for (int i = 0; i < jsons.length - 1; i++)
             jsons[i] = jsons[i] + "}";
 
-        for (String json : jsons) 
+        for (String json : jsons)
             list.add(mapper.readTree(json));
 
         return list;
+    }
+    
+    public void sendData(HttpServletResponse resp, ResultSet res) throws Exception{
+        List<Map<String, Object>> json_resp = ResultSetToJSON(res);
+        
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
+        resp.addHeader("Access-Control-Allow-Origin", "*");
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.writeValue(resp.getOutputStream(), json_resp);
     }
 }

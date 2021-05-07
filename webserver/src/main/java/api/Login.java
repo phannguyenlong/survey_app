@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -40,7 +39,6 @@ public class Login extends HttpServlet {
             st.setString(2, req.getParameter("password"));
             
             System.out.println(st);
-            
             ResultSet res = st.executeQuery();
             
             if (!res.next()) {
