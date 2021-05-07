@@ -15,14 +15,13 @@ function init() {
 	getQuestion()
 
 	// load html component
-	 $("#header").load("/webserver/component/header.html");
+	$("#header").load("/webserver/component/header.html");
     $("#footer").load("/webserver/component/footer.html");
 
 	$("#submit_bnt").click(function(){
 		submitQuestion(questions)
 	})
 }
-	
 
 function getClass() {
 	$.ajax({
@@ -68,14 +67,14 @@ function getQuestion() {
 
 
 function selectOption(){
-		$("#class_code").change(function(){
-			$("#aca").children("p").remove();
-			$("#sem").children("p").remove();
-			$("#fal").children("p").remove();
-			$("#pro").children("p").remove();
-			$("#mod").children("p").remove();
-			$("#lecturer_code").children("option").remove();
-       	var code = new String($(this).children("option:selected").val());
+	$("#class_code").change(function(){
+		$("#aca").children("p").remove();
+		$("#sem").children("p").remove();
+		$("#fal").children("p").remove();
+		$("#pro").children("p").remove();
+		$("#mod").children("p").remove();
+		$("#lecturer_code").children("option").remove();
+		var code = new String($(this).children("option:selected").val());
 		class_code = $(this).children("option:selected").val()
 		$.ajax({
 			type: 'GET',
@@ -113,7 +112,6 @@ function submitQuestion(json){
         const rbs = document.querySelectorAll(`input[name="${new String(json[i].id)}"]`);
         let selectedValue;
         for (let j=0;j<rbs.length;j++) {
-			//let element = {}
             if (rbs[j].checked) {
 				selectedValue = rbs[j].value;
 				if(parseInt(selectedValue)==6)

@@ -10,102 +10,6 @@ $(document).ready(function () {
     filterChart();
 })
 
-/**
- * Filter to visualize Chart
- */
-function filterChart() {
-    getAllSelect()
-}
-
-function getAllSelect(select_id) {
-    console.log(select_id)
-    teaching_id = []
-    let selectArr = ["aca", "sem", "fa", "pro", "mo", "class", "lec"]
-    // Generate the parameter (if no input ==> null)
-    let params = "";
-    for (let i = 0; i < selectArr.length; i++) {
-        if ($(`#${selectArr[i]} option:selected`).val() == '')
-            params += selectArr[i] + "_code=null"
-        else if (selectArr[i] == "fa" || selectArr[i] == "lec" || selectArr[i] == "pro")
-            params += selectArr[i] + "_code='" + $(`#${selectArr[i]} option:selected`).val() + "'"
-        else
-            params += selectArr[i] + "_code=" + $(`#${selectArr[i]} option:selected`).val()
-        params += i == selectArr.length - 1 ? "" : "&"
-    }
-    
-    console.log(params)
-    // optionRemoveNew(select_id)
-    $.ajax({
-        type: 'GET',
-        url: "http://localhost:8080/webserver/chart/validate?" + params,
-        success: function (data) {
-            let arr = [[], [], [], [], [], [], []] // array for filter duplicate
-            let cacheArr = [[], [], [], [], [], [], []]
-            if (cacheArr[0] != null)
-                for (let i = 0; i < selectArr.length; i++) {
-                    $(`#${selectArr[i]} option`).not(":first").each(function() {
-                        cacheArr[i].push(String($(this).val()))
-                    })
-                }
-            // Add data to select
-            for (let x = 0; x < data.length; x++) {
-                for (let i = 0; i < selectArr.length; i++) {
-                    if (!arr[i].includes(String(data[x][`${selectArr[i]}_code`]))) {
-                        arr[i].push(String(data[x][`${selectArr[i]}_code`]))
-                        if (!cacheArr[i].includes(String(data[x][`${selectArr[i]}_code`]))) {
-                            let optionTag = selectArr[i] == "class" || selectArr[i] == "sem"
-                                ? `<option value = "${String(data[x][`${selectArr[i]}_code`])}"> ${data[x][`${selectArr[i]}_code`]}</option>`
-                                : `<option value = "${String(data[x][`${selectArr[i]}_code`])}"> ${data[x][`${selectArr[i]}_code`]} - ${data[x][`${selectArr[i]}_name`]} </option>`
-                            // code for input the right position
-                            let isBefore = false;
-                            for (let z = 0; z < cacheArr[i].length; z++) {
-                                if (String(data[x][`${selectArr[i]}_code`]) < cacheArr[i][z]) {
-                                    $(`#${selectArr[i]} option[value="${cacheArr[i][z]}"]`).before(optionTag)
-                                    isBefore = true;
-                                    break;
-                                }
-                            }
-                            if (!isBefore) 
-                                $(`#${selectArr[i]}`).append(optionTag)
-                        }
-                    }
-                }
-                teaching_id.push(data[x].teaching_id)
-            }
-            console.log(arr)
-            console.log(cacheArr)
-
-            // filter redundant
-            for (let i = 0; i < selectArr.length; i++) {
-                $(`#${selectArr[i]} option`).not(":first").each(function () {
-                    if (!arr[i].includes($(this).val())) {
-                        $(`#${selectArr[i]} option[value='${$(this).val()}']`).remove()
-                    }
-                })
-            }
-        },
-        error: (xhr, ajaxOptions, thrownError) => alertMessage('error', 'Error', xhr.responseText)
-    })
-}
-
-/**
- * Reset Button Function
- */
-
-$('#resetButton').click(function() {
-    optionField = ["aca", "sem", "fa", "pro", "mo", "class", "lec"]
-    for (let i = 0; i < optionField.length; i++)
-        $(`#${optionField[i]}`).val("")
-    getAllSelect();
-});
-
-/**
- * Visualize Chart and Answer 20
- */
-$('#visualizeButton').click(function() {
-    visualizeChart();
-    visualizeFeedback();
-});
 
 /**
  *  Create Chart and its Properties
@@ -230,6 +134,103 @@ function init() {
         $(".chartContainer").append(`<p id="stDev_${i}"> Standard Deviation =  </p>`)
     }
 }
+
+/**
+ * Filter to visualize Chart
+ */
+function filterChart() {
+    getAllSelect()
+}
+
+function getAllSelect(select_id) {
+    console.log(select_id)
+    teaching_id = []
+    let selectArr = ["aca", "sem", "fa", "pro", "mo", "class", "lec"]
+    // Generate the parameter (if no input ==> null)
+    let params = "";
+    for (let i = 0; i < selectArr.length; i++) {
+        if ($(`#${selectArr[i]} option:selected`).val() == '')
+            params += selectArr[i] + "_code=null"
+        else if (selectArr[i] == "fa" || selectArr[i] == "lec" || selectArr[i] == "pro")
+            params += selectArr[i] + "_code='" + $(`#${selectArr[i]} option:selected`).val() + "'"
+        else
+            params += selectArr[i] + "_code=" + $(`#${selectArr[i]} option:selected`).val()
+        params += i == selectArr.length - 1 ? "" : "&"
+    }
+    
+    console.log(params)
+    // optionRemoveNew(select_id)
+    $.ajax({
+        type: 'GET',
+        url: "http://localhost:8080/webserver/chart/validate?" + params,
+        success: function (data) {
+            let arr = [[], [], [], [], [], [], []] // array for filter duplicate
+            let cacheArr = [[], [], [], [], [], [], []]
+            if (cacheArr[0] != null)
+                for (let i = 0; i < selectArr.length; i++) {
+                    $(`#${selectArr[i]} option`).not(":first").each(function() {
+                        cacheArr[i].push(String($(this).val()))
+                    })
+                }
+            // Add data to select
+            for (let x = 0; x < data.length; x++) {
+                for (let i = 0; i < selectArr.length; i++) {
+                    if (!arr[i].includes(String(data[x][`${selectArr[i]}_code`]))) {
+                        arr[i].push(String(data[x][`${selectArr[i]}_code`]))
+                        if (!cacheArr[i].includes(String(data[x][`${selectArr[i]}_code`]))) {
+                            let optionTag = selectArr[i] == "class" || selectArr[i] == "sem"
+                                ? `<option value = "${String(data[x][`${selectArr[i]}_code`])}"> ${data[x][`${selectArr[i]}_code`]}</option>`
+                                : `<option value = "${String(data[x][`${selectArr[i]}_code`])}"> ${data[x][`${selectArr[i]}_code`]} - ${data[x][`${selectArr[i]}_name`]} </option>`
+                            // code for input the right position
+                            let isBefore = false;
+                            for (let z = 0; z < cacheArr[i].length; z++) {
+                                if (String(data[x][`${selectArr[i]}_code`]) < cacheArr[i][z]) {
+                                    $(`#${selectArr[i]} option[value="${cacheArr[i][z]}"]`).before(optionTag)
+                                    isBefore = true;
+                                    break;
+                                }
+                            }
+                            if (!isBefore) 
+                                $(`#${selectArr[i]}`).append(optionTag)
+                        }
+                    }
+                }
+                teaching_id.push(data[x].teaching_id)
+            }
+            console.log(arr)
+            console.log(cacheArr)
+
+            // filter redundant
+            for (let i = 0; i < selectArr.length; i++) {
+                $(`#${selectArr[i]} option`).not(":first").each(function () {
+                    if (!arr[i].includes($(this).val())) {
+                        $(`#${selectArr[i]} option[value='${$(this).val()}']`).remove()
+                    }
+                })
+            }
+        },
+        error: (xhr, ajaxOptions, thrownError) => alertMessage('error', 'Error', xhr.responseText)
+    })
+}
+
+/**
+ * Reset Button Function
+ */
+
+$('#resetButton').click(function() {
+    optionField = ["aca", "sem", "fa", "pro", "mo", "class", "lec"]
+    for (let i = 0; i < optionField.length; i++)
+        $(`#${optionField[i]}`).val("")
+    getAllSelect();
+});
+
+/**
+ * Visualize Chart and Answer 20
+ */
+$('#visualizeButton').click(function() {
+    visualizeChart();
+    visualizeFeedback();
+});
 
 /**
  * Visualize chart and its properties

@@ -2,32 +2,42 @@ $(document).ready(function() {
 	if (Cookies.get("session_key") == null)
 		window.location.replace("/webserver/pages/login/login.html");
 	init()	
-	
-	
 });
-var primaryKey = {aca_year:"aca_code",faculty:"fa_code",program:"pro_code",module:"mo_code",
-				  semester:"sem_code",class:"class_code",lecturer:"lec_code",
-				  teaching:"id",year_faculty:"id_1",
-				  year_fac_pro:"id_2",year_fac_pro_mo:"id_3"}
 
-var modifyKey = {faculty:["old_key","name"],module:["old_key","name"],program:["old_key","name"],aca_year:["old_key","name"],lecturer:["old_key","name"],
-semester:["old_key","code"],teaching:["old_key","c_code","lec_code"],class:["old_key","size","code","id"],year_fac_pro_mo: ["old_key","id","code"],
-year_fac_pro:["old_key","id","code"],year_faculty:["old_key","a_code","f_code"]}
+// inital value
+var primaryKey = {
+	aca_year: "aca_code", faculty: "fa_code", program: "pro_code", module: "mo_code",
+	semester:"sem_code",class:"class_code",lecturer:"lec_code",
+	teaching:"id",year_faculty:"id_1",
+	year_fac_pro: "id_2", year_fac_pro_mo: "id_3"
+}
 
-var addKey = {faculty:["old_key","name"],module:["old_key","name"],program:["old_key","name"],aca_year:["old_key","name"],lecturer:["old_key","name"],
-semester:["old_key","code"],teaching:["old_key","c_code","lec_code"],class:["old_key","size","code","id"],year_fac_pro_mo: ["old_key","id","code"],
-year_fac_pro:["old_key","id","code"],year_faculty:["old_key","a_code","f_code"]}
+var modifyKey = {
+	faculty: ["old_key", "name"], module: ["old_key", "name"], program: ["old_key", "name"], aca_year: ["old_key", "name"], lecturer: ["old_key", "name"],
+	semester:["old_key","code"],teaching:["old_key","c_code","lec_code"],class:["old_key","size","code","id"],year_fac_pro_mo: ["old_key","id","code"],
+	year_fac_pro: ["old_key", "id", "code"], year_faculty: ["old_key", "a_code", "f_code"]
+}
 
-var translateKey = {"aca_code":"Academic Code", "aca_name":"Acacdemic Name","fa_code":"Faculty Code","pro_code":"Program Code","mo_code":"Module Code","sem_code":"Semester Code",
-"class_code":"Class Code","name":"Name","size":"Size","semester_code":"Semester Code","id_3":"Year-Faculty-Program-Module Code","lec_code":"Lecturer Code","username":"Username",
-"id":"Teaching Code","class_code":"Class Code","lecturer_code":"Lecturer Code","id_1":"Year-Faculty Code","academic_code":"Academic Code","faculty_code":"Faculty Code","id_2":"Year-Faculty-Program Code","program_code":"Program Code",
-"module_code":"Module Code"}
+var addKey = {
+	faculty: ["old_key", "name"], module: ["old_key", "name"], program: ["old_key", "name"], aca_year: ["old_key", "name"], lecturer: ["old_key", "name"],
+	semester:["old_key","code"],teaching:["old_key","c_code","lec_code"],class:["old_key","size","code","id"],year_fac_pro_mo: ["old_key","id","code"],
+	year_fac_pro: ["old_key", "id", "code"], year_faculty: ["old_key", "a_code", "f_code"]
+}
+
+var translateKey = {
+	"aca_code": "Academic Code", "aca_name": "Acacdemic Name", "fa_code": "Faculty Code", "pro_code": "Program Code", "mo_code": "Module Code", "sem_code": "Semester Code",
+	"class_code":"Class Code","name":"Name","size":"Size","semester_code":"Semester Code","id_3":"Year-Faculty-Program-Module Code","lec_code":"Lecturer Code","username":"Username",
+	"id":"Teaching Code","class_code":"Class Code","lecturer_code":"Lecturer Code","id_1":"Year-Faculty Code","academic_code":"Academic Code","faculty_code":"Faculty Code","id_2":"Year-Faculty-Program Code","program_code":"Program Code",
+	"module_code": "Module Code"
+}
 
 var dropdownKey = {year_fac_pro:"id_1",year_fac_pro_mo:"id_2",class:"id_3"}
 
-var sortedColumns = {year_fac_pro_mo : ["id_3","id_2","module_code"], aca_year : ["aca_code","aca_name"], class : ["class_code","size","semester_code","id_3"], 
-faculty :["fa_code","name"], lecturer : ["lec_code","name","username"], module : ["mo_code","name"], program : ["pro_code","name"],semester: ["sem_code","academic_code"], year_fac_pro:["id_2","id_1","program_code"]
-,year_faculty : ["id_1","academic_code","faculty_code"], teaching : ["id","class_code","lecturer_code"]  }
+var sortedColumns = {
+	year_fac_pro_mo: ["id_3", "id_2", "module_code"], aca_year: ["aca_code", "aca_name"], class: ["class_code", "size", "semester_code", "id_3"],
+	faculty: ["fa_code", "name"], lecturer: ["lec_code", "name", "username"], module: ["mo_code", "name"], program: ["pro_code", "name"], semester: ["sem_code", "academic_code"],
+	year_fac_pro: ["id_2", "id_1", "program_code"], year_faculty: ["id_1", "academic_code", "faculty_code"], teaching: ["id", "class_code", "lecturer_code"]
+}
 
 var currentShowTable=[];
 
@@ -37,11 +47,10 @@ function init() {
 	["program","Program"],["module","Module"],
 	["semester","Semester"],["class","Class"],
 	["lecturer","Lecturer"],["teaching","Teaching"], ["year_faculty","Year and Faculty"],["year_fac_pro","Year, Faculty and Program"],
-	["year_fac_pro_mo","Year, Faculty, Program and Module"]
-	] 
+	["year_fac_pro_mo","Year, Faculty, Program and Module"]] 
 
 	 //load html component
-	 $("#header").load("/webserver/component/header.html");
+	$("#header").load("/webserver/component/header.html");
     $("#footer").load("/webserver/component/footer.html");
 
 	
@@ -90,27 +99,26 @@ function dropDownList(id_type){
 		async: false, 
 		url: "http://localhost:8080/webserver/database/idDropdown?id_type="+id_type,
 		success: function(data, textStatus, jqXHR) {
-			     const json = JSON.parse(JSON.stringify(data))
-			     columns_2 = Object.keys(json[0]) 
-			     
-			     let arr=[];
-			     
-			     for(let i=0;i<json.length;i++){
-			     	let output="-";
-			     	for(let j=0;j<columns_2.length;j++){
-				     	if(columns_2[j]!=id_type){
-				     		output+=json[i][columns_2[j]]+"-"
-				     		}
-				     	}
-				    arr.push(output)
-				    option = $(`<option name="${json[i][id_type]}" ></option>`).text(output).attr("sem_code",`${json[i]["sem_code"]}`)
-				    select.append(option)
-			     }
-			     
-			     console.log(arr)
+			const json = JSON.parse(JSON.stringify(data))
+			columns_2 = Object.keys(json[0]) 
+			
+			let arr=[];
+			
+			for(let i=0;i<json.length;i++){
+				let output="-";
+				for(let j=0;j<columns_2.length;j++){
+					if(columns_2[j]!=id_type){
+						output+=json[i][columns_2[j]]+"-"
+					}
+				}
+				arr.push(output)
+				option = $(`<option name="${json[i][id_type]}" ></option>`).text(output).attr("sem_code",`${json[i]["sem_code"]}`)
+				select.append(option)
 			}
-			})
-			return select[0];
+			console.log(arr)
+		}
+	})
+	return select[0];
 		
 }
 
@@ -163,19 +171,16 @@ function createTable(option) {
 					var dropDown;
 					tr = $(`<tr id="input_row_add"></tr>`)
 					for (let i = 0; i < keys.length; i++) {
-						if(columns[i] === dropdownKey[option]){		
+						if(columns[i] === dropdownKey[option]) {		
 							dropDown = dropDownList(columns[i])					
 							div = $(`<div class="add_form_${option}" ></div>`).append(dropDown)
 							th = $(`<th></th>`).append(div)
-						
 						}
 						else{
-							if(columns[i] ==="semester_code"){
+							if(columns[i] ==="semester_code")
 								th = $(`<th><div class="add_form_${option}"><input type="text" class="${'input_semester_'+ keys[i]}" name="${keys[i]}"/></div></th>`) // get attr code in all some table, so we classified semester_code in ID3.
-							}
-							else{
+							else
 								th = $(`<th><div class="add_form_${option}"><input type="text" class="${'input_' + keys[i]}" name="${keys[i]}"/></div></th>`)
-							}
 						}
 						tr.append(th)
 					}
@@ -194,10 +199,8 @@ function createTable(option) {
 						if(($(arr[i]).children('input')[0]) === undefined){
 							console.log(($(arr[i]).children("select").children("option:selected")).attr("name"))
 							params += `&${keys[i]}=${encodeURIComponent(($(arr[i]).children("select").children("option:selected")).attr("name"))}`
-						}
-						else {
+						} else 
 							params += `&${keys[i]}=${encodeURIComponent(($(arr[i]).children('input')[0]).value)}`
-						}
 					}
 						addRow(option, params)
 						reloadShowingTables()
@@ -221,9 +224,7 @@ function createTable(option) {
 				console.log($(`#${option + 1}`).find(".input_row_modify"))
 				if ($(`#${option + 1}`).find(".input_row_modify")[0] === undefined) {
 					console.log("add")
-					
-					
-					
+
 					value = this.value
 	            	key = primaryKey[value]
 	            	selector = $(this).siblings(".content_tr_"+key)[0]
@@ -237,34 +238,25 @@ function createTable(option) {
 						console.log(columns[i], key)
 						if(columns[i] === key) { // columns save all key of table.
 							th = $(`<th><div class="modify_form_${option}"><input type="text" readonly value="${result_key}" class="${'input_' + keys[i]}" name="${keys[i]}"/></div></th>`)
-						}
-						else{
+						} else {
 							if(columns[i] === dropdownKey[option]){
 								dropDown = dropDownList(columns[i])
 								
 								div = $(`<div class="modify_form_${option}" ></div>`).append(dropDown)	
 								th = $(`<th></th>`).append(div)
-							}
-							
-							else{
-								if(columns[i] ==="semester_code"){
+							} else {
+								if(columns[i] ==="semester_code")
 									th = $(`<th><div class="modify_form_${option}"><input type="text" class="${'input_semester_'+ keys[i]}" name="${keys[i]}"/></div></th>`) // get attr code in all some table, so we classified semester_code in ID3.
-								}
-								else{
+								else
 									th = $(`<th><div class="modify_form_${option}"><input type="text" class="${'input_' + keys[i]}" name="${keys[i]}"/></div></th>`)
-									
-								}
-								
-								}
-											
 							}
-						tr.append(th)
-						
 						}
-						$(dropDown).change(function(){
-							let value = $(dropDown).children("option:selected").attr("sem_code")
-							$(dropDown).parents(".input_row_modify").find(".input_semester_code").replaceWith($(`<input type="text" class="input_semester_code" readonly value="${value}"/>`))
-						})
+						tr.append(th)
+					}
+					$(dropDown).change(function(){
+						let value = $(dropDown).children("option:selected").attr("sem_code")
+						$(dropDown).parents(".input_row_modify").find(".input_semester_code").replaceWith($(`<input type="text" class="input_semester_code" readonly value="${value}"/>`))
+					})
 							
 					submitBtn = $(`<button class="action_btn">Submit</button>`)
 					submitBtn.click(() => {
@@ -288,19 +280,13 @@ function createTable(option) {
 					tr.append($(`<th></th>`).append(submitBtn))
 					//$(this).parent()[0].insertAfter(tr);
 					tr.insertAfter($(this).parent()[0])
-					}
-					else{
-						console.log("remove")
-						console.log($(`#${option + 1}`).find(".input_row_modify"))
-						$(`#${option + 1}`).find(".input_row_modify").remove();
-					}
-				
-				
+				}
+				else {
+					$(`#${option + 1}`).find(".input_row_modify").remove();
+				}
 			})
-	
 		},
 	})
-		
 }
 function addRow(table, param) {
 	$.ajax({
