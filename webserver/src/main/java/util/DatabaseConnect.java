@@ -116,6 +116,12 @@ public class DatabaseConnect {
         return list;
     }
     
+    /**
+     * Use for sending json in the HTTP response
+     * @param resp HTTP reponse of servlet
+     * @param res Result set get from query to database
+     * @throws Exception
+     */
     public void sendData(HttpServletResponse resp, ResultSet res) throws Exception{
         List<Map<String, Object>> json_resp = ResultSetToJSON(res);
         
