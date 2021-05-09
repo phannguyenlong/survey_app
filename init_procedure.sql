@@ -657,24 +657,30 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS java_app.accessControlAddProgram;
 DELIMITER  //
-CREATE PROCEDURE accessControlAddProgram(fac_code VARCHAR(10),program_code VARCHAR(10)) 
+CREATE PROCEDURE accessControlAddProgram(user VARCHAR(20),program_code VARCHAR(10)) 
 BEGIN
 	-- INSERT INTO program(pro_code,name) VALUES(program_code,program_name);
+    SET @f = (SELECT MAX(faculty_code) FROM deans WHERE username = user and now() <= end_date and now() >= start_date);
     SET @a = (SELECT id_1 FROM year_faculty 
-		WHERE academic_code = (SELECT MAX(academic_code) FROM year_faculty where faculty_code = fac_code) 
-			AND faculty_code = fac_code);
+		WHERE academic_code = (SELECT MAX(academic_code) FROM year_faculty where faculty_code = @f) 
+			AND faculty_code = @f);
     INSERT INTO year_fac_pro(id_1, program_code) VALUES(@a,program_code);    
 END //
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS java_app.accessControlAddModuleForProco;
+DROP PROCEDURE IF EXISTS java_app.accessControlAddModule;
 DELIMITER  //
-CREATE PROCEDURE accessControlAddModuleForProco(pro_code VARCHAR(10),module_code VARCHAR(10)) 
+CREATE PROCEDURE accessControlAddModule(user VARCHAR(20),mo_code VARCHAR(10)) 
 BEGIN
 	-- INSERT INTO module(mo_code,name) VALUES(module_code,module_name);
+    SET @f = (SELECT MAX(faculty_code) FROM deans WHERE username = user and now() <= end_date and now() >= start_date);
+	SET @p = (SELECT MAX(program_code) FROM program_coordinator WHERE username = user and now() <= end_date and now() >= start_date);
+    SET @a = (SELECT MAX(id_2) FROM year_fac_pro yfp JOIN year_faculty yf ON yf.id_1=yfp.id_1
+		WHERE yf.academic_code = (SELECT MAX(academic_code) FROM year_faculty yf where @f = yf.faculty_code) 
+			AND yf.faculty_code = @f);
     SET @b = (SELECT id_2 FROM year_fac_pro yfp JOIN year_faculty yf ON yf.id_1=yfp.id_1
-		WHERE yf.academic_code = (SELECT MAX(academic_code) FROM year_faculty yf JOIN year_fac_pro yfp ON yf.id_1=yfp.id_1 where pro_code = yfp.program_code) 
-			AND yfp.program_code = pro_code);
-    INSERT INTO year_fac_pro_mo(id_2, module_code) VALUES(@b,module_code);    
+		WHERE yf.academic_code = (SELECT MAX(academic_code) FROM year_faculty yf JOIN year_fac_pro yfp ON yf.id_1=yfp.id_1 where @p = yfp.program_code) 
+			AND yfp.program_code = @p);
+	INSERT INTO year_fac_pro_mo(id_2, module_code) VALUES(IF(ISNULL(@f),@b,@a),mo_code);
 END //
 DELIMITER ;
