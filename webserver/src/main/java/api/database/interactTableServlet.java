@@ -112,8 +112,10 @@ public class interactTableServlet extends HttpServlet {
             permissionTable = permissionTableForRole[1];
         else if (role.equals("Deans"))
             permissionTable = permissionTableForRole[2];
-        
-        if (!Arrays.asList(permissionTable).contains(req.getParameter("table_name")) && permissionTable != null)
+        else if (role.equals("Admin"))
+            return;
+                    
+        if (permissionTable == null || !Arrays.asList(permissionTable).contains(req.getParameter("table_name")))
             throw new Exception("You dont have right to interact with this table");
 
         ResultSet resAccessCotrol = DB.doQuery(query);
