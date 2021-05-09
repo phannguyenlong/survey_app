@@ -684,3 +684,14 @@ BEGIN
 	INSERT INTO year_fac_pro_mo(id_2, module_code) VALUES(IF(ISNULL(@f),@b,@a),mo_code);
 END //
 DELIMITER ;
+
+DROP PROCEDURE IF EXISTS java_app.accessControlAddTeachingForLec;
+DELIMITER  //
+CREATE PROCEDURE accessControlAddTeachingForLec(user VARCHAR(20),size INT, sem_code VARCHAR(10),id_3 INT) 
+BEGIN
+	INSERT INTO class(size, semester_code, id_3) VALUES(size, sem_code, id_3);
+    SET @l = (SELECT lec_code FROM lecturer WHERE username = user);
+    SET @c = (SELECT LAST_INSERT_ID());
+    INSERT INTO teaching(class_code, lecturer_code) VALUES(@c,@l);    
+END //
+DELIMITER ;
