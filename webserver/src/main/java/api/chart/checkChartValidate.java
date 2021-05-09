@@ -6,10 +6,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLSyntaxErrorException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,6 +24,7 @@ import javax.servlet.annotation.WebServlet;
 
 // Others
 import util.DatabaseConnect;
+import util.JwtGenerate;
 
 /**
  * Used for check Chart's Validation from database
@@ -31,14 +35,45 @@ public class checkChartValidate extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String query = "CALL Validate(?, ?, ?, ?, ?, ?, ?);";
+        Cookie cookie = req.getCookies()[0];         
+        String username = (new JwtGenerate()).parseJWT(cookie.getValue())[0];
+        System.out.println(username);
+
+        String query = "CALL controllAccess('" + username + "')";
         try {
             DatabaseConnect DB = new DatabaseConnect();
             Connection conn = DB.getConnection();
-            PreparedStatement st = conn.prepareStatement(query);
+            ResultSet resAccessCotrol = DB.doQuery(query);
+
+            List<String> fa_arr = new ArrayList<>();
+            List<String> pro_arr = new ArrayList<>();
+            List<String> lec_arr = new ArrayList<>();
+            while (resAccessCotrol.next()) {
+                fa_arr.add(resAccessCotrol.getString("faculty"));
+                pro_arr.add(resAccessCotrol.getString("program"));
+                lec_arr.add(resAccessCotrol.getString("lecturer"));
+            }
+
+            PreparedStatement st = conn.prepareStatement("CALL Validate(?, ?, ?, ?, ?, ?, ?);");
 
             String[] params = { "aca_code", "sem_code", "fa_code", "pro_code", "mo_code", "lec_code", "class_code" };
             for (int i = 1; i < 8; i++) {
+                if (params[i - 1].equals("fa_code"))
+                    st.setString(i,
+                            req.getParameter(params[i - 1]).equals("null")
+                                    ? "'" + String.join("','", new ArrayList<>(new HashSet<>(fa_arr))) + "'"
+                                    : req.getParameter(params[i - 1]));
+                else if (params[i - 1].equals("pro_code"))
+                    st.setString(i,
+                            req.getParameter(params[i - 1]).equals("null")
+                                    ? "'" + String.join("','", new ArrayList<>(new HashSet<>(pro_arr))) + "'"
+                                    : req.getParameter(params[i - 1]));
+                else if (params[i - 1].equals("lec_code"))
+                    st.setString(i,
+                            req.getParameter(params[i - 1]).equals("null")
+                                    ? "'" + String.join("','", new ArrayList<>(new HashSet<>(lec_arr))) + "'"
+                                    : req.getParameter(params[i - 1]));
+                else
                     st.setString(i, req.getParameter(params[i - 1]).equals("null") ? "null": req.getParameter(params[i - 1]));
             }
 
