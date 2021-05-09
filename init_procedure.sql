@@ -403,7 +403,7 @@ DELIMITER ;
 -- Interact with class
 DROP PROCEDURE IF EXISTS java_app.classInteract;
 DELIMITER //
-CREATE PROCEDURE classInteract(action VARCHAR(10),old_key INT,csize INT,code VARCHAR(10),id INT, key_array VARCHAR(500))
+CREATE PROCEDURE classInteract(action VARCHAR(10),old_key INT,csize INT,code VARCHAR(10),id INT, key_array VARCHAR(1000))
 BEGIN
 	CASE
 		WHEN action = "dump" THEN
