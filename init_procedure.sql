@@ -597,16 +597,21 @@ DELIMITER ;
 -- procedure idDropdown
 DROP PROCEDURE IF EXISTS java_app.idDropdown;
 DELIMITER //
-CREATE PROCEDURE idDropdown(id_type VARCHAR(10))
+CREATE PROCEDURE idDropdown(id_type VARCHAR(10), key_array VARCHAR(500))
 BEGIN
+    SET @arr_key = key_array;
 	CASE
 		WHEN id_type = "id_1" THEN
+			SET @a = CONCAT('
 			SELECT yf.id_1, CONCAT(a.aca_code , " - " , a.aca_name, " - " , f.fa_code , " - " , f.name) AS id_name
 			FROM year_faculty yf 
 			JOIN faculty f ON yf.faculty_code = f.fa_code
 			JOIN academic_year a ON yf.academic_code = a.aca_code
+            ', 'WHERE yf.id_1 IN (', @arr_key, ')','
             ORDER BY a.aca_code;
+		');
 		WHEN id_type = "id_2" THEN
+			SET @a = CONCAT('
 			SELECT yfp.id_2, yf.id_1, CONCAT(a.aca_code , " - " , a.aca_name, " - " , f.fa_code , " - " , f.name , " - " , 
 				p.pro_code , " - " , p.name) AS id_name
 			FROM year_fac_pro yfp
@@ -614,8 +619,11 @@ BEGIN
 			JOIN faculty f ON yf.faculty_code = f.fa_code
 			JOIN academic_year a ON yf.academic_code = a.aca_code
 			JOIN program p ON yfp.program_code = p.pro_code
+			', 'WHERE yfp.id_2 IN (', @arr_key, ')','
 			ORDER BY a.aca_code;
+		');
 		WHEN id_type = "id_3" THEN
+			SET @a = CONCAT('
 			SELECT yfpm.id_3, yfp.id_2, yf.id_1, 
 				CONCAT(a.aca_code , " - " , a.aca_name, " - " , s.sem_code, " - ", f.fa_code , " - " , f.name , " - " , 
 				p.pro_code , " - " , p.name, " - ", m.mo_code, " - ", m.name) AS id_name, s.sem_code, m.mo_code
@@ -627,8 +635,13 @@ BEGIN
 			JOIN semester s ON s.academic_code = a.aca_code
 			JOIN program p ON yfp.program_code = p.pro_code
 			JOIN module m ON yfpm.module_code = m.mo_code
+			', 'WHERE yfpm.id_3 IN (', @arr_key, ')','
 			ORDER BY a.aca_code;
+			');
 	END CASE;
+    PREPARE stmt1 FROM @a;
+	EXECUTE stmt1;
+	DEALLOCATE PREPARE stmt1;
 END //
 DELIMITER ;
 

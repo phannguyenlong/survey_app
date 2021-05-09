@@ -77,6 +77,9 @@ public class interactTableServlet extends HttpServlet {
             params = new String[] { "old_key", "name" };
         } else if (tableName.equals("module") || tableName.equals("program") || tableName.equals("faculty")) {
             query = "CALL " + tableName + "Interact(\"" + action + "\", ?, ?, ?);";
+            // if (action.equals("create")) {
+            //     if (tableName.equals("program")) query
+            // }
             params = new String[] { "old_key", "name" };
         }
 
