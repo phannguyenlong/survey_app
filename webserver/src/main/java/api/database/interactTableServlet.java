@@ -117,16 +117,19 @@ public class interactTableServlet extends HttpServlet {
         boolean isAllow = false, isAllowModify = false;
         while (resAccessCotrol.next()) {
             if ((Arrays.asList("class", "year_fac_pro", "year_fac_pro_mo")).contains(table_name)) {
-                if (resAccessCotrol.getString(map.get(table_name)).equals(req.getParameter("id")))
+                String compareData = resAccessCotrol.getString(map.get(table_name)) == null ? "null": resAccessCotrol.getString(map.get(table_name));
+                if (compareData.equals(req.getParameter("id")))
                     isAllowModify = true;
             } 
             else if (table_name.equals("teaching")) {
-                if (resAccessCotrol.getString(map.get(table_name)).equals(req.getParameter("c_code")))
+                String compareData = resAccessCotrol.getString(map.get(table_name)) == null ? "null": resAccessCotrol.getString(map.get(table_name));
+                if (compareData.equals(req.getParameter("c_code")))
                     isAllowModify = true;
             } else {
                 isAllowModify = true;
             }
-            if (resAccessCotrol.getString(req.getParameter("table_name")).equals(req.getParameter("old_key")))
+            String compareData = resAccessCotrol.getString(table_name) == null ? "null": resAccessCotrol.getString(table_name);
+            if (compareData.equals(req.getParameter("old_key")))
                 isAllow = true;
         }
         // System.out.println(isAllowModify);
