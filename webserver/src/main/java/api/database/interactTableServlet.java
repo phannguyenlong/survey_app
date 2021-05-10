@@ -38,6 +38,7 @@ public class interactTableServlet extends HttpServlet {
             {"year_fac_pro_mo", "class", "teaching", "lecturer", "module"},                              // for program coor
             {"year_fac_pro", "year_fac_pro_mo", "class", "teaching", "lecturer", "module", "program"}    // for deans
     };
+    private String username;
 
     private PreparedStatement createStatement(HttpServletRequest req, String action, Connection conn,
             String permissionList) throws Exception {
@@ -61,8 +62,14 @@ public class interactTableServlet extends HttpServlet {
             query = "CALL " + tableName + "Interact(\"" + action + "\", ?, ?, ?, ?);";
             params = new String[] { "old_key", "id", "code" };
         } else if (tableName.equals("class")) {
-            query = "CALL " + tableName + "Interact(\"" + action + "\", ?, ?, ?, ?, ?);";
-            params = new String[] { "old_key", "size", "code", "id" };
+            if (action.equals("create")) {
+                query = "Call accessControlAddTeachingForLec('" + username + "', ?, ?, ?);";
+                params = new String[] {"size", "code", "id" };
+            } 
+            else {
+                query = "CALL " + tableName + "Interact(\"" + action + "\", ?, ?, ?, ?, ?);";
+                params = new String[] { "old_key", "size", "code", "id" };
+            }
         } else if (tableName.equals("teaching")) {
             query = "CALL " + tableName + "Interact(\"" + action + "\", ?, ?, ?, ?);";
             params = new String[] { "old_key", "c_code", "lec_code" };
@@ -77,9 +84,12 @@ public class interactTableServlet extends HttpServlet {
             params = new String[] { "old_key", "name" };
         } else if (tableName.equals("module") || tableName.equals("program") || tableName.equals("faculty")) {
             query = "CALL " + tableName + "Interact(\"" + action + "\", ?, ?, ?);";
-            // if (action.equals("create")) {
-            //     if (tableName.equals("program")) query
-            // }
+            if (action.equals("create")) {
+                if (tableName.equals("program"))
+                    query = "CALL accessControlAddProgram('" + username + "', ?, ?);";
+                else if (tableName.equals("module"))
+                    query = "CALL accessControlAddModule('" + username + "', ?, ?);";
+            }
             params = new String[] { "old_key", "name" };
         }
 
@@ -90,7 +100,10 @@ public class interactTableServlet extends HttpServlet {
                     !req.getParameterMap().containsKey(params[i - 1]) || req.getParameter(params[i - 1]).equals("null")
                             ? null
                             : req.getParameter(params[i - 1]));
-        if (!(tableName.equals("aca_year") || tableName.equals("semester")))
+        if (!(tableName.equals("aca_year") || tableName.equals("semester")
+                || (tableName.equals("class") && action.equals("create"))
+                || (tableName.equals("program") && action.equals("create"))
+                || (tableName.equals("module") && action.equals("create"))))
             st.setString(i, permissionList);
         System.out.println(st);
         return st;
@@ -98,7 +111,7 @@ public class interactTableServlet extends HttpServlet {
     
     private void checkAccessControl(HttpServletRequest req, DatabaseConnect DB, String action) throws Exception {
         Cookie cookie = req.getCookies()[0];         
-        String username = (new JwtGenerate()).parseJWT(cookie.getValue())[0];
+        username = (new JwtGenerate()).parseJWT(cookie.getValue())[0];
         String role = (new JwtGenerate()).parseJWT(cookie.getValue())[1];
         String query = "CALL controllAccess('" + username + "')";
         String permissionTable[] = null;
@@ -123,6 +136,7 @@ public class interactTableServlet extends HttpServlet {
         while (resAccessCotrol.next()) {
             if ((Arrays.asList("class", "year_fac_pro", "year_fac_pro_mo")).contains(table_name)) {
                 String compareData = resAccessCotrol.getString(map.get(table_name)) == null ? "null": resAccessCotrol.getString(map.get(table_name));
+                System.out.println(req.getParameter("id"));
                 if (compareData.equals(req.getParameter("id")))
                     isAllowModify = true;
             } 
@@ -137,9 +151,12 @@ public class interactTableServlet extends HttpServlet {
             if (compareData.equals(req.getParameter("old_key")))
                 isAllow = true;
         }
-        // System.out.println(isAllowModify);
+        System.out.println(isAllowModify);
+        System.out.println(isAllow);
         if (action.equals("create"))
             isAllow = true;
+        if (action.equals("delete"))
+            isAllowModify = true;
         if (!(isAllow && isAllowModify))
             throw new Exception("You dont have right to interact with this data");
     }
