@@ -657,9 +657,9 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS java_app.accessControlAddProgram;
 DELIMITER  //
-CREATE PROCEDURE accessControlAddProgram(user VARCHAR(20),program_code VARCHAR(10)) 
+CREATE PROCEDURE accessControlAddProgram(user VARCHAR(20),program_code VARCHAR(10),program_name VARCHAR(50)) 
 BEGIN
-	-- INSERT INTO program(pro_code,name) VALUES(program_code,program_name);
+	INSERT INTO program(pro_code,name) VALUES(program_code,program_name);
     SET @f = (SELECT MAX(faculty_code) FROM deans WHERE username = user and now() <= end_date and now() >= start_date);
     SET @a = (SELECT id_1 FROM year_faculty 
 		WHERE academic_code = (SELECT MAX(academic_code) FROM year_faculty where faculty_code = @f) 
@@ -670,9 +670,9 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS java_app.accessControlAddModule;
 DELIMITER  //
-CREATE PROCEDURE accessControlAddModule(user VARCHAR(20),mo_code VARCHAR(10)) 
+CREATE PROCEDURE accessControlAddModule(user VARCHAR(20),mo_code VARCHAR(10),mo_name VARCHAR(50)) 
 BEGIN
-	-- INSERT INTO module(mo_code,name) VALUES(module_code,module_name);
+	INSERT INTO module(mo_code,name) VALUES(mo_code,mo_name);
     SET @f = (SELECT MAX(faculty_code) FROM deans WHERE username = user and now() <= end_date and now() >= start_date);
 	SET @p = (SELECT MAX(program_code) FROM program_coordinator WHERE username = user and now() <= end_date and now() >= start_date);
     SET @a = (SELECT MAX(id_2) FROM year_fac_pro yfp JOIN year_faculty yf ON yf.id_1=yfp.id_1
