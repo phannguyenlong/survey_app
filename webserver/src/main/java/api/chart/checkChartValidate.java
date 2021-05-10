@@ -55,24 +55,19 @@ public class checkChartValidate extends HttpServlet {
             }
 
             PreparedStatement st = conn.prepareStatement("CALL Validate(?, ?, ?, ?, ?, ?, ?);");
+            Map<String, List<String>> map = Map.of("fa_code", fa_arr, "pro_code", pro_arr, "lec_code", lec_arr);
 
             String[] params = { "aca_code", "sem_code", "fa_code", "pro_code", "mo_code", "lec_code", "class_code" };
             for (int i = 1; i < 8; i++) {
-                if (params[i - 1].equals("fa_code"))
+                String param = params[i - 1];
+                if (param.equals("fa_code") || param.equals("pro_code") || param.equals("lec_code")) {
+                    if (!req.getParameter(param).equals("null") && !map.get(param).contains(req.getParameter(param)))
+                        throw new Exception("You dont have the right to access this data");
                     st.setString(i,
-                            req.getParameter(params[i - 1]).equals("null")
-                                    ? "'" + String.join("','", new ArrayList<>(new HashSet<>(fa_arr))) + "'"
+                            req.getParameter(param).equals("null")
+                                    ? "'" + String.join("','", new ArrayList<>(new HashSet<>(map.get(param)))) + "'"
                                     : req.getParameter(params[i - 1]));
-                else if (params[i - 1].equals("pro_code"))
-                    st.setString(i,
-                            req.getParameter(params[i - 1]).equals("null")
-                                    ? "'" + String.join("','", new ArrayList<>(new HashSet<>(pro_arr))) + "'"
-                                    : req.getParameter(params[i - 1]));
-                else if (params[i - 1].equals("lec_code"))
-                    st.setString(i,
-                            req.getParameter(params[i - 1]).equals("null")
-                                    ? "'" + String.join("','", new ArrayList<>(new HashSet<>(lec_arr))) + "'"
-                                    : req.getParameter(params[i - 1]));
+                }
                 else
                     st.setString(i, req.getParameter(params[i - 1]).equals("null") ? "null": req.getParameter(params[i - 1]));
             }
@@ -105,7 +100,7 @@ public class checkChartValidate extends HttpServlet {
         }
         catch (Exception ex) {
         	resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        	resp.getWriter().println("The Request is invalid");
+        	resp.getWriter().println(ex.getMessage());
             ex.printStackTrace();
         }
     }
