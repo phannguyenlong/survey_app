@@ -66,7 +66,7 @@ public class checkChartValidate extends HttpServlet {
                     st.setString(i,
                             req.getParameter(param).equals("null")
                                     ? "'" + String.join("','", new ArrayList<>(new HashSet<>(map.get(param)))) + "'"
-                                    : req.getParameter(params[i - 1]));
+                                    : "'" + req.getParameter(params[i - 1]) + "'");
                 }
                 else
                     st.setString(i, req.getParameter(params[i - 1]).equals("null") ? "null": req.getParameter(params[i - 1]));

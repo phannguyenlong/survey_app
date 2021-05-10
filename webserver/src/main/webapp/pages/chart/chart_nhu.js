@@ -26,8 +26,8 @@ function getAllSelect(select_id) {
     for (let i = 0; i < selectArr.length; i++) {
         if ($(`#${selectArr[i]} option:selected`).val() == '')
             params += selectArr[i] + "_code=null"
-        else if (selectArr[i] == "fa" || selectArr[i] == "lec" || selectArr[i] == "pro")
-            params += selectArr[i] + "_code='" + $(`#${selectArr[i]} option:selected`).val() + "'"
+        // else if (selectArr[i] == "fa" || selectArr[i] == "lec" || selectArr[i] == "pro")
+        //     params += selectArr[i] + "_code='" + $(`#${selectArr[i]} option:selected`).val() + "'"
         else
             params += selectArr[i] + "_code=" + $(`#${selectArr[i]} option:selected`).val()
         params += i == selectArr.length - 1 ? "" : "&"
